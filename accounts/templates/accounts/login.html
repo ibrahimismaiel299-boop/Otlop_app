@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Otlop</title>
+    <style>
+        :root {
+            --primary: #0d1b2a;
+            --secondary: #1b263b;
+            --accent: #1DA1F2;
+            --bg: #f4f6f9;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+        }
+        
+        .login-container { 
+            max-width: 450px; 
+            background: white; 
+            margin: 60px auto; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            text-align: right; 
+            border: 1px solid #edf2f7;
+        }
+        
+        .brand-logo { 
+            text-align: center; 
+            font-size: 42px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin-bottom: 5px; 
+            letter-spacing: 1px;
+        }
+        
+        .brand-logo span { 
+            color: var(--accent); 
+        }
+        
+        h2 { 
+            color: #718096; 
+            text-align: center; 
+            font-size: 16px; 
+            margin-top: 0; 
+            margin-bottom: 35px; 
+            font-weight: 600;
+        }
+        
+        .form-group { 
+            margin-bottom: 22px; 
+        }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: var(--primary); 
+            font-size: 14px; 
+        }
+        
+        .form-group input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #cbd5e0; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 15px; 
+            outline: none;
+            background: #f7fafc;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus { 
+            border-color: var(--accent); 
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+        }
+        
+        .btn { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            font-weight: bold; 
+            box-shadow: 0 4px 12px rgba(13,27,42,0.2);
+            margin-top: 10px;
+        }
+        
+        .btn:hover { 
+            background-color: var(--accent); 
+            box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .error-alert { 
+            background-color: #ffe3e3; 
+            color: #dc3545; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #f5c6cb; 
+            margin-bottom: 25px; 
+            font-size: 14px; 
+            text-align: center; 
+            font-weight: 600;
+        }
+        
+        .nav-link { 
+            display: block; 
+            text-align: center; 
+            margin-top: 18px; 
+            color: var(--accent); 
+            text-decoration: none; 
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- إضافة اللوجو الموحد للمنصة -->
+        <a href="{% url 'home' %}" style="text-decoration: none;"><div class="brand-logo">Otlo<span>p</span></div></a>
+        <h2>تسجيل الدخول إلى حسابك المشترك 🔑</h2>
+        
+        {% if error_message %}
+            <div class="error-alert">⚠️ {{ error_message }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn">دخول الحساب 🚀</button>
+        </form>
+        
+        <a href="{% url 'signup' %}" class="nav-link">ليس لديك حساب؟ سجل الآن مجاناً</a>
+            <a href="{% url 'home' %}" class="nav-link" style="display: block; background: #edf2f7; color: #0d1b2a; padding: 12px; border-radius: 30px; text-align: center; margin-top: 15px; border: 1px solid #cbd5e0; text-decoration: none;">🏠 العودة لتايم لاين الرئيسية</a>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الملف الشخصي - Otlop</title>
+    <style>
+        :root {
+            --primary: #0d1b2a;
+            --secondary: #1b263b;
+            --accent: #1DA1F2;
+            --bg: #f4f6f9;
+        }
+        html, body { overflow-x: hidden; max-width: 100%; font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; box-sizing: border-box; }
+        .profile-container { max-width: 600px; background: white; margin: 30px auto; padding: 35px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: right; border: 1px solid #edf2f7; }
+        .avatar-wrapper { text-align: center; margin-bottom: 30px; position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary); box-shadow: 0 6px 15px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; display: block; margin: 0 auto; }
+        .avatar:hover { border-color: var(--accent); opacity: 0.9; }
+        .camera-icon-badge { position: absolute; bottom: 0; left: 5px; background: var(--primary); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 2px solid white; pointer-events: none; }
+        .brand-logo { text-align: center; font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 20px; }
+        .brand-logo span { color: var(--accent); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary); font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; background: #f7fafc; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent); background: #fff; }
+        .btn-save { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 12px rgba(13,27,42,0.2); }
+        .btn-save:hover { background-color: var(--accent); }
+        .nav-link { display: block; text-align: center; margin-top: 20px; color: #718096; text-decoration: none; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <a href="{% url 'home' %}" style="text-decoration: none;"><div class="brand-logo">Otlo<span>p</span> Profile</div></a>
+        
+        <form method="POST" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+            
+            <!-- 📸 واجهة تعديل صورة الحساب الشخصية الفاخرة بدون أزرار مشوهة 📸 -->
+            <div style="text-align: center; margin-bottom: 10px;">
+                <div class="avatar-wrapper" onclick="document.getElementById('profile_pic_input').click();" title="اضغط هنا لتغيير صورة حسابك">
+                    {% if user.profile_picture %}
+                        <img id="avatar_preview" src="{{ user.profile_picture.url }}" class="avatar" alt="صورة البروفايل">
+                    {% else %}
+                        <img id="avatar_preview" src="https://ui-avatars.com{{ user.username }}&background=0D1B2A&color=fff&size=120" class="avatar" alt="صورة البروفايل">
+                    {% endif %}
+                    <div class="camera-icon-badge">📷</div>
+                    <!-- حقل الرفع المخفي التابع لاستمارة دجانجو -->
+                    <input type="file" id="profile_pic_input" name="profile_picture" accept="image/*" style="display: none;" onchange="previewAvatar(this)">
+                </div>
+                <div style="font-size: 12px; color: #718096; font-weight: 600; margin-top: -15px; margin-bottom: 20px;">انقر على الصورة لتغييرها</div>
+            </div>
+
+            <div class="form-group"><label>رقم الهاتف الحالي:</label>{{ form.phone_number }}</div>
+            <div class="form-group"><label>المحافظة:</label>{{ form.governorate }}</div>
+            <div class="form-group"><label>المدينة / المركز التابع له:</label>{{ form.city }}</div>
+            <div class="form-group"><label>تفاصيل العنوان (الشارع والحي):</label>{{ form.address_details }}</div>
+            
+            {% if user.user_type == 'provider' %}
+                <div class="form-group" style="background: #f0f7ff; padding: 15px; border-radius: 8px; border: 1px dashed #bee3f8;">
+                    <label style="color: #2b6cb0; font-weight: bold;">تعديل تخصصك المهني الحالي:</label>
+                    {{ form.category }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn-save">حفظ وتحديث التغييرات 💾</button>
+        </form>
+        
+        <a href="{% url 'home' %}" class="nav-link" style="display: block; background: #edf2f7; color: #0d1b2a; padding: 12px; border-radius: 30px; text-align: center; margin-top: 15px; border: 1px solid #cbd5e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">🏠 العودة لتايم لاين الرئيسية</a>
+    </div>
+
+    <script>
+        // دالة العرض الفوري لصورة الحساب الدائرية فور اختيارها
+        function previewAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatar_preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const govSelect = document.querySelector('select[name="governorate"]');
+            const citySelect = document.querySelector('select[name="city"]');
+            if (govSelect && citySelect) {
+                govSelect.addEventListener('change', function() {
+                    const govId = this.value;
+                    if (!govId) return;
+                    fetch(`/ajax/load-cities/?governorate_id=${govId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">اختر المدينة / المركز 📌</option>';
+                            data.forEach(function(city) {
+                                const option = document.createElement('option');
+                                option.value = city.id;
+                                option.textContent = city.name_ar;
+                                citySelect.appendChild(option);
+                            });
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

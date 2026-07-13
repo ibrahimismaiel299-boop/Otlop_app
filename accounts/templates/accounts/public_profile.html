@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ target_user.username }} - Otlop</title>
+    <style>
+        :root { --primary: #0d1b2a; --secondary: #1b263b; --accent: #1DA1F2; --bg: #f4f6f9; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
+        .profile-card { max-width: 500px; background: white; margin: 40px auto; padding: 35px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; border: 1px solid #edf2f7; }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary); box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .info-row { text-align: right; background: #f8fafc; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; font-size: 15px; color: #2d3748; border: 1px solid #edf2f7; }
+        .btn-chat { display: block; background: var(--primary); color: white; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: bold; margin-top: 25px; transition: 0.3s; box-shadow: 0 4px 12px rgba(13,27,42,0.2); }
+        .btn-chat:hover { background: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <!-- صورة الحساب الكبيرة -->
+        {% if target_user.profile_picture %}
+            <img src="{{ target_user.profile_picture.url }}" class="avatar" alt="صورة البروفايل">
+        {% else %}
+            <div class="avatar" style="background: #cbd5e0; display: inline-flex; align-items: center; justify-content: center; font-size: 45px; color: var(--primary); margin: 0 auto 15px auto;">👤</div>
+        {% endif %}
+        
+        <h2 style="margin: 0 0 5px 0; color: var(--primary);">{{ target_user.username }}</h2>
+        <p style="margin: 0 0 25px 0; color: #718096; font-weight: 600;">📌 نوع الحساب: {{ target_user.get_user_type_display }}</p>
+
+        <!-- عرض التقييم بالنجوم لو كان مقدم خدمة مع إتاحة التقييم المباشر للعملاء -->
+        {% if target_user.user_type == 'provider' %}
+            <div style="background: #fff8e7; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe3b3; text-align: center;">
+                <div style="color: #ffb703; font-weight: bold; font-size: 18px; margin-bottom: 8px;">
+                    ⭐ متوسط التقييم الحالي: <span id="public-avg-rating">{{ target_user.get_average_rating }}</span> / 5.0
+                </div>
+                
+                <!-- ⭐ نظام ضغط النجوم السريع داخل البروفايل العام ⭐ -->
+                {% if request.user.is_authenticated and request.user != target_user %}
+                    <div style="direction: ltr; display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
+                        <span style="font-size: 13px; color: #718096; font-family: sans-serif; direction: rtl; margin-right: 5px;">اضغط على النجوم لتقييم الفني:</span>
+                        <span onclick="submitPublicRating('{{ target_user.id }}', 1)" class="star-clickable" style="cursor:pointer; font-size:22px; color:#cbd5e0; transition: 0.2s;">★</span>
+                        <span onclick="submitPublicRating('{{ target_user.id }}', 2)" class="star-clickable" style="cursor:pointer; font-size:22px; color:#cbd5e0; transition: 0.2s;">★</span>
+                        <span onclick="submitPublicRating('{{ target_user.id }}', 3)" class="star-clickable" style="cursor:pointer; font-size:22px; color:#cbd5e0; transition: 0.2s;">★</span>
+                        <span onclick="submitPublicRating('{{ target_user.id }}', 4)" class="star-clickable" style="cursor:pointer; font-size:22px; color:#cbd5e0; transition: 0.2s;">★</span>
+                        <span onclick="submitPublicRating('{{ target_user.id }}', 5)" class="star-clickable" style="cursor:pointer; font-size:22px; color:#cbd5e0; transition: 0.2s;">★</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="info-row">🛠️ <strong>التخصص المهني:</strong> {{ target_user.category.name_ar }}</div>
+        {% endif %}
+
+        <!-- البيانات الجغرافية وبيانات الاتصال للعموم -->
+        <div class="info-row">📍 <strong>الموقع الجغرافي:</strong> {{ target_user.governorate.name_ar }} - {{ target_user.city.name_ar }}</div>
+        {% if target_user.address_details %}
+            <div class="info-row">🏠 <strong>تفاصيل الحي السكني:</strong> {{ target_user.address_details }}</div>
+        {% endif %}
+        
+        {% if target_user.phone_number %}
+            <div class="info-row">📞 <strong>رقم الهاتف:</strong> <a href="tel:{{ target_user.phone_number }}" style="color: var(--accent); text-decoration: none; font-weight: bold;">{{ target_user.phone_number }}</a></div>
+        {% endif %}
+
+        <!-- أزرار التفاعل المباشر (شات فوري + طلب صداقة ذكي) -->
+        {% if request.user.is_authenticated and request.user != target_user %}
+            <div style="display: flex; gap: 12px; margin-top: 25px;">
+                
+                <!-- 👥 التحكم البرمجي الذكي في زر حالة الصداقة 👥 -->
+                {% if friend_status == 'accepted' %}
+                    <span style="flex: 1; text-align: center; background: #e2e8f0; color: #4a5568; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block;">أصدقاء 👥</span>
+                {% elif friend_status == 'pending' %}
+                    <span style="flex: 1; text-align: center; background: #fff3cd; color: #b7791f; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block;">تم إرسال الطلب ⏳</span>
+                {% else %}
+                    <!-- لا توجد علاقة، يظهر زر الإرسال الحر الفوري -->
+                    <a href="{% url 'send_friend_request' target_user.id %}" style="flex: 1; text-align: center; background: #1DA1F2; color: white; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block; box-shadow: 0 4px 12 rgba(29, 161, 242, 0.2);">👥 إضافة صديق</a>
+                {% endif %}
+
+                <!-- زر فتح الشات المغلق -->
+                <a href="{% url 'chat_detail' target_user.id %}" class="btn-chat" style="flex: 1; margin-top: 0; padding: 12px;">💬 مراسلة خاصة</a>
+            </div>
+        {% endif %}
+
+                <!-- 📝 قسم عرض منشورات وعروض هذا الفني السابقة 📝 -->
+        <h3 style="text-align: right; color: var(--primary); font-size: 15px; margin-top: 30px; border-bottom: 1px solid #edf2f7; padding-bottom: 8px;">📝 المنشورات والعروض السابقة له:</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px; text-align: right;">
+            {% for post in user_posts %}
+                <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #edf2f7;">
+                    <p style="font-size: 14px; color: #2d3748; line-height: 1.5; margin: 0 0 8px 0; white-space: pre-line;">{{ post.content }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" style="max-width: 100%; max-height: 150px; border-radius: 8px; object-fit: contain; display: block;">
+                    {% endif %}
+                    <span style="font-size: 11px; color: #a0aec0; display: block; margin-top: 5px;">📅 نُشر في: {{ post.created_at|date:"Y-m-d" }}</span>
+                </div>
+            {% empty %}
+                <p style="text-align: center; color: #a0aec0; font-size: 12px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 1px dashed #e2e8f0; margin: 0;">لم يقم بنشر أي منشورات أو عروض حتى الآن.</p>
+            {% endfor %}
+        </div>
+
+        <a href="{% url 'home' %}" style="display: block; text-align: center; margin-top: 20px; color: #718096; text-decoration: none; font-size: 14px; font-weight: bold;">🏠 العودة للرئيسية</a>
+    </div>
+    <!-- سكريبت لتمرير التقييم الفوري بالـ AJAX من داخل البروفايل العام -->
+    <script>
+        function submitPublicRating(providerId, starsCount) {
+            const formData = new FormData();
+            formData.append('provider_id', providerId);
+            formData.append('stars', starsCount);
+            // جلب الـ CSRF Token الأمني المدمج تلقائياً في دجانجو لحماية الإرسال
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch('/rating/add/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(`شكراً لك! تم تسجيل تقييمك لهذا الفني بنجاح ومحدث لحظياً. 🎉`);
+                    // تحديث الرقم المعروض على الشاشة فوراً بدون ريفريش كامل للصفحة
+                    const avgSpan = document.getElementById('public-avg-rating');
+                    if (avgSpan) avgSpan.textContent = data.avg_rating;
+                } else {
+                    alert('عذراً، حدث خطأ أثناء إرسال التقييم.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>

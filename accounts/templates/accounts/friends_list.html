@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أصدقائي - Otlop</title>
+    <style>
+        :root { --primary: #0d1b2a; --bg: #f4f6f9; --accent: #1DA1F2; }
+        body { font-family: sans-serif; background-color: var(--bg); padding: 20px; text-align: right; }
+        .friend-box { max-width: 550px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #edf2f7; }
+        .friend-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 8px; border: 1px solid #edf2f7; }
+        .btn-profile { background: var(--primary); color: white; text-decoration: none; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="friend-box">
+        <h3 style="color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 8px;">👥 قائمة أصدقائي الحاليين:</h3>
+        {% for friend in friends %}
+            <div class="friend-item">
+                <span style="font-weight: bold; font-size: 14px; color: #2d3748;">👤 {{ friend.username }} ({{ friend.get_user_type_display }})</span>
+                <a href="{% url 'public_profile' friend.id %}" class="btn-profile">عرض البروفايل 👤</a>
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: #a0aec0; font-size: 13px; padding: 20px;">لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!</p>
+        {% endfor %}
+        <a href="{% url 'home' %}" style="display: block; text-align: center; margin-top: 20px; color: var(--accent); text-decoration: none; font-weight: bold; font-size: 14px;">🏠 العودة لتايم لاين الرئيسية</a>
+    </div>
+
+</body>
+</html>

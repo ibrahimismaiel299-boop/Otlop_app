@@ -1,0 +1,7 @@
+[
+  {"model": "accounts.category", "pk": 1, "fields": {"name_ar": "سباك صيانة", "name_en": "Plumber", "section_type": "freelance"}},
+  {"model": "accounts.category", "pk": 2, "fields": {"name_ar": "كهربائي منازل", "name_en": "Electrician", "section_type": "freelance"}},
+  {"model": "accounts.category", "pk": 3, "fields": {"name_ar": "مبرمج ويب وتطبيقات", "name_en": "Developer", "section_type": "freelance"}},
+  {"model": "accounts.category", "pk": 4, "fields": {"name_ar": "توصيل دليفري (أكل وبقالة)", "name_en": "Delivery", "section_type": "delivery"}},
+  {"model": "accounts.category", "pk": 5, "fields": {"name_ar": "كابتن توصيل (تاكسي)", "name_en": "Taxi Driver", "section_type": "delivery"}}
+]

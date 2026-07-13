@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إنشاء حساب جديد - Otlop</title>
+    <!-- استدعاء مكتبة Cropper.js العالمية والشهيرة لاقتصاص وتحريك الصور من الموبايل -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="https://cloudflare.com"></script>
+    
+    <style>
+        :root {
+            --primary: #0d1b2a;
+            --secondary: #1b263b;
+            --accent: #1DA1F2;
+            --bg: #f4f6f9;
+        }
+        html, body { overflow-x: hidden; max-width: 100%; font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; box-sizing: border-box; }
+        .form-container { max-width: 550px; background: white; margin: 30px auto; padding: 35px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: right; border: 1px solid #edf2f7; }
+        .brand-logo { text-align: center; font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .brand-logo span { color: var(--accent); }
+        h2 { text-align: center; font-size: 16px; margin-top: 0; margin-bottom: 30px; color: #718096; font-weight: 600; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary); font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; background: #f7fafc; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent); background: #fff; }
+        .btn { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 12px rgba(13,27,42,0.2); margin-top: 15px; }
+        .btn:hover { background-color: var(--accent); box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3); }
+        .nav-link { display: block; text-align: center; margin-top: 15px; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 14px; }
+        .provider-only-fields { display: none; background: #f0f7ff; padding: 20px; border-radius: 12px; border: 1px dashed #bee3f8; margin-bottom: 20px; }
+        
+        /* 📸 ستايل حوايا الكاميرا الاحترافية المحدثة 📸 */
+        .image-upload-wrapper { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 5px; }
+        .custom-image-box { position: relative; width: 100%; max-width: 200px; height: 120px; border: 2px dashed #cbd5e0; border-radius: 10px; background: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; transition: 0.3s; }
+        .custom-image-box:hover { border-color: var(--accent); background: #f0f7ff; }
+        .custom-image-box span { font-size: 12px; color: #718096; font-weight: bold; margin-top: 6px; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 5; }
+        
+        /* مودال منبثق لاقتصاص وتحريك الصور */
+        .crop-modal { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .crop-box-container { background: white; padding: 20px; border-radius: 16px; width: 100%; max-width: 450px; text-align: center; }
+        .crop-wrapper { max-height: 300px; margin-bottom: 15px; overflow: hidden; }
+        .crop-wrapper img { max-width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <div class="brand-logo">Otlo<span>p</span></div>
+        <h2>إنشاء حساب جديد للمنصة المشتركة 🚀</h2>
+        
+        <form method="POST" enctype="multipart/form-data" id="signupForm">
+            {% csrf_token %}
+            
+            <div class="form-group"><label>اسم المستخدم:</label>{{ form.username }}</div>
+            <div class="form-group"><label>كلمة المرور:</label>{{ form.password }}</div>
+            <div class="form-group"><label>رقم الهاتف:</label>{{ form.phone_number }}</div>
+            <div class="form-group"><label>المحافظة المصرية:</label>{{ form.governorate }}</div>
+            <div class="form-group"><label>المدينة / المركز:</label>{{ form.city }}</div>
+            <div class="form-group"><label>تفاصيل العنوان الحي السكني:</label>{{ form.address_details }}</div>
+            <div class="form-group" id="user-type-group"><label>نوع الحساب المستهدف:</label>{{ form.user_type }}</div>
+            <!-- الحقول المتقدمة التي تظهر للفنيين ومقدمي الخدمة فقط -->
+            <div class="provider-only-fields" id="provider-section">
+                <h4 style="margin-top:0; color: var(--primary); border-bottom: 1px solid #bee3f8; padding-bottom:5px;">بيانات العمل والتوثيق الأمني:</h4>
+                <div class="form-group"><label>المهنة أو التخصص الرئيسي للفني:</label>{{ form.category }}</div>
+                <div class="form-group"><label>الرقم القومي للبطاقة الشخصية (14 رقم):</label>{{ form.national_id }}</div>
+                
+                <!-- 📸 استبدال أزرار رفع الملفات التقليدية بأيقونة الكاميرا والـ Preview 📸 -->
+                <div class="form-group">
+                    <label>تحميل وثائق الهوية الجنائية والبطاقة (وش وضهر):</label>
+                    <div class="image-upload-wrapper">
+                        <!-- صندوق وجه البطاقة -->
+                        <div class="custom-image-box" onclick="triggerInput('id_front')">
+                            <span style="font-size: 26px;">📷</span>
+                            <span>صورة وجه البطاقة</span>
+                            <img id="front_preview" class="preview-img" alt="وجه البطاقة">
+                            <input type="file" id="id_front" name="id_front_image" accept="image/*" style="display: none;" onchange="initCropper(this, 'front_preview')">
+                        </div>
+                        
+                        <!-- صندوق ظهر البطاقة -->
+                        <div class="custom-image-box" onclick="triggerInput('id_back')">
+                            <span style="font-size: 26px;">📷</span>
+                            <span>صورة ظهر البطاقة</span>
+                            <img id="back_preview" class="preview-img" alt="ظهر البطاقة">
+                            <input type="file" id="id_back" name="id_back_image" accept="image/*" style="display: none;" onchange="initCropper(this, 'back_preview')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🎯 ثانياً: صندوق الاهتمامات الذكي المدمج لطالبي الخدمة (العملاء) فقط 🎯 -->
+            <div id="customer-section" style="display: none; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px dashed #cbd5e0; margin-bottom: 20px;">
+                <h4 style="margin-top:0; color: var(--primary); border-bottom: 1px solid #cbd5e0; padding-bottom:5px;">تخصيص تايم لاين العميل:</h4>
+                <div class="form-group">
+                    <label style="font-weight: bold; color: var(--primary); font-size: 14px;">ما هي اهتماماتك واحتياجاتك الأساسية؟ (يمكنك اختيار أكثر من قسم):</label>
+                    <div style="margin-top: 8px;">
+                        {{ form.interests }}
+                    </div>
+                    <span style="font-size: 11px; color: #718096; display: block; margin-top: 6px; line-height: 1.4;">* نصيحة مبرمجين: اضغط مع الاستمرار على زر Ctrl في الكيبورد لتحديد أكثر من اهتمام معاً. سيقوم التطبيق بفلترة التايم لاين تلقائياً لعرض البوستات المتوافقة مع اختياراتك.</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">تسجيل وانطلاق الحساب 🚀</button>
+        </form>
+        <a href="{% url 'home' %}" class="nav-link" style="display: block; background: #edf2f7; color: #0d1b2a; padding: 12px; border-radius: 30px; text-align: center; margin-top: 15px; border: 1px solid #cbd5e0; text-decoration: none;">🏠 العودة لتايم لاين الرئيسية</a>
+    </div>
+
+    <!-- 🔧 المودال العالمي الخاص بتحريك وقص الصور 🔧 -->
+    <div class="crop-modal" id="cropModal">
+        <div class="crop-box-container">
+            <h3 style="margin-top:0; color:var(--primary);">تحريك وقص وثيقة الهوية ✂️</h3>
+            <div class="crop-wrapper">
+                <img id="imageToCrop" src="" alt="قص الصورة">
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button type="button" onclick="executeCrop()" style="background:var(--primary); color:white; border:none; padding:10px 25px; border-radius:20px; font-weight:bold; cursor:pointer;">تأكيد القص والمظهر ✔️</button>
+                <button type="button" onclick="cancelCrop()" style="background:#dc3545; color:white; border:none; padding:10px 25px; border-radius:20px; font-weight:bold; cursor:pointer;">إلغاء ❌</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let cropper;
+        let currentInput;
+        let currentPreviewId;
+
+        // تشغيل زر الرفع المخفي عند النقر على صندوق الكاميرا
+        function triggerInput(inputId) {
+            document.getElementById(inputId).click();
+        }
+
+        // تهيئة واجهة القص عند اختيار صورة من الكاميرا أو الاستوديو
+        function initCropper(input, previewId) {
+            if (input.files && input.files[0]) {
+                currentInput = input;
+                currentPreviewId = previewId;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const modal = document.getElementById('cropModal');
+                    const image = document.getElementById('imageToCrop');
+                    image.src = e.target.result;
+                    modal.style.display = 'flex';
+                    
+                    if (cropper) cropper.destroy();
+                    // تشغيل محرك كروبر العالمي مع ميزة تدوير وتحريك حر غير مقيد بنسب ثابته للبطاقات
+                    cropper = new Cropper(image, {
+                        dragMode: 'move',
+                        viewMode: 1,
+                        autoCropArea: 0.9,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: false,
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // تنفيذ عملية القص الفعلي وتحويل النتيجة لملف يعرض في صندوق الكاميرا فوراً (تكملة الكود)
+        function executeCrop() {
+            const canvas = cropper.getCroppedCanvas({ width: 600, height: 400 });
+            canvas.toBlob(function(blob) {
+                // عرض الصورة المقصوصة داخل صندوق الكاميرا فوق أيقونة الكاميرا القديمة
+                const previewImg = document.getElementById(currentPreviewId);
+                previewImg.src = URL.createObjectURL(blob);
+                previewImg.style.display = 'block';
+                
+                // استبدال الملف الأصلي في حقل الـ Input بالملف الجديد المقصوص ليرسل للدجانجو بشكل سليم
+                const file = new File([blob], "cropped_id.png", { type: "image/png" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                currentInput.files = dataTransfer.files;
+                
+                document.getElementById('cropModal').style.display = 'none';
+            }, 'image/png');
+        }
+
+        function cancelCrop() {
+            document.getElementById('cropModal').style.display = 'none';
+            currentInput.value = ""; // تفريغ المدخل في حال الإلغاء
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const govSelect = document.querySelector('select[name="governorate"]');
+            const citySelect = document.querySelector('select[name="city"]');
+            const userTypeSelect = document.querySelector('select[name="user_type"]');
+            const providerSection = document.getElementById('provider-section');
+            
+            // الربط الجغرافي للمدن
+            if (govSelect && citySelect) {
+                citySelect.innerHTML = '<option value="">اختر المحافظة أولاً ⚠️</option>';
+                govSelect.addEventListener('change', function() {
+                    const govId = this.value;
+                    if (!govId) {
+                        citySelect.innerHTML = '<option value="">اختر المحافظة أولاً ⚠️</option>';
+                        return;
+                    }
+                    fetch(`/ajax/load-cities/?governorate_id=${govId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            citySelect.innerHTML = '<option value="">اختر المدينة / المركز 📌</option>';
+                            data.forEach(function(city) {
+                                const option = document.createElement('option');
+                                option.value = city.id;
+                                option.textContent = city.name_ar;
+                                citySelect.appendChild(option);
+                            });
+                        });
+                });
+            }
+
+            // إخفاء وإظهار حقول الفنيين والعملاء ديناميكياً
+            if (userTypeSelect && providerSection) {
+                const customerSection = document.getElementById('customer-section');
+                function toggleProviderFields() {
+                    if (userTypeSelect.value === 'provider') {
+                        providerSection.style.display = 'block';
+                        if(customerSection) customerSection.style.display = 'none';
+                    } else {
+                        providerSection.style.display = 'none';
+                        if(customerSection) customerSection.style.display = 'block';
+                    }
+                }
+                userTypeSelect.addEventListener('change', toggleProviderFields);
+                toggleProviderFields();
+            }
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رسائل Otlop</title>
+    <style>
+        :root {
+            --primary: #0d1b2a;
+            --secondary: #1b263b;
+            --accent: #1DA1F2;
+            --bg: #f4f6f9;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg); 
+            margin: 0; 
+            padding: 15px; 
+            color: var(--primary);
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .user-row {
+            background: white; 
+            padding: 15px; 
+            border-radius: 14px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid #edf2f7;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .username {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            display: block;
+        }
+        .usertype {
+            font-size: 11px;
+            color: #718096;
+            margin-top: 2px;
+            display: block;
+        }
+        .btn-chat {
+            background: var(--primary); 
+            color: white; 
+            padding: 8px 18px; 
+            text-decoration: none; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: bold;
+            transition: 0.2s ease;
+            box-shadow: 0 4px 10px rgba(13,27,42,0.15);
+        }
+        .btn-chat:hover {
+            background: var(--accent);
+        }
+        .btn-back {
+            display: block; 
+            background: #edf2f7; 
+            color: var(--primary); 
+            padding: 12px; 
+            border-radius: 30px; 
+            text-align: center; 
+            margin-top: 25px; 
+            border: 1px solid #cbd5e0; 
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-title">💬 صندوق المحادثات والرسائل</div>
+        
+        {% for u in users %}
+            <div class="user-row">
+                <div class="user-info">
+                    <div class="avatar-placeholder">👤</div>
+                    <div>
+                        <span class="username">{{ u.username }}</span>
+                        <span class="usertype">{{ u.get_user_type_display }}</span>
+                    </div>
+                </div>
+                <a href="{% url 'chat_detail' u.id %}" class="btn-chat">مراسلة 💬</a>
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: #a0aec0; padding: 30px; background: white; border-radius: 12px; border: 1px dashed #e2e8f0;">لا يوجد مستخدمون لمراسلتهم حالياً.</p>
+        {% endfor %}
+        
+        <a href="{% url 'home' %}" class="btn-back">🏠 العودة للتايم لاين الرئيسي</a>
+    </div>
+
+</body>
+</html>
