@@ -4,18 +4,25 @@ from django.conf import settings
 from django.conf.urls.static import static
 # استيراد كافة الدوال والـ Views المعتمدة من تطبيق accounts بدون أي نقص
 from accounts.views import (
-    home_view, signup_view, login_view, logout_view, 
+    edit_post_view, home_view, signup_view, login_view, logout_view, 
     load_cities_view, profile_view, delete_comment_view, 
     add_rating_view, send_friend_request_view, accept_friend_request_view, 
     chat_rooms_list_view, chat_detail_view, public_profile_view, mark_notifications_read_view,
     post_action_view, check_live_updates_view, check_new_messages_view, reject_friend_request_view,
-    check_unread_messages_count_view, friends_list_view
+    check_unread_messages_count_view, friends_list_view,
+    all_providers_view, delete_post_view
 
 )
 
+# otlob_project/urls.py
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # 🚀 الحصن البرمجي الحاسم: دعم كلا المسارين (الفارغ والمائل) لمنع تجميد وفشل نشر البوستات 🚀
     path('', home_view, name='home'),
+    path('/', home_view, name='home_slash'), # المسار السحري الاحتياطي الذي سيفجر قفل النشر فوريًا!
+    
     path('signup/', signup_view, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
@@ -26,9 +33,10 @@ urlpatterns = [
     
     # مسارات التحكم في الحسابات والملفات الشخصية (تعديل وعرض عام)
     path('profile/', profile_view, name='profile'),
-    path('user/<int:user_id>/', public_profile_view, name='public_profile'), # الـ Name هنا هو السير وراء حل الخطأ!
+    path('user/<int:user_id>/', public_profile_view, name='public_profile'),
     
     # مسارات التفاعل الاجتماعي (التعليقات والتقييمات)
+    # تأكد من تطابق هذا السطر بداخل مصفوفة urlpatterns بملف الـ urls.py
     path('comment/delete/<int:comment_id>/', delete_comment_view, name='delete_comment'),
     path('rating/add/', add_rating_view, name='add_rating'),
     
@@ -45,6 +53,9 @@ urlpatterns = [
     path('friend-request/reject/<int:request_id>/', reject_friend_request_view, name='reject_friend_request'),
     path('live/messages-count/', check_unread_messages_count_view, name='check_unread_messages_count'),
     path('friends/', friends_list_view, name='friends_list'),
+    path('providers/', all_providers_view, name='providers_directory'),
+    path('post/delete/<int:post_id>/', delete_post_view, name='delete_post'),
+    path('post/edit/<int:post_id>/', edit_post_view, name='edit_post'),
 ]
 
 # تفعيل مسار الصور وملفات الميديا في بيئة التطوير

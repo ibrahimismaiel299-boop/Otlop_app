@@ -2,138 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.db import models # استيراد هام جداً لتشغيل الـ models.Q في الشات!
-
-# استيراد كافة الاستمارات المعتمدة
+from django.db import models # استيراد هام جداً لتشغيل الـ models.Q في الشات والتصفية!
 from .forms import UserSignupForm, UserLoginForm, UserProfileForm, PostForm
-
-# استيراد كافة جداول قاعدة البيانات (تمت إضافة الموديلات الجديدة هنا بدقة لمنع التجميد)
 from .models import User, Governorate, City, Category, Post, Comment, Rating, ChatMessage, FriendRequest, Notification, PostAction
-
-def home_view(request):
-    selected_gov = request.GET.get('governorate')
-    selected_category = request.GET.get('category')
-    
-    # 1. جلب الأقسام الرئيسية فقط لتعرض كأزرار للاهتمامات بالقمة
-    # جلب كافة الأقسام الرئيسية (الأب فارغ) لضمان ظهور أي قسم تنشئه من لوحة الإدارة فوراً
-    category_choices = Category.objects.filter(parent=None)
-    
-    # جلب مقدمي الخدمات والفلترة حسب المحافظة
-    providers = User.objects.filter(user_type='provider')
-    if selected_gov:
-        providers = providers.filter(governorate_id=selected_gov)
-        
-    # تهيئة استمارة المنشور وتغذيتها بكافة التخصصات والأقسام المتاحة في قاعدة البيانات ديناميكياً
-    post_form = PostForm()
-    if hasattr(post_form.fields, 'get'):
-        if 'category' in post_form.fields:
-            post_form.fields['category'].queryset = Category.objects.all()
-            
-    # 2. إدارة الإشعارات وطلبات الصداقة المعلقة (مرة واحدة فقط وبدون تكرار)
-    unread_notifications = []
-    pending_friend_requests = []
-    if request.user.is_authenticated:
-        unread_notifications = request.user.notifications.filter(is_read=False)
-        pending_friend_requests = request.user.received_friend_requests.filter(status='pending')
-
-    # إدارة عمليات الـ POST (إنشاء منشور أو كتابة تعليق/رد فرعي)
-    if request.user.is_authenticated and request.method == 'POST':
-        if 'submit_post' in request.POST:
-            form = PostForm(request.POST, request.FILES)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.user = request.user
-                post.save()
-                return redirect('home')
-        elif 'submit_comment' in request.POST:
-            post_id = request.POST.get('post_id')
-            comment_content = request.POST.get('comment_content')
-            parent_id = request.POST.get('parent_id')
-            
-            if comment_content and post_id:
-                post_obj = get_object_or_404(Post, id=post_id)
-                parent_obj = None
-                if parent_id:
-                    parent_obj = get_object_or_404(Comment, id=parent_id)
-                
-                Comment.objects.create(
-                    post=post_obj, 
-                    user=request.user, 
-                    content=comment_content,
-                    parent=parent_obj
-                )
-                
-                if post_obj.user != request.user and not parent_obj:
-                    from .models import Notification
-                    Notification.objects.create(
-                        recipient=post_obj.user,
-                        sender=request.user,
-                        notification_type='comment',
-                        post=post_obj
-                    )
-                return redirect('home')
-
-    # جلب المنشورات وترتيبها
-    posts = Post.objects.all().order_by('-created_at')
-    
-    # 🌟 فلترة الذكاء الاصطناعي التلقائية لتايم لاين العميل بناءً على اهتماماته 🌟
-    if request.user.is_authenticated and request.user.user_type == 'customer' and not selected_category:
-        user_interests_ids = request.user.interests.values_list('id', flat=True)
-        if user_interests_ids.exists():
-            # إذا كان العميل يمتلك اهتمامات محددة مسبقاً، تظهر له بوستاتها تلقائياً فور فتح التطبيق
-            posts = posts.filter(category_id__in=user_interests_ids)
-
-    
-    # 3. 🔥 محرك الفلترة الشجرية الذكي للأقسام والاحتياجات الفرعية 🔥
-    if selected_category:
-        category_obj = get_object_or_404(Category, id=selected_category)
-        
-        # جلب القسم المختار نفسه + جلب كافة معرفات الأقسام الفرعية والتخصصات المتفرعة منه عمودياً
-        sub_categories_ids = [category_obj.id]
-        
-        # جلب المستوى الأول من الأبناء (الفرعي)
-        level_1_children = category_obj.children.all()
-        for child1 in level_1_children:
-            sub_categories_ids.append(child1.id)
-            # جلب المستوى الثاني من الأبناء (التخصصات الدقيقة)
-            level_2_children = child1.children.all()
-            for child2 in level_2_children:
-                sub_categories_ids.append(child2.id)
-                
-        # الفلترة السحرية: جلب أي بوست ينتمي للقسم الرئيسي أو أي تخصص متفرع منه تلقائياً!
-        posts = posts.filter(category_id__in=sub_categories_ids)
-        
-    # 4. فحص حالة الصداقة لكل منشور لحجب زر "إضافة صديق" ديناميكياً
-    for post in posts:
-        post.friend_status = None
-        if request.user.is_authenticated:
-            rel = FriendRequest.objects.filter(
-                (models.Q(from_user=request.user) & models.Q(to_user=post.user)) |
-                (models.Q(from_user=post.user) & models.Q(to_user=request.user))
-            ).first()
-            if rel:
-                post.friend_status = rel.status
-
-    context = {
-        'providers': providers,
-        'gov_choices': Governorate.objects.all(),
-        'category_choices': category_choices, # إرسال الأقسام الرئيسية النظيفة فقط للفلترة العليا
-        'selected_gov': int(selected_gov) if selected_gov else None,
-        'selected_category': int(selected_category) if selected_category else None,
-        'posts': posts,
-        'post_form': post_form,
-        'unread_notifications': unread_notifications,
-        'pending_requests': pending_friend_requests,
-    }
-    return render(request, 'accounts/home.html', context)
 
 
 @login_required
 def delete_comment_view(request, comment_id):
-    """دالة أمنية لحذف التعليق تمنح الحق فقط لصاحب المنشور أو كاتب التعليق نفسه"""
+    """دالة حصنية لحذف التعليق؛ تمنح الصلاحية للمالك وللمدير العام إذا كان التعليق مسيئاً"""
     comment = get_object_or_404(Comment, id=comment_id)
-    # الشرط الصارم: يجب أن يكون المستخدم هو صاحب المنشور الرئيسي أو هو من كتب التعليق
-    if request.user == comment.post.user or request.user == comment.user:
+    # التحقق: إذا كان الحاذف هو المالك، أو إذا كان الحساب إدارياً (مدير أو مشرف)
+    if comment.user == request.user or request.user.is_staff or request.user.is_superuser:
         comment.delete()
     return redirect('home')
 
@@ -187,8 +66,13 @@ def login_view(request):
             user = authenticate(request, username=username, password=password) # فحص الحساب مشفراً في السيرفر
             
             if user is not None:
-                login(request, user) # بدء الجلسة
+                login(request, user)
+                
+                # 🌟 تفعيل الدخول الدائم للأبد بداخل ذاكرة الهاتف (تذكرني) 🌟
+                request.session.set_expiry(0) # 0 تعني تنتهي فقط عندما يختار المستخدم "خروج" يدوياً
+                
                 return redirect('home')
+
             else:
                 error_message = "خطأ في اسم المستخدم أو كلمة المرور! تأكد من البيانات."
     else:
@@ -299,10 +183,11 @@ def public_profile_view(request, user_id):
         'friend_status': friend_status # تمرير الحالة لزر الواجهة الأمامية
     })
 
-# أضف هذه الدالة في نهاية ملف views.py للتحكم في الإعجابات
+# accounts/views.py
+
 @login_required
 def post_action_view(request, post_id, action_type):
-    """دالة تفاعلية لاستقبال الإعجابات وعدم الإعجابات وتحديث العدادات فوراً"""
+    """دالة تفاعلية لاستقبال الإعجابات وعدم الإعجابات وتحديث العدادات فوراً وبث حي"""
     post_obj = get_object_or_404(Post, id=post_id)
     if action_type in ['like', 'dislike']:
         # إذا كان المستخدم ضغط على نفس الزر سابقاً، نقوم بإلغاء التفاعل (Toggle)
@@ -316,10 +201,14 @@ def post_action_view(request, post_id, action_type):
         else:
             PostAction.objects.create(user=request.user, post=post_obj, action_type=action_type)
             
+    # 🚀 التحديث السحري: إجبار السيرفر على جلب الأعداد "الحية والجديدة" مباشرة من الجدول المحدث 🚀
+    fresh_likes = PostAction.objects.filter(post=post_obj, action_type='like').count()
+    fresh_dislikes = PostAction.objects.filter(post=post_obj, action_type='dislike').count()
+            
     return JsonResponse({
         'status': 'success',
-        'likes': post_obj.likes_count,
-        'dislikes': post_obj.dislikes_count
+        'likes': fresh_likes,      # ضخ الأعداد الحية الحقيقية فوريًا
+        'dislikes': fresh_dislikes # ضخ الأعداد الحية الحقيقية فوريًا
     })
 
 # أضف هذه الدوال في نهاية ملف views.py للتشغيل اللحظي
@@ -386,3 +275,142 @@ def friends_list_view(request):
             friends.append(rel.from_user)
             
     return render(request, 'accounts/friends_list.html', {'friends': friends})
+
+# 🌟 دالة الرئيسية الشاملة والموحدة (النسخة الفولاذية النهائية المصلحة للنشر) 🌟
+def home_view(request):
+    # 1. جلب البيانات الأساسية للأقسام الشجرية والمحافظات الحية
+    category_choices = Category.objects.filter(parent=None)
+    gov_choices = Governorate.objects.all()
+    selected_category = request.GET.get('category')
+    
+    # 2. معالجة عمليات الـ POST وحفظ المنشورات والتعليقات (المحرك المحرر لفتح بوابات النشر)
+    if request.user.is_authenticated and request.method == 'POST':
+        if 'submit_post' in request.POST:
+            # التقاط النصوص والصور والفيديوهات القصيرة فوريًا من الـ HTML المطور
+            form = PostForm(request.POST, request.FILES) 
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.user = request.user
+                post.save()
+                return redirect('home')
+        elif 'submit_comment' in request.POST:
+            post_id = request.POST.get('post_id')
+            comment_content = request.POST.get('comment_content')
+            parent_id = request.POST.get('parent_id')
+            
+            if comment_content and post_id:
+                post_obj = get_object_or_404(Post, id=post_id)
+                parent_obj = None
+                if parent_id:
+                    parent_obj = get_object_or_404(Comment, id=parent_id)
+                
+                Comment.objects.create(
+                    post=post_obj, 
+                    user=request.user, 
+                    content=comment_content,
+                    parent=parent_obj
+                )
+                return redirect('home')
+
+    # 3. تهيئة استمارة المنشور الافتراضية لحالات الـ GET السادة
+    post_form = PostForm()
+    if hasattr(post_form.fields, 'get') and 'category' in post_form.fields:
+        post_form.fields['category'].queryset = Category.objects.all()
+            
+    # 4. جلب طلبات الاتصال المعلقة وعدادات الإشعارات اللحظية الحية للمسجلين
+    unread_notifications = []
+    pending_friend_requests = []
+    if request.user.is_authenticated:
+        unread_notifications = request.user.notifications.filter(is_read=False)
+        pending_friend_requests = request.user.received_friend_requests.filter(status='pending')
+
+    # 5. تجميع التايم لاين وتفعيل الفلترة الشجرية العميقة للاحتياجات
+    posts = Post.objects.all().order_by('-created_at')
+    
+    if request.user.is_authenticated and request.user.user_type == 'customer' and not selected_category:
+        user_interests_ids = request.user.interests.values_list('id', flat=True)
+        if user_interests_ids.exists():
+            posts = posts.filter(category_id__in=user_interests_ids)
+
+    if selected_category:
+        category_obj = get_object_or_404(Category, id=selected_category)
+        sub_categories_ids = [category_obj.id]
+        for child1 in category_obj.children.all():
+            sub_categories_ids.append(child1.id)
+            for child2 in child1.children.all():
+                sub_categories_ids.append(child2.id)
+        posts = posts.filter(category_id__in=sub_categories_ids)
+        
+    # 6. فحص ومطالعة علاقات الصداقة لحجب وتثبيت أزرار التفاعل بالتايم لاين
+    for post in posts:
+        post.friend_status = None
+        if request.user.is_authenticated:
+            rel = FriendRequest.objects.filter(
+                (models.Q(from_user=request.user) & models.Q(to_user=post.user)) |
+                (models.Q(from_user=post.user) & models.Q(to_user=request.user))
+            ).first()
+            if rel: 
+                post.friend_status = rel.status
+
+    # 7. 🔒 حزمة الـ Context الأصلية المكتملة والمحقونة بالبيانات الحية بالملي 🔒
+    context = {
+        'gov_choices': gov_choices,
+        'category_choices': category_choices,
+        'selected_category': int(selected_category) if selected_category else None,
+        'posts': posts,
+        'post_form': post_form,
+        'unread_notifications': unread_notifications,
+        'pending_requests': pending_friend_requests,
+    }
+    return render(request, 'accounts/home.html', context)
+
+
+# 2. 🚀 دالة صفحة دليل الفنيين المستقلة الجديدة تماماً (تستقبل البحث الذكي والفلترة) 🚀
+def all_providers_view(request):
+    selected_gov = request.GET.get('governorate')
+    search_query = request.GET.get('q', '').strip()
+
+    providers = User.objects.filter(user_type='provider')
+    
+    if selected_gov:
+        providers = providers.filter(governorate_id=selected_gov)
+        
+    if search_query:
+        providers = providers.filter(
+            models.Q(username__icontains=search_query) |       
+            models.Q(phone_number__icontains=search_query) |   
+            models.Q(category__name_ar__icontains=search_query) 
+        ).distinct()
+
+    context = {
+        'providers': providers,
+        'gov_choices': Governorate.objects.all(),
+        'selected_gov': int(selected_gov) if selected_gov else None,
+        'search_query': search_query,
+    }
+    return render(request, 'accounts/providers_directory.html', context)
+# 🗑️ دالة حذف المنشور الحصنية (تتحقق أمنياً أن الحاذف هو صاحب البوست) 🗑️
+@login_required
+def delete_post_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.user == request.user:
+        post.delete()
+    return redirect('home')
+
+# 📝 دالة تعديل المنشور الفورية 📝
+@login_required
+def edit_post_view(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.user != request.user:
+        return redirect('home')
+        
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            post.content = content
+            # التقاط الميديا المحدثة إن وجدت
+            if request.FILES.get('image'): post.image = request.FILES.get('image')
+            if request.FILES.get('video'): post.video = request.FILES.get('video')
+            post.save()
+            return redirect('home')
+    return redirect('home')

@@ -5,27 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>أصدقائي - Otlop</title>
     <style>
-        :root { --primary: #0d1b2a; --bg: #f4f6f9; --accent: #1DA1F2; }
-        body { font-family: sans-serif; background-color: var(--bg); padding: 20px; text-align: right; }
-        .friend-box { max-width: 550px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #edf2f7; }
-        .friend-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 8px; border: 1px solid #edf2f7; }
-        .btn-profile { background: var(--primary); color: white; text-decoration: none; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        :root {
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #0d1b2a;
+            --text-muted: #718096;
+            --border-color: #edf2f7;
+            --input-bg: #f8fafc;
+        }
+        [data-theme="dark"] {
+            --bg: #0b132b;          
+            --card-bg: #1c2541;     
+            --text-main: #ffffff !important; 
+            --text-muted: #cbd5e0 !important; 
+            --border-color: #3a4764;
+            --input-bg: #131a35 !important; 
+        }
+        html, body {
+            margin: 0; padding: 20px; min-height: 100vh;
+            background-color: var(--bg) !important;
+            color: var(--text-main) !important;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            transition: background-color 0.2s, color 0.2s;
+            box-sizing: border-box;
+        }
+        .friend-box {
+            max-width: 550px;
+            margin: 20px auto;
+            background-color: var(--card-bg) !important;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            text-align: right;
+        }
+        .friend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--input-bg) !important;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .friend-name-txt {
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--text-main) !important;
+        }
+        .btn-profile {
+            background: #0d1b2a;
+            color: white !important;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .nav-link-back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #1DA1F2 !important;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* 📱 الـ Media Query المطاطي للموبايل لإلغاء الإطار الأبيض 📱 */
+        @media (max-width: 768px) {
+            html, body { padding: 0 !important; margin: 0 !important; }
+            .friend-box {
+                margin: 0 !important;
+                padding: 25px 20px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 100vh;
+                border-radius: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                box-sizing: border-box !important;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="friend-box">
-        <h3 style="color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 8px;">👥 قائمة أصدقائي الحاليين:</h3>
-        {% for friend in friends %}
-            <div class="friend-item">
-                <span style="font-weight: bold; font-size: 14px; color: #2d3748;">👤 {{ friend.username }} ({{ friend.get_user_type_display }})</span>
-                <a href="{% url 'public_profile' friend.id %}" class="btn-profile">عرض البروفايل 👤</a>
-            </div>
-        {% empty %}
-            <p style="text-align: center; color: #a0aec0; font-size: 13px; padding: 20px;">لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!</p>
-        {% endfor %}
-        <a href="{% url 'home' %}" style="display: block; text-align: center; margin-top: 20px; color: var(--accent); text-decoration: none; font-weight: bold; font-size: 14px;">🏠 العودة لتايم لاين الرئيسية</a>
+        <h3 id="txt-friends-title" style="color: var(--text-main); margin-top: 0; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; font-size: 18px;">👥 قائمة أصدقائي الحاليين:</h3>
+        
+        <div id="friends-list-container">
+            {% for friend in friends %}
+                <div class="friend-item">
+                    <span class="friend-name-txt">👤 {{ friend.username }} ({{ friend.get_user_type_display }})</span>
+                    <a href="{% url 'public_profile' friend.id %}" class="btn-profile-txt btn-profile">عرض البروفايل 👤</a>
+                </div>
+            {% empty %}
+                <p id="txt-no-friends" style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px; margin: 0;">لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!</p>
+            {% endfor %}
+        </div>
+        
+        <a href="{% url 'home' %}" id="txt-back-home" class="nav-link-back">🏠 الرئيسية</a>
     </div>
 
+    <!-- سكريبت الوراثة والترجمة اللحظية المورثة بدون أزرار مكررة -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const savedLang = localStorage.getItem('lang') || 'ar';
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = savedLang;
+
+            // قاموس ترجمة قائمة الأصدقاء الفوري
+            const friendsTranslations = {
+                'ar': {
+                    'title': '👥 قائمة أصدقائي الحاليين:',
+                    'view_btn': 'عرض البروفايل 👤',
+                    'no_friends': 'لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!',
+                    'back_home': '🏠 الرئيسية   '
+                },
+                'en': {
+                    'title': '👥 My Current Friends List:',
+                    'view_btn': 'View Profile 👤',
+                    'no_friends': 'No friends added yet. Try connecting with providers on the timeline!',
+                    'back_home': '🏠 Return to Main Timeline'
+                }
+            };
+
+            const t = friendsTranslations[savedLang];
+            if(document.getElementById('txt-friends-title')) document.getElementById('txt-friends-title').textContent = t['title'];
+            if(document.getElementById('txt-no-friends')) document.getElementById('txt-no-friends').textContent = t['no_friends'];
+            if(document.getElementById('txt-back-home')) document.getElementById('txt-back-home').textContent = t['back_home'];
+            document.querySelectorAll('.btn-profile-txt').forEach(el => el.textContent = t['view_btn']);
+        });
+    </script>
 </body>
 </html>

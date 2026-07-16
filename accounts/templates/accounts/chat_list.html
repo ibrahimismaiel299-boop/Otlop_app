@@ -6,121 +6,192 @@
     <title>رسائل Otlop</title>
     <style>
         :root {
-            --primary: #0d1b2a;
-            --secondary: #1b263b;
-            --accent: #1DA1F2;
+            /* ☀️ الألوان الافتراضية للنهار ☀️ */
             --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #0d1b2a;
+            --text-muted: #718096;
+            --border-color: #edf2f7;
+            --input-bg: #f8fafc;
         }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--bg); 
-            margin: 0; 
-            padding: 15px; 
-            color: var(--primary);
+        [data-theme="dark"] {
+            /* 🌙 الألوان الفاخرة للوضع الليلي المورّث 🌙 */
+            --bg: #0b132b;          
+            --card-bg: #1c2541;     
+            --text-main: #ffffff !important; 
+            --text-muted: #cbd5e0 !important; 
+            --border-color: #3a4764;
+            --input-bg: #131a35 !important; 
+        }
+        html, body {
+            margin: 0; padding: 20px; min-height: 100vh;
+            background-color: var(--bg) !important;
+            color: var(--text-main) !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            transition: background-color 0.2s, color 0.2s;
+            box-sizing: border-box;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
+            background-color: var(--card-bg) !important;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
         }
         .header-title {
             font-size: 20px;
             font-weight: 700;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
+            color: var(--text-main) !important;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
             margin-bottom: 20px;
             text-align: right;
         }
         .user-row {
-            background: white; 
+            background-color: var(--input-bg) !important; 
             padding: 15px; 
             border-radius: 14px; 
             margin-bottom: 12px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            border: 1px solid #edf2f7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+            border: 1px solid var(--border-color);
         }
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .avatar-placeholder {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: #e2e8f0;
+            background: #cbd5e0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             font-weight: bold;
+            color: #0d1b2a !important;
         }
         .username {
             font-size: 15px;
             font-weight: 600;
-            color: var(--primary);
+            color: var(--text-main) !important;
             display: block;
         }
         .usertype {
             font-size: 11px;
-            color: #718096;
-            margin-top: 2px;
+            color: var(--text-muted) !important;
+            margin-top: 3px;
             display: block;
         }
         .btn-chat {
-            background: var(--primary); 
-            color: white; 
+            background: #0d1b2a; 
+            color: white !important; 
             padding: 8px 18px; 
             text-decoration: none; 
             border-radius: 20px; 
             font-size: 13px; 
             font-weight: bold;
-            transition: 0.2s ease;
-            box-shadow: 0 4px 10px rgba(13,27,42,0.15);
-        }
-        .btn-chat:hover {
-            background: var(--accent);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.2s;
         }
         .btn-back {
             display: block; 
-            background: #edf2f7; 
-            color: var(--primary); 
+            background: var(--input-bg) !important; 
+            color: var(--text-main) !important; 
             padding: 12px; 
             border-radius: 30px; 
             text-align: center; 
             margin-top: 25px; 
-            border: 1px solid #cbd5e0; 
+            border: 1px solid var(--border-color); 
             text-decoration: none;
             font-weight: bold;
             font-size: 14px;
+        }
+
+        /* 📱 الـ Media Query المطاطي لإلغاء الإطار الأبيض على الهواتف 📱 */
+        @media (max-width: 768px) {
+            html, body { padding: 0 !important; margin: 0 !important; }
+            .container {
+                margin: 0 !important;
+                padding: 25px 20px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 100vh;
+                border-radius: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                box-sizing: border-box !important;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header-title">💬 صندوق المحادثات والرسائل</div>
+        <!-- 💡 العنوان الرئيسي المهيأ للترجمة اللحظية المورثة 💡 -->
+        <div id="txt-chat-list-title" class="header-title">💬 صندوق المحادثات والرسائل</div>
         
-        {% for u in users %}
-            <div class="user-row">
-                <div class="user-info">
-                    <div class="avatar-placeholder">👤</div>
-                    <div>
-                        <span class="username">{{ u.username }}</span>
-                        <span class="usertype">{{ u.get_user_type_display }}</span>
+        <div id="chats-list-container">
+            {% for u in users %}
+                <div class="user-row">
+                    <div class="user-info">
+                        <div class="avatar-placeholder">👤</div>
+                        <div>
+                            <span class="username">{{ u.username }}</span>
+                            <span class="usertype">{{ u.get_user_type_display }}</span>
+                        </div>
                     </div>
+                    <!-- زر المراسلة التفاعلي المترجم تلقائياً -->
+                    <a href="{% url 'chat_detail' u.id %}" class="btn-msg-txt btn-chat">مراسلة 💬</a>
                 </div>
-                <a href="{% url 'chat_detail' u.id %}" class="btn-chat">مراسلة 💬</a>
-            </div>
-        {% empty %}
-            <p style="text-align: center; color: #a0aec0; padding: 30px; background: white; border-radius: 12px; border: 1px dashed #e2e8f0;">لا يوجد مستخدمون لمراسلتهم حالياً.</p>
-        {% endfor %}
+            {% empty %}
+                <p id="txt-no-chats" style="text-align: center; color: var(--text-muted); padding: 30px; background-color: var(--card-bg) !important; border-radius: 12px; border: 1px dashed var(--border-color); margin: 0;">لا يوجد مستخدمون لمراسلتهم حالياً.</p>
+            {% endfor %}
+        </div>
         
-        <a href="{% url 'home' %}" class="btn-back">🏠 العودة للتايم لاين الرئيسي</a>
+        <a href="{% url 'home' %}" id="txt-chat-list-back" class="btn-back">🏠 الرئيسية</a>
     </div>
 
+    <!-- 🚀 سكريبت الوراثة اللحظية والترجمة المورّثة لغرف الرسائل بدون أزرار مكررة 🚀 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. فحص وتطبيق المظهر الداكن/الفاتح المخزن في الهاتف تلقائياً
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // 2. فحص وتطبيق الاتجاه واللغة المورّثة تلقائياً من الصفحة الرئيسية
+            const savedLang = localStorage.getItem('lang') || 'ar';
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = savedLang;
+
+            // 🌐 قاموس ترجمة شاشة المحادثات الفوري 🌐
+            const chatListTranslations = {
+                'ar': {
+                    'title': '💬 صندوق المحادثات والرسائل',
+                    'msg_btn': 'مراسلة 💬',
+                    'no_chats': 'لا يوجد مستخدمون لمراسلتهم حالياً.',
+                    'back_home': '🏠    الرئيسية'
+                },
+                'en': {
+                    'title': '💬 Conversations & Messages Inbox',
+                    'msg_btn': 'Chat 💬',
+                    'no_chats': 'No users available for chatting right now.',
+                    'back_home': '🏠 Return to Main Timeline'
+                }
+            };
+
+            const t = chatListTranslations[savedLang];
+            if(document.getElementById('txt-chat-list-title')) document.getElementById('txt-chat-list-title').textContent = t['title'];
+            if(document.getElementById('txt-no-chats')) document.getElementById('txt-no-chats').textContent = t['no_chats'];
+            if(document.getElementById('txt-chat-list-back')) document.getElementById('txt-chat-list-back').textContent = t['back_home'];
+            document.querySelectorAll('.btn-msg-txt').forEach(el => el.textContent = t['msg_btn']);
+        });
+    </script>
 </body>
 </html>

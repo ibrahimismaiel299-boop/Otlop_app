@@ -10,6 +10,71 @@
     
     <style>
         :root {
+            /* ☀️ الألوان الافتراضية للنهار ☀️ */
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #0d1b2a;
+            --text-muted: #718096;
+            --border-color: #edf2f7;
+            --input-bg: #f8fafc;
+        }
+
+        [data-theme="dark"] {
+            /* 🌙 الألوان الفاخرة للوضع الليلي المصحح بالملي 🌙 */
+            --bg: #0b132b;          
+            --card-bg: #1c2541;     
+            --text-main: #ffffff !important; /* إجبار كافة النصوص بلا استثناء على التحول للون الأبيض */
+            --text-muted: #cbd5e0 !important; /* لون العناوين الفرعية الرفيعة فوق الحقول */
+            --border-color: #3a4764;
+            --input-bg: #131a35 !important; 
+        }
+
+        /* ⚠️ تطبيق المتغيرات الحصينة ⚠️ */
+        body { 
+            background-color: var(--bg) !important; 
+            color: var(--text-main) !important; 
+            transition: background-color 0.2s, color 0.2s; 
+        }
+
+        /* تطهير صندوق الحاوية الرئيسي بالكامل */
+        .profile-container, .form-container, .container {
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        /* حل مشكلة صندوق التخصص الأبيض: صبغ الحوايا الفرعية بالكامل بلون المظهر */
+        div[style*="background"], div[style*="background-color"], .form-group, fieldset {
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        /* 💡 إجبار العناوين المكتوبة بداخل وسوم الـ label والـ strong على الإضاءة البيضاء بالليل 💡 */
+        label, .form-group label, strong, p, span, h1, h2, h3, h4 {
+            color: var(--text-muted) !important; /* يجعل النصوص الفرعية واضحة جداً للقراءة */
+        }
+
+        /* حماية اللوجو العلوي والعناوين الرئيسية لتظل بيضاء ساطعة دائماً */
+        .brand-logo, .brand-logo span, h2 {
+            color: var(--text-main) !important;
+            font-weight: 800;
+        }
+
+        /* تطهير الحقول والقوائم المنسدلة */
+        input[type="text"], input[type="password"], input[type="tel"], select, textarea, .form-group input, .form-group select {
+            background-color: var(--input-bg) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+
+        :root {
             --primary: #0d1b2a;
             --secondary: #1b263b;
             --accent: #1DA1F2;
@@ -232,5 +297,19 @@
 
         });
     </script>
+        <!-- 🚀 سكريبت الوراثة التلقائية الفورية للمظهر واللغات بدون أزرار 🚀 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. قراءة وتطبيق المظهر (Dark/Light) المخزن في ذاكرة الهاتف تلقائياً
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // 2. قراءة وتطبيق اللغة والاتجاه (RTL/LTR) المخزن في ذاكرة الهاتف تلقائياً
+            const savedLang = localStorage.getItem('lang') || 'ar';
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = savedLang;
+        });
+    </script>
+
 </body>
 </html>

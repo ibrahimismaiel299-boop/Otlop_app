@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .emojis import CATEGORY_EMOJI_CHOICES
 
 # 1. جدول المحافظات النهائي
 class Governorate(models.Model):
@@ -18,7 +19,7 @@ class City(models.Model):
     def __str__(self):
         return f"{self.name_ar} - {self.governorate.name_ar}"
 
-# كلاس الأقسام المطور والديناميكي بالكامل لدعم الأقسام الرئيسية والفرعية والتخصصات
+# 🌟 كلاس الأقسام المطور والديناميكي بالكامل لدعم الأقسام الرئيسية والفرعية والتخصصات (نسخة الإيموجيات المنسدلة) 🌟
 class Category(models.Model):
     name_ar = models.CharField(max_length=100, verbose_name="اسم القسم/التخصص بالعربية")
     name_en = models.CharField(max_length=100, verbose_name="اسم القسم/التخصص بالإنجليزية", blank=True, null=True)
@@ -33,21 +34,29 @@ class Category(models.Model):
         verbose_name="القسم الأب (اتركه فارغاً ليكون قسماً رئيسياً)"
     )
     
-    icon_emoji = models.CharField(max_length=10, default="🛠️", verbose_name="أيقونة التخصص (إيموجي)")
+    # 🚀 تحديث الحقل ليقرأ أوتوماتيكياً من مكتبة الإيموجيات الخارجية كقائمة خيارات منسدلة فخمة 🚀
+    icon_emoji = models.CharField(
+        max_length=10, 
+        choices=CATEGORY_EMOJI_CHOICES, # ربط القائمة المنسدلة الذكية
+        default="🛠️", 
+        verbose_name="أيقونة التخصص (إيموجي)"
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "القسم والتخصص"
+        verbose_name = "الالقسم والتخصص"
         verbose_name_plural = "الأقسام والتخصصات"
 
     # دالة ذكية تعرض مسار القسم بالكامل في لوحة التحكم (مثال: خدمات منزلية -> سباكة -> تمديد شبكات)
     def __str__(self):
-        full_path = [self.name_ar]
+        full_path = [f"{self.icon_emoji} {self.name_ar}"] # 🌟 دمج الإيموجي في أول المسار ليعطي مظهراً فخماً بداخل لوحة الإدارة
         k = self.parent
         while k is not None:
             full_path.append(k.name_ar)
             k = k.parent
         return " -> ".join(reversed(full_path))
+
 
 # 3. جدول المستخدم النهائي والمستقر
 class User(AbstractUser):
@@ -116,25 +125,58 @@ class User(AbstractUser):
             return round(avg, 1) # تقريب للرقم مثل 4.5
         return 0.0
 
+        # 🔐 دالة التشفير الذكي لأرقام الهواتف (تحافظ على أول 3 أرقام وآخر 3 أرقام وتخفي المنتصف) 🔐
+    @property
+    def masked_phone(self):
+        if self.phone_number and len(self.phone_number) >= 8:
+            # مثال: 01012345678 يتحول إلى 010*****678
+            return f"{self.phone_number[:3]}*****{self.phone_number[-3:]}"
+        return self.phone_number
 
 # أضف هذا الجدول في نهاية ملف models.py
+# 🌟 كلاس المنشورات المطور (يدعم الصور، الفيديوهات القصيرة، والدوال الإحصائية الذكية) 🌟
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', verbose_name="كاتب المنشور")
     content = models.TextField(verbose_name="ماذا يدور في ذهنك؟")
     image = models.ImageField(upload_to='posts_images/', blank=True, null=True, verbose_name="صورة المنشور")
     
+    # 🎬 الحقل السحري: دعم رفع الفيديوهات القصيرة حتى دقيقة 🎬
+    video = models.FileField(upload_to='post_videos/', blank=True, null=True, verbose_name="فيديو المنشور")
+
     # ربط المنشور بقسم معين لفلترته حسب اهتمامات المستخدمين (🔧، 👨‍💻، 🍔، 🚖)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="قسم الاهتمام")
     
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ النشر")
-        # أضف هاتين الدالتين داخل كلاس الـ Post في ملف models.py
+
+    class Meta:
+        verbose_name = "المنشور"
+        verbose_name_plural = "المنشورات"
+        ordering = ['-created_at'] # ترتيب المنشورات من الأحدث للأقدم تلقائياً بالتايم لاين
+
+    # 🚀 دالة ذكية 1: جلب التعليقات الرئيسية فقط (التي ليس لها أب) لترتيب العروض بنظافة
+    def get_main_comments(self):
+        return self.comments.filter(parent=None).order_by('-created_at')
+
+    # 🚀 دالة ذكية 2: فحص سريع لمعرفة هل المنشور يحتوي على فيديو مرفق أم لا لتغيير أيقونة العرض
+    def has_video(self):
+        return bool(self.video)
+
+    def __str__(self):
+        return f"منشور بواسطة {self.user.username} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+    # 🚀 التحديث السحري: إجبار الموديل على قراءة الأعداد الحية من جدول الـ PostAction عند الريفريش 🚀
     @property
     def likes_count(self):
-        return self.actions.filter(action_type='like').count()
+        # استدعاء جدول PostAction وفلترته لحساب الإعجابات الحقيقية للمنشور الحالي
+        from .models import PostAction  # استيراد داخلي لمنع التداخل (Circular Import)
+        return PostAction.objects.filter(post=self, action_type='like').count()
 
     @property
     def dislikes_count(self):
-        return self.actions.filter(action_type='dislike').count()
+        # استدعاء جدول PostAction وفلترته لحساب الرفض الحقيقي للمنشور الحالي
+        from .models import PostAction
+        return PostAction.objects.filter(post=self, action_type='dislike').count()
+
 
 
     class Meta:

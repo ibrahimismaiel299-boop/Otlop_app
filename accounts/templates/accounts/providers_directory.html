@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Otlop - Providers Directory</title>
+    <style>
+        :root {
+            --bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; 
+            --border: #e2e8f0; --input-bg: #f1f5f9; --accent: #1da1f2;
+        }
+        [data-theme="dark"] {
+            --bg: #0b0f19; --card-bg: #151d30; --text-main: #f8fafc !important; --text-muted: #94a3b8 !important; 
+            --border: #24314f; --input-bg: #0e1626 !important;
+        }
+        html, body {
+            margin: 0; padding: 0; min-height: 100vh; background-color: var(--bg) !important;
+            color: var(--text-main) !important; font-family: 'Segoe UI', Tahoma, sans-serif;
+            transition: background-color 0.2s, color 0.2s; box-sizing: border-box;
+        }
+        .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 40px 16px; box-sizing: border-box; width: 100%; }
+        
+        /* ضبط شريط الفلترة والبحث الذكي العلوي */
+        .search-grid { 
+            display: grid; grid-template-columns: 90px 1.2fr 2fr; gap: 10px; width: 100%; 
+            background: var(--card-bg); padding: 12px; border-radius: 18px; 
+            border: 1px solid var(--border); box-shadow: 0 4px 25px rgba(0,0,0,0.01); box-sizing: border-box; margin-bottom: 25px; 
+        }
+        .search-grid input, .search-grid select, .search-grid button { height: 44px; border: none; outline: none; background: var(--input-bg); color: var(--text-main); border-radius: 12px; font-size: 13px; font-weight: 600; box-sizing: border-box; width: 100%; }
+        .search-grid input { padding: 0 16px; text-align: right; border: 1px solid var(--border) !important; }
+        .search-grid select { padding: 0 12px; cursor: pointer; -webkit-appearance: menulist !important; appearance: menulist !important; border: 1px solid var(--border) !important; }
+        .search-grid button { background: #2ec4b6 !important; color: white !important; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(46,196,182,0.15); }
+        
+        /* كروت مقدمي الخدمات الفخمة بنظام الأبعاد الملمومة ميكانيكياً */
+        .provider-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.005); box-sizing: border-box; width: 100%; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.95; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @media (max-width: 768px) { .search-grid { grid-template-columns: 1fr !important; gap: 8px !important; } }
+    </style>
+</head>
+<body>
+    <!-- الحاوية الفاخرة المحكومة بـ 680 بكسل لتتوسط اللاب توب وتتمدد بالكامل على الموبايل -->
+    <div class="container">
+        
+        <!-- زر العودة السريع للتايم لاين بالرئيسية -->
+        <div style="margin-bottom: 20px; text-align: right;">
+            <button type="button" onclick="window.location.href='/'" style="background: none; border: none; color: #1da1f2; font-weight: bold; font-size: 14px; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 4px;">
+                <span>➡️</span> عودة للرئيسية
+            </button>
+        </div>
+
+        <!-- شريط الفلترة والبحث الذكي المطور (اسم، تخصص، هاتف، محافظة) -->
+        <form method="GET" action="/providers/" class="search-grid">
+            <button type="submit">تصفية 🔍</button>
+            <select name="governorate">
+                <option value="">كل المحافظات المصرية 🌍</option>
+                {% for gov in gov_choices %}
+                    <option value="{{ gov.id }}" {% if selected_gov == gov.id %}selected{% endif %}>{{ gov.name_ar }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="ابحث بالاسم، الهاتف، أو نوع الخدمة... 🛠️">
+        </form>
+
+        <!-- شبكة عرض كروت مقدمي الخدمات الملمومة والموسطة هندسياً -->
+        <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; box-sizing: border-box;">
+            {% for provider in providers %}
+                <div class="provider-card">
+                    <!-- الصورة الدائرية الفخمة بنظام الأبعاد الموزونة -->
+                    {% if provider.profile_picture %}
+                        <img src="{{ provider.profile_picture.url }}" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #1da1f2; margin-bottom: 5px;">
+                    {% else %}
+                        <div style="width: 65px; height: 65px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 24px; font-weight: bold; margin-bottom: 5px;">👤</div>
+                    {% endif %}
+
+                    <!-- اسم الفني وتقييمه الحركي -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <a href="{% url 'public_profile' provider.id %}" style="text-decoration: none; color: inherit;">
+                            <strong style="color: var(--text-main); font-size: 16px; font-weight: 800;">{{ provider.username }}</strong>
+                        </a>
+                        <span style="color: #ffb703; font-weight: bold; font-size: 13px;">⭐ {{ provider.get_average_rating }}</span>
+                    </div>
+
+                    <!-- التخصص والموقع الجغرافي المسجل بالسيرفر -->
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; margin: 4px 0 10px 0;">
+                        <span>🛠️ التخصص: <span style="color: #1da1f2;">{{ provider.category.name_ar|default:"غير محدد" }}</span></span>
+                        <span>📍 الموقع: {{ provider.governorate.name_ar }} - {{ provider.city.name_ar }}</span>
+                    </div>
+
+                    <!-- 🔐 كبسولة الاتصال النيونية الفاخرة والمشفرة بصرياً بالكامل (ممررة للرقم خلف الكواليس) 🔐 -->
+                    {% if provider.phone_number %}
+                        <a href="tel:{{ provider.phone_number }}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 8px 22px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; box-sizing: border-box;">
+                            <span style="font-size: 15px; animation: pulse 2s infinite; display: inline-block;">📞</span> 
+                            <span>اتصال ⚡</span>
+                        </a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 20px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد نتائج مطابقة لبحثك حالياً.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- تفعيل تزامنات الجافا سكريبت الخاصة بقراءة وإرث الوضع المظلم التلقائي للهاتف -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>
+

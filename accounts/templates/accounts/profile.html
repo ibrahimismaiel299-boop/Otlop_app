@@ -6,6 +6,70 @@
     <title>الملف الشخصي - Otlop</title>
     <style>
         :root {
+            /* ☀️ الألوان الافتراضية للنهار ☀️ */
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #0d1b2a;
+            --text-muted: #718096;
+            --border-color: #edf2f7;
+            --input-bg: #f8fafc;
+        }
+
+        [data-theme="dark"] {
+            /* 🌙 الألوان الفاخرة للوضع الليلي المصحح بالملي 🌙 */
+            --bg: #0b132b;          
+            --card-bg: #1c2541;     
+            --text-main: #ffffff !important; /* إجبار كافة النصوص بلا استثناء على التحول للون الأبيض */
+            --text-muted: #cbd5e0 !important; /* لون العناوين الفرعية الرفيعة فوق الحقول */
+            --border-color: #3a4764;
+            --input-bg: #131a35 !important; 
+        }
+
+        /* ⚠️ تطبيق المتغيرات الحصينة ⚠️ */
+        body { 
+            background-color: var(--bg) !important; 
+            color: var(--text-main) !important; 
+            transition: background-color 0.2s, color 0.2s; 
+        }
+
+        /* تطهير صندوق الحاوية الرئيسي بالكامل */
+        .profile-container, .form-container, .container {
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        /* حل مشكلة صندوق التخصص الأبيض: صبغ الحوايا الفرعية بالكامل بلون المظهر */
+        div[style*="background"], div[style*="background-color"], .form-group, fieldset {
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        /* 💡 إجبار العناوين المكتوبة بداخل وسوم الـ label والـ strong على الإضاءة البيضاء بالليل 💡 */
+        label, .form-group label, strong, p, span, h1, h2, h3, h4 {
+            color: var(--text-muted) !important; /* يجعل النصوص الفرعية واضحة جداً للقراءة */
+        }
+
+        /* حماية اللوجو العلوي والعناوين الرئيسية لتظل بيضاء ساطعة دائماً */
+        .brand-logo, .brand-logo span, h2 {
+            color: var(--text-main) !important;
+            font-weight: 800;
+        }
+
+        /* تطهير الحقول والقوائم المنسدلة */
+        input[type="text"], input[type="password"], input[type="tel"], select, textarea, .form-group input, .form-group select {
+            background-color: var(--input-bg) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        :root {
             --primary: #0d1b2a;
             --secondary: #1b263b;
             --accent: #1DA1F2;
@@ -26,6 +90,37 @@
         .btn-save { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 12px rgba(13,27,42,0.2); }
         .btn-save:hover { background-color: var(--accent); }
         .nav-link { display: block; text-align: center; margin-top: 20px; color: #718096; text-decoration: none; font-size: 14px; font-weight: bold; }
+
+        /* 📱 محرك التجاوب الحصين والمطاطي لشاشات الموبايل (إلغاء الإطار الأبيض بالملي) 📱 */
+@media (max-width: 768px) {
+    /* 1. تصفير هوامش الصفحة العامة تماماً لمنع أي تسريب بكسل أبيض */
+    html, body {
+        padding: 0 !important;
+        margin: 0 !important;
+        background-color: var(--bg) !important;
+        min-height: 100vh;
+    }
+
+    /* 2. مطّ حاوية البروفايل الكبرى لتملأ كامل طول وعرض شاشة الموبايل 100% تلقائياً */
+    .profile-container {
+        margin: 0 !important;
+        padding: 25px 20px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 100vh;
+        border-radius: 0 !important; /* إلغاء الحواف الدائرية لتلتحم بحافة شاشة الهاتف كالفيسبوك */
+        border: none !important;
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+    }
+            @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.12); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+}
+
     </style>
 </head>
 <body>
@@ -66,7 +161,7 @@
             <button type="submit" class="btn-save">حفظ وتحديث التغييرات 💾</button>
         </form>
         
-        <a href="{% url 'home' %}" class="nav-link" style="display: block; background: #edf2f7; color: #0d1b2a; padding: 12px; border-radius: 30px; text-align: center; margin-top: 15px; border: 1px solid #cbd5e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">🏠 العودة لتايم لاين الرئيسية</a>
+        <a href="{% url 'home' %}" class="nav-link" style="display: block; background: #edf2f7; color: #0d1b2a; padding: 12px; border-radius: 30px; text-align: center; margin-top: 15px; border: 1px solid #cbd5e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">🏠 الرئيسية</a>
     </div>
 
     <script>
@@ -103,5 +198,37 @@
             }
         });
     </script>
+        <!-- 🚀 سكريبت الوراثة التلقائية الفورية للمظهر واللغات بدون أزرار 🚀 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. قراءة وتطبيق المظهر (Dark/Light) المخزن في ذاكرة الهاتف تلقائياً
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // 2. قراءة وتطبيق اللغة والاتجاه (RTL/LTR) المخزن في ذاكرة الهاتف تلقائياً
+            const savedLang = localStorage.getItem('lang') || 'ar';
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = savedLang;
+        });
+                // قاموس ترجمة البروفايل التلقائي المورّث
+        const profTranslations = {
+            'ar': { 'title': 'الملف الشخصي - Otlop', 'save': 'حفظ وتحديث التغييرات 💾', 'back': '🏠 الرئيسية' },
+            'en': { 'title': 'User Profile - Otlop', 'save': 'Save & Update Changes 💾', 'back': '🏠 Return to Main Timeline' }
+        };
+        const currentLang = localStorage.getItem('lang') || 'ar';
+        const t = profTranslations[currentLang];
+        
+        // حقن الترجمات في ترويسات وأزرار البروفايل فوراً
+        const titleEl = document.querySelector('.brand-logo');
+        if(titleEl) titleEl.innerHTML = currentLang === 'ar' ? 'Otlo<span>p</span> Profile' : 'Otlo<span>p</span> Profile';
+        
+        const btnSave = document.querySelector('.btn-save');
+        if(btnSave) btnSave.textContent = t['save'];
+        
+        const btnBack = document.querySelector('.nav-link');
+        if(btnBack) btnBack.textContent = t['back'];
+
+    </script>
+
 </body>
 </html>
