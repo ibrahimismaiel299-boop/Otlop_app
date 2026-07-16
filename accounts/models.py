@@ -90,6 +90,12 @@ class User(AbstractUser):
     # أضف هذا الحقل داخل كلاس User في ملف models.py
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True, default='profile_pics/default_user.png', verbose_name="صورة الحساب")
     # الحقول الجديدة لربط التخصصات والاهتمامات الديناميكية الشجرية
+        # 🚀 حقول التوزيع الجغرافي والإتاحة اللحظية لايف للسوبر آب 🚀
+    is_active_now = models.BooleanField(default=False, verbose_name="متاح الآن للعمل")
+    latitude = models.FloatField(null=True, blank=True, verbose_name="خط العرض GPS")
+    longitude = models.FloatField(null=True, blank=True, verbose_name="خط الطول GPS")
+    last_location_update = models.DateTimeField(null=True, blank=True, verbose_name="آخر تحديث للموقع")
+
     category = models.ForeignKey(
         'Category', 
         on_delete=models.SET_NULL, 
