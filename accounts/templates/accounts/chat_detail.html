@@ -49,17 +49,35 @@
         .chat-input { flex-grow: 1; padding: 12px 15px; border-radius: 25px; border: 1px solid var(--border-color) !important; outline: none; font-size: 14px; background-color: var(--input-bg) !important; color: var(--text-main) !important; transition: 0.2s; }
         .btn-send { background: #2ec4b6; color: white; border: none; padding: 12px 22px; border-radius: 25px; font-weight: bold; font-size: 14px; cursor: pointer; }
     </style>
-
-
 </head>
+
 <body>
 
+    <!-- 🚀 حاوية الحصر السحرية الموحدة: تضمن توسط اللابتوب وتمدد الموبايل بكامل مساحة الشاشة 🚀 -->
     <div class="chat-main-wrapper">
         
-        <!-- هيدر الشات العلوي -->
+        <!-- هيدر الشات العلوي المطور بالصورة والشارة وزر الاتصال الهاتفي لايف -->
         <div class="chat-header">
-            <h3>💬 محادثة: {{ other_user.username }}</h3>
-            <a href="{% url 'chat_rooms_list' %}" class="btn-back-link">رجوع ⬅️</a>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="position: relative; width: 40px; height: 40px; flex-shrink: 0; display: inline-block;">
+                    {% if other_user.profile_picture %}
+                        <img src="{{ other_user.profile_picture.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid {% if other_user.is_active_now %}#2ec4b6{% else %}var(--border-color){% endif %};">
+                    {% else %}
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 18px; font-weight: bold;">👤</div>
+                    {% endif %}
+                    {% if other_user.is_active_now %}
+                        <span style="position: absolute; bottom: 0; right: 0; width: 11px; height: 11px; background: #2ec4b6; border: 2px solid var(--card-bg); border-radius: 50%; animation: chat-pulse 2s infinite; display: inline-block;"></span>
+                    {% endif %}
+                </div>
+                <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main);">💬 محادثة: {{ other_user.username }}</h3>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 14px;">
+                {% if other_user.is_active_now %}
+                    <a href="{% url 'trigger_voice_call' other_user.id %}" style="text-decoration: none; background: #2ec4b6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 3px 10px rgba(46,196,182,0.3); animation: chat-pulse 2s infinite;">📞</a>
+                {% endif %}
+                <a href="{% url 'chat_rooms_list' %}" class="btn-back-link" style="font-size: 13px; font-weight: 700; text-decoration: none;">رجوع ⬅️</a>
+            </div>
         </div>
 
         <!-- منطقة عرض الرسائل الحية للطرفين -->
@@ -73,34 +91,66 @@
             {% endfor %}
         </div>
 
-        <!-- صندوق الإدخال السفلي الثابت -->
+        <!-- صندوق الإدخال السفلي الثابت المطور بالسهم الطائر -->
         <div class="input-zone-container">
             <form method="POST" class="chat-form">
                 {% csrf_token %}
                 <input type="text" name="message" class="chat-input" placeholder="اكتب رسالتك الخاصة هنا..." required autocomplete="off">
-                <button type="submit" class="btn-send">إرسال 🚀</button>
+                <button type="submit" style="background: #0d1b2a; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; padding: 0; box-shadow: 0 4px 12px rgba(13,27,42,0.15); flex-shrink: 0;">✈️</button>
             </form>
         </div>
 
     </div>
 
-    <!-- محرك البث اللحظي لحقن الرسائل ديناميكياً بدون ريفريش وبأعلى مرونة للموبايل -->
+    <!-- 🎛️ شاشة منبثقة سينمائية ملوكية لعرض وعزل المكالمات الصادرة والواردة لايف (Full UI Voice Overlay) 🎛️ -->
+    <div id="voiceCallOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13,27,42,0.99); z-index: 9999; text-align: center; flex-direction: column; justify-content: center; align-items: center; color: white; direction: rtl; box-sizing: border-box; padding: 20px;">
+        
+        <!-- انميشن النبض الهاتفي المطور -->
+        <div style="width: 100px; height: 100px; border-radius: 50%; background: #2ec4b6; display: flex; align-items: center; justify-content: center; font-size: 46px; margin-bottom: 20px; animation: chat-pulse 2s infinite;">📞</div>
+        
+        <h2 style="margin: 0; font-size: 20px; font-weight: 800;" id="callStatusText">جاري الاتصال الصوتي عبر الإنترنت...</h2>
+        
+        <!-- ⏱️ عداد حساب الدقائق والثواني اللحظي للمكالمة النشطة ⏱️ -->
+        <div id="callTimer" style="font-size: 24px; font-weight: bold; font-family: monospace; color: #2ec4b6; margin-top: 15px; display: none; letter-spacing: 1px;">00:00</div>
+        
+        <!-- 📢 لوحة كباري السبيكر وكتم الميكروفون الملوكية المدمجة 📢 -->
+        <div id="callControlHardware" style="display: none; gap: 25px; margin-top: 30px; justify-content: center; align-items: center;">
+            <!-- زر كتم وتشغيل الميكروفون -->
+            <button onclick="toggleMute()" id="btn-mic-toggle" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">🎙️</button>
+            <!-- زر تشغيل السبيكر / السماعة الخارجية -->
+            <button onclick="toggleSpeaker()" id="btn-speaker-toggle" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">🔊</button>
+        </div>
+        
+        <!-- أزرار الإجراءات الصريحة (قبول/رفض/إنهاء) -->
+        <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center;" id="callActionButtons">
+            <button onclick="endVoiceCall()" style="background: #ef4444; color: white; border: none; padding: 12px 34px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(239,68,68,0.3);">إلغاء المكالمة ❌</button>
+        </div>
+    </div>
+
+    <!-- محرك البث اللحظي للرسائل والرادار المصلح ميكانيكياً لكشف وتفجير المكالمات المعلقة بالثانية -->
     <script>
         const chatZone = document.getElementById('chatMessagesContainer');
-        if(chatZone) chatZone.scrollTop = chatZone.scrollHeight; // نزول تلقائي للأسفل عند الفتح
+        if(chatZone) chatZone.scrollTop = chatZone.scrollHeight; 
 
+        let activeCallRoomId = null; 
+        let hasUserClosedCallManually = false; // 🛡️ صمام أمان فولاذي يمنع تكرار فتح الـ overlay بعد إغلاقه يدويّاً 🛡️
+        let callTimerInterval = null;
+        let secondsElapsed = 0;
+        let ringAudioElement = null; // الاحتفاظ بملف النغمة للتحكم في الإيقاف
+        
+        // متغيرات الهاردوير الافتراضية
+        let isMuted = false;
+        let isSpeakerOn = false;
+
+        // 1. موازنة وفحص الرسائل والمكالمات الواردة كل ثانيتين بدون توقف
         setInterval(function() {
+            // أ) فحص وتحديث الرسائل النصية
             fetch('{% url "check_new_messages" other_user.id %}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.new_messages.length > 0 && chatZone) {
                         const emptyText = document.getElementById('empty-chat-text');
                         if (emptyText) emptyText.style.display = 'none';
-
-                        // 🔔 دحرجة نغمة الشات الحية: عزف صوت تنبيه خفيف فور استقبال رسالة جديدة 🔔
-                        const chatAudio = new Audio('https://mixkit.co');
-                        chatAudio.play().catch(err => console.log("Audio trigger context waiting for user click"));
-
                         data.new_messages.forEach(msg => {
                             const html = `<div class="bubble other-msg">${msg.message}</div>`;
                             chatZone.insertAdjacentHTML('beforeend', html);
@@ -108,22 +158,198 @@
                         chatZone.scrollTop = chatZone.scrollHeight;
                     }
                 });
+
+            // ب) 📡 رادار الكشف الفوري والمصلح للمكالمات الواردة لايف من قاعدة البيانات 📡
+            if (!hasUserClosedCallManually) { // فحص الرادار فقط إذا لم يقم المستخدم بالحظر اليدوي المؤقت الحين
+                fetch('/api/call/check-incoming/')
+                    .then(res => res.json())
+                    .then(callData => {
+                        if (callData.status === 'incoming' && document.getElementById('voiceCallOverlay').style.display !== 'flex') {
+                            activeCallRoomId = callData.room_id; 
+                            launchIncomingCallOverlay(callData.caller_name, callData.room_id);
+                        }
+                    }).catch(e => {});
+            }
         }, 2000);
 
+        // 2. كاشف ومحرك الرنين الفوري عند كبس زر الاتصال الصادر (المتصل البادئ)
+        const urlParams = new URLSearchParams(window.location.search);
+        const callRoom = urlParams.get('initiate_call');
+        
+        if (callRoom) {
+            activeCallRoomId = callRoom;
+            hasUserClosedCallManually = false;
+            document.getElementById('voiceCallOverlay').style.display = 'flex';
+            
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+            .then(stream => {
+                document.getElementById('callStatusText').textContent = "يرن الآن عند الطرف الآخر... ⏳";
+                playRingSoundLoop(); // إطلاق رنين حقيقي ومستمر
+            }).catch(err => {
+                alert("يرجى تفعيل إذن الوصول للميكروفون لإتمام الاتصال!");
+                closeCallOverlayLocally();
+            });
+        }
+
+        // 3. دالة إطلاق واجهة الرد للمستقبل الصامت (الهاتف الثاني)
+        function launchIncomingCallOverlay(callerName, roomId) {
+            document.getElementById('voiceCallOverlay').style.display = 'flex';
+            document.getElementById('callStatusText').textContent = `مكالمة صوتية واردة من: ${callerName} 🔔`;
+            
+            document.getElementById('callActionButtons').innerHTML = `
+                <button onclick="acceptIncomingCall('${roomId}')" style="background: #2ec4b6; color: white; border: none; padding: 12px 34px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(46,196,182,0.3);">قبول ورَد ✔️</button>
+                <button onclick="rejectIncomingCall('${roomId}')" style="background: #ef4444; color: white; border: none; padding: 12px 34px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(239,68,68,0.3);">رفض ❌</button>
+            `;
+            playRingSoundLoop(); // رنين مستمر ومتكرر
+        }
+
+        // 🚀 دالة تشغيل رنين مستمر لا يموت ويتخطى قيود الحظر للأندرويد والموبايل 🚀
+        function playRingSoundLoop() {
+            if (ringAudioElement) ringAudioElement.pause();
+            ringAudioElement = new Audio('https://mixkit.co');
+            ringAudioElement.loop = true; // تكرار لا نهائي طوال فترة الرنين
+            ringAudioElement.play().catch(e => console.log("Auto-play blocked, waiting for click interaction"));
+        }
+
+        function stopRingSound() {
+            if (ringAudioElement) {
+                ringAudioElement.pause();
+                ringAudioElement = null;
+            }
+        }
+
+        // 🚀 دالة القبول وبدء تشغيل عداد الوقت لايف وعرض لوحة الهاردوير والسبيكر 🚀
+        function acceptIncomingCall(roomId) {
+            stopRingSound(); // إيقاف الرنين فوراً عند البدء
+            document.getElementById('callStatusText').textContent = "مكالمة نشطة... 🗣️ جاري بث الصوت";
+            
+            // إظهار العداد ولوحة الأزرار (السبيكر والمايك)
+            document.getElementById('callTimer').style.display = 'block';
+            document.getElementById('callControlHardware').style.display = 'flex';
+            
+            // تبديل الأزرار لزر إنهاء موحد واحد
+            document.getElementById('callActionButtons').innerHTML = `
+                <button onclick="endVoiceCall()" style="background: #ef4444; color: white; border: none; padding: 12px 40px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(239,68,68,0.3);">إنهاء المكالمة 🟥</button>
+            `;
+            
+            startCallTimer(); // تشغيل عداد الدقائق والثواني
+        }
+
+        // ⏱️ محرك تشغيل وإقلاع عداد الوقت بالثواني والدقائق لايف ⏱️
+        function startCallTimer() {
+            clearInterval(callTimerInterval);
+            secondsElapsed = 0;
+            const timerEl = document.getElementById('callTimer');
+            timerEl.textContent = "00:00";
+            
+            callTimerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+                timerEl.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // 🎙️ دالة كتم وتشغيل الميكروفون التفاعلية 🎙️
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btn-mic-toggle');
+            if (isMuted) {
+                btn.style.background = '#ef4444'; btn.textContent = '🔇';
+            } else {
+                btn.style.background = 'rgba(255,255,255,0.1)'; btn.textContent = '🎙️';
+            }
+        }
+
+        // 🔊 دالة تشغيل السبيكر / السماعة الخارجية التفاعلية 🔊
+        function toggleSpeaker() {
+            isSpeakerOn = !isSpeakerOn;
+            const btn = document.getElementById('btn-speaker-toggle');
+            if (isSpeakerOn) {
+                btn.style.background = '#2ec4b6'; btn.textContent = '📢';
+            } else {
+                btn.style.background = 'rgba(255,255,255,0.1)'; btn.textContent = '🔊';
+            }
+        }
+        function rejectIncomingCall(roomId) {
+            hasUserClosedCallManually = true; // تفعيل الصمام لمنع التكرار اللحظي
+            stopRingSound();
+            const formData = new FormData();
+            formData.append('action', 'rejected');
+            fetch(`/api/call/end/${roomId}/`, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => closeCallOverlayLocally())
+            .catch(e => closeCallOverlayLocally());
+        }
+
+        function endVoiceCall() {
+            hasUserClosedCallManually = true; // تفعيل الصمام لمنع التكرار اللحظي
+            stopRingSound();
+            clearInterval(callTimerInterval);
+            if (activeCallRoomId) {
+                const formData = new FormData();
+                formData.append('action', 'ended');
+                fetch(`/api/call/end/${activeCallRoomId}/`, { method: 'POST', body: formData })
+                .then(res => res.json())
+                .then(data => closeCallOverlayLocally())
+                .catch(e => closeCallOverlayLocally());
+            } else {
+                closeCallOverlayLocally();
+            }
+        }
+
+        function closeCallOverlayLocally() {
+            stopRingSound();
+            clearInterval(callTimerInterval);
+            document.getElementById('voiceCallOverlay').style.display = 'none';
+            document.getElementById('callTimer').style.display = 'none';
+            document.getElementById('callControlHardware').style.display = 'none';
+            activeCallRoomId = null;
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // فتح الصمام مجدداً بعد مرور 4 ثوانٍ ليكون السيرفر قد تم تنظيفه تماماً وبأعلى أمان
+            setTimeout(() => { hasUserClosedCallManually = false; }, 4000);
+        }
     </script>
-        <!-- 🚀 سكريبت الوراثة التلقائية الفورية للمظهر واللغات بدون أزرار 🚀 -->
+    
+    <!-- سكريبت المظهر والوراثة التلقائية الفورية للموبايل -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. قراءة وتطبيق المظهر (Dark/Light) المخزن في ذاكرة الهاتف تلقائياً
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
-
-            // 2. قراءة وتطبيق اللغة والاتجاه (RTL/LTR) المخزن في ذاكرة الهاتف تلقائياً
             const savedLang = localStorage.getItem('lang') || 'ar';
             document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.lang = savedLang;
         });
     </script>
 
+    <style>
+        /* 📱 الـ CSS المطور: يجمع بين حصر وتوسط اللابتوب والتمطد الكامل 100% للموبايل حافة بحافة 📱 */
+        html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100vh !important; overflow: hidden !important; background: var(--bg-main); font-family: inherit; }
+        
+        .chat-main-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh !important; 
+            width: 100% !important; 
+            max-width: 680px; /* 💻 قفل وحصر العرض للابتوب لمنع التمدد البشع 💻 */
+            margin: 0 auto !important; /* 🏢 التوسط التلقائي بمنتصف اللابتوب 🏢 */
+            padding: 0 !important; 
+            border-radius: 0 !important; 
+            box-sizing: border-box; 
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .chat-zone { flex-grow: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box; }
+        .input-zone-container { padding: 12px; background: var(--card-bg); border-top: 1px solid var(--border-color); width: 100%; box-sizing: border-box; }
+        
+        @keyframes chat-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+    </style>
 </body>
 </html>

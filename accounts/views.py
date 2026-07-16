@@ -4,7 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db import models # استيراد هام جداً لتشغيل الـ models.Q في الشات والتصفية!
 from .forms import UserSignupForm, UserLoginForm, UserProfileForm, PostForm
-from .models import User, Governorate, City, Category, Post, Comment, Rating, ChatMessage, FriendRequest, Notification, PostAction
+from .models import User, Governorate, City, Category, Post, Comment, Rating, ChatMessage, FriendRequest, Notification, PostAction, VoiceCall
+import math
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 
 @login_required
@@ -414,3 +417,100 @@ def edit_post_view(request, post_id):
             post.save()
             return redirect('home')
     return redirect('home')
+
+
+
+# 🚀 أ) API استقبال وتحديث الموقع الجغرافي لايف من الموبايل 🚀
+@csrf_exempt
+@login_required
+def update_live_location_view(request):
+    if request.method == 'POST':
+        # استقبال حالة الزر والإحداثيات القادمة من نظام الـ GPS بهاتف الفني
+        is_active = request.POST.get('is_active_now') # 'true' or 'false'
+        lat = request.POST.get('latitude')
+        lng = request.POST.get('longitude')
+        
+        user = request.user
+        if is_active is not None:
+            user.is_active_now = (is_active.lower() == 'true')
+            
+        if lat and lng:
+            user.latitude = float(lat)
+            user.longitude = float(lng)
+            user.last_location_update = timezone.now()
+            
+        user.save()
+        return JsonResponse({
+            "status": "success", 
+            "is_active_now": user.is_active_now,
+            "msg": "تم تحديث موقعك الجغرافي وحالة الإتاحة لايف بنجاح 🟢"
+        })
+    return JsonResponse({"status": "error", "msg": "طلب غير مسموح به"}, status=400)
+
+# 🚀 ب) دالة حساب المسافة الرياضية (Haversine Formula) بالملي 🚀
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # نصف قطر الكرة الأرضية بالكيلومترات
+    R = 6371.0 
+    
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    
+    a = math.sin(dlat / 2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    
+    return R * c # المسافة الدقيقة بالكيلومترات
+
+import uuid
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+
+@login_required
+def trigger_voice_call_view(request, receiver_id):
+    """دالة تحويل العميل تلقائياً إلى مكالمة صوتية مشفرة عبر غرف الشات"""
+    receiver_user = get_object_or_404(User, id=receiver_id)
+    
+    # حظر أمني: منع الاتصال إذا كان الفني أطفأ زر الإتاحة
+    if not receiver_user.is_active_now:
+        return JsonResponse({"status": "error", "msg": "عذراً، مقدم الخدمة غير متاح للاتصال حالياً!"}, status=400)
+        
+    # توليد معرف مشفر فريد لغرفة الاتصال الصوتي عبر الإنترنت WebRTC
+    generated_room = f"call_{uuid.uuid4().hex[:12]}"
+    
+    # تسجيل المكالمة في قاعدة البيانات لإطلاق الرنين بجهاز الفني
+    VoiceCall.objects.create(
+        caller=request.user,
+        receiver=receiver_user,
+        room_id=generated_room,
+        status='ringing'
+    )
+    
+    # توجيه العميل فوراً لغرفة الشات المفتوحة مع حقن وسم بدء الاتصال الصوتي
+    return redirect(f"/chats/{receiver_user.id}/?initiate_call={generated_room}")
+
+@login_required
+def check_incoming_call_api(request):
+    """رادار يفحص بالثانية وجود مكالمة صوتية 'جاري الرنين' موجهة للحساب الحالي"""
+    incoming = VoiceCall.objects.filter(receiver=request.user, status='ringing').last()
+    if incoming:
+        return JsonResponse({
+            "status": "incoming",
+            "caller_name": incoming.caller.username,
+            "room_id": incoming.room_id
+        })
+    return JsonResponse({"status": "no_calls"})
+
+@csrf_exempt
+@login_required
+def end_voice_call_api(request, room_id):
+    """API حاسم لتحديث حالة المكالمة فوراً في قاعدة البيانات إلى منتهية لكسر حلقة الرنين"""
+    if request.method == 'POST':
+        action = request.POST.get('action') # 'rejected' أو 'ended'
+        # البحث عن المكالمة المعلقة وتحديث حالتها فوريّاً
+        calls = VoiceCall.objects.filter(room_id=room_id)
+        if calls.exists():
+            for call in calls:
+                call.status = action if action in ['rejected', 'ended'] else 'ended'
+                call.save()
+            return JsonResponse({"status": "success", "msg": "تم إنهاء المكالمة وتطهير جداول قاعدة البيانات 🟢"})
+    return JsonResponse({"status": "error", "msg": "طلب غير مسموح به"}, status=400)

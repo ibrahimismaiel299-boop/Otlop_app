@@ -291,3 +291,24 @@ class PostAction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.get_action_type_display()} - بوست {self.post.id}"
+
+class VoiceCall(models.Model):
+    """جدول استراتيجي لرصد إشارات وحالة المكالمات الصوتية لايف عبر الشات"""
+    STATUS_CHOICES = [
+        ('ringing', 'جاري الرنين 📞'),
+        ('active', 'مكالمة نشطة 🗣️'),
+        ('ended', 'انتهت المكالمة ❌'),
+        ('rejected', 'مرفوضة 🚫'),
+    ]
+    caller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='made_calls', verbose_name="المتصل")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_calls', verbose_name="المستقبل")
+    
+    # 🚀 التعديل الذهبي: تصحيح الكلمة لـ max_length لمنع الـ TypeError فوراً 🚀
+    room_id = models.CharField(max_length=100, unique=True, verbose_name="معرف غرفة الاتصال المشفر")
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ringing')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Call from {self.caller.username} to {self.receiver.username} - {self.status}"

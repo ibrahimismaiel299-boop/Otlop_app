@@ -137,21 +137,36 @@
         <!-- 💡 العنوان الرئيسي المهيأ للترجمة اللحظية المورثة 💡 -->
         <div id="txt-chat-list-title" class="header-title">💬 صندوق المحادثات والرسائل</div>
         
-        <div id="chats-list-container">
+        <div id="chats-list-container" style="display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box;">
             {% for u in users %}
-                <div class="user-row">
-                    <div class="user-info">
-                        <div class="avatar-placeholder">👤</div>
+                <div class="user-row" style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px; border-radius: 16px; border: 1px solid var(--border-color); box-sizing: border-box; width: 100%; direction: rtl;">
+                    
+                    <div class="user-info" style="display: flex; align-items: center; gap: 12px; text-align: right;">
+                        <!-- 🚀 حقن الصورة الحقيقية والشارة النيونية 🟢 بداخل لستة غرف الشات 🚀 -->
+                        <div style="position: relative; width: 46px; height: 46px; flex-shrink: 0; display: inline-block;">
+                            {% if u.profile_picture %}
+                                <img src="{{ u.profile_picture.url }}" style="width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid {% if u.is_active_now %}#2ec4b6{% else %}var(--border-color){% endif %};">
+                            {% else %}
+                                <div style="width: 46px; height: 46px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 20px; font-weight: bold;">👤</div>
+                            {% endif %}
+                            
+                            <!-- الشارة الخضراء تلمع على كرت الغرفة إذا كان الطرف الآخر أونلاين الحين -->
+                            {% if u.is_active_now %}
+                                <span style="position: absolute; bottom: 0; right: 0; width: 11px; height: 11px; background: #2ec4b6; border: 2px solid var(--card-bg); border-radius: 50%; animation: chat-pulse 2s infinite; display: inline-block;"></span>
+                            {% endif %}
+                        </div>
+
                         <div>
-                            <span class="username">{{ u.username }}</span>
-                            <span class="usertype">{{ u.get_user_type_display }}</span>
+                            <span class="username" style="display: block; font-size: 14px; font-weight: 800; color: var(--text-main);">{{ u.username }}</span>
+                            <span class="usertype" style="display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 2px;">{{ u.get_user_type_display }}</span>
                         </div>
                     </div>
+
                     <!-- زر المراسلة التفاعلي المترجم تلقائياً -->
-                    <a href="{% url 'chat_detail' u.id %}" class="btn-msg-txt btn-chat">مراسلة 💬</a>
+                    <a href="{% url 'chat_detail' u.id %}" class="btn-msg-txt btn-chat" style="flex-shrink: 0;">مراسلة 💬</a>
                 </div>
             {% empty %}
-                <p id="txt-no-chats" style="text-align: center; color: var(--text-muted); padding: 30px; background-color: var(--card-bg) !important; border-radius: 12px; border: 1px dashed var(--border-color); margin: 0;">لا يوجد مستخدمون لمراسلتهم حالياً.</p>
+                <p id="txt-no-chats" style="text-align: center; color: var(--text-muted); padding: 30px; background-color: var(--card-bg) !important; border-radius: 12px; border: 1px dashed var(--border-color); margin: 0; font-weight: 700; font-size: 13px;">لا يوجد مستخدمون لمراسلتهم حالياً.</p>
             {% endfor %}
         </div>
         
@@ -176,13 +191,13 @@
                     'title': '💬 صندوق المحادثات والرسائل',
                     'msg_btn': 'مراسلة 💬',
                     'no_chats': 'لا يوجد مستخدمون لمراسلتهم حالياً.',
-                    'back_home': '🏠    الرئيسية'
+                    'back_home': '🏠 الرئيسية'
                 },
                 'en': {
                     'title': '💬 Conversations & Messages Inbox',
                     'msg_btn': 'Chat 💬',
                     'no_chats': 'No users available for chatting right now.',
-                    'back_home': '🏠 Return to Main Timeline'
+                    'back_home': '🏠 Main Timeline'
                 }
             };
 
@@ -193,5 +208,14 @@
             document.querySelectorAll('.btn-msg-txt').forEach(el => el.textContent = t['msg_btn']);
         });
     </script>
+    
+    <style>
+        /* 🟢 تأثير النبض الحركي لشارات غرف المحادثات لايف 🟢 */
+        @keyframes chat-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+    </style>
 </body>
 </html>

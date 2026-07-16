@@ -33,7 +33,13 @@
         
         /* كروت مقدمي الخدمات الفخمة بنظام الأبعاد الملمومة ميكانيكياً */
         .provider-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.005); box-sizing: border-box; width: 100%; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        
+                /* ستايل نبض شارة الإتاحة بصفحة دليل مقدمي الخدمات */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.6); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.08); opacity: 0.95; }
@@ -69,12 +75,20 @@
         <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; box-sizing: border-box;">
             {% for provider in providers %}
                 <div class="provider-card">
-                    <!-- الصورة الدائرية الفخمة بنظام الأبعاد الموزونة -->
-                    {% if provider.profile_picture %}
-                        <img src="{{ provider.profile_picture.url }}" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #1da1f2; margin-bottom: 5px;">
-                    {% else %}
-                        <div style="width: 65px; height: 65px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 24px; font-weight: bold; margin-bottom: 5px;">👤</div>
-                    {% endif %}
+                    <!-- الصورة الدائرية المحمية بنبض الإتاحة الجغرافية -->
+                    <div style="position: relative; display: inline-block;">
+                        {% if provider.profile_picture %}
+                            <img src="{{ provider.profile_picture.url }}" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid {% if provider.is_active_now %}#2ec4b6{% else %}#1da1f2{% endif %};">
+                        {% else %}
+                            <div style="width: 65px; height: 65px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 24px; font-weight: bold;">👤</div>
+                        {% endif %}
+                        
+                        <!-- نقطة النور النيوني النابض تلمع على الكرت لايف -->
+                        {% if provider.is_active_now %}
+                            <span style="position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #2ec4b6; border: 2.5px solid var(--card-bg); border-radius: 50%; animation: pulse 2s infinite;"></span>
+                        {% endif %}
+                    </div>
+
 
                     <!-- اسم الفني وتقييمه الحركي -->
                     <div style="display: flex; align-items: center; gap: 8px;">

@@ -4,13 +4,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 # استيراد كافة الدوال والـ Views المعتمدة من تطبيق accounts بدون أي نقص
 from accounts.views import (
-    edit_post_view, home_view, signup_view, login_view, logout_view, 
+    check_incoming_call_api, edit_post_view, end_voice_call_api, home_view, signup_view, login_view, logout_view, 
     load_cities_view, profile_view, delete_comment_view, 
     add_rating_view, send_friend_request_view, accept_friend_request_view, 
     chat_rooms_list_view, chat_detail_view, public_profile_view, mark_notifications_read_view,
     post_action_view, check_live_updates_view, check_new_messages_view, reject_friend_request_view,
     check_unread_messages_count_view, friends_list_view,
-    all_providers_view, delete_post_view
+    all_providers_view, delete_post_view, trigger_voice_call_view, update_live_location_view
 
 )
 
@@ -56,6 +56,13 @@ urlpatterns = [
     path('providers/', all_providers_view, name='providers_directory'),
     path('post/delete/<int:post_id>/', delete_post_view, name='delete_post'),
     path('post/edit/<int:post_id>/', edit_post_view, name='edit_post'),
+    # 🚀 أضف هذا السطر بداخل مصفوفة urlpatterns بملف الـ urls.py 🚀
+    path('api/location/update/', update_live_location_view, name='update_live_location'),
+    path('call/trigger/<int:receiver_id>/', trigger_voice_call_view, name='trigger_voice_call'),
+    path('api/call/check-incoming/', check_incoming_call_api, name='check_incoming_call'),
+        # 🚀 أضف هذا السطر بداخل مصفوفة urlpatterns بملف الـ urls.py 🚀
+    path('api/call/end/<str:room_id>/', end_voice_call_api, name='end_voice_call_api'),
+
 ]
 
 # تفعيل مسار الصور وملفات الميديا في بيئة التطوير

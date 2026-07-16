@@ -31,7 +31,20 @@
         .search-grid input { height: 44px; border: none; outline: none; background: var(--input-bg); color: var(--text-main); padding: 0 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: right; box-sizing: border-box; width: 100%; }
         .pill-tab { padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; }
         .feed-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.005); box-sizing: border-box; width: 100%; margin-bottom: 20px; }
-                /* إلغاء الهوامش الداخلية وتمدد المحتوى بكامل مساحة الشاشة على الهاتف */
+                /* ستايل زر التبديل الجغرافي الفخم */
+        .slider-premium:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider-premium { background-color: #2ec4b6 !important; }
+        input:checked + .slider-premium:before { transform: translateX(20px); }
+        
+        /* تأثير النبض النيوني للشارة الخضراء الحية */
+        @keyframes status-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+
+         /* إلغاء الهوامش الداخلية وتمدد المحتوى بكامل مساحة الشاشة على الهاتف */
+        
         @media (max-width: 768px) {
             .main-responsive-container {
                 max-width: 100% !important;
@@ -199,34 +212,52 @@
             </div>
         </div>
 
+    <!-- 🚀 حاوية الحصر السحرية الموحدة: تضمن توسط اللابتوب وتمدد الموبايل بكامل مساحة الشاشة 🚀 -->
+    <div class="main-responsive-container" style="max-width: 680px; margin: 0 auto; padding: 20px 16px 40px 16px; box-sizing: border-box; width: 100%;">
+
         <!-- 📝 صندوق كتابة منشور جديد العصري الفخم (مستقل تماماً ومقاوم للتجمد) 📝 -->
         {% if request.user.is_authenticated %}
             <div style="background: var(--card-bg); padding: 22px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border); margin-bottom: 30px; text-align: right; box-sizing: border-box; width: 100%;">
-                <h3 id="txt-post-title" style="margin-top: 0; margin-bottom: 15px; font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                
+                <!-- 1. عنوان الصندوق السينمائي النظيف -->
+                <h3 id="txt-post-title" style="margin-top: 0; margin-bottom: 18px; font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
                     <span>✍️</span> أنشئ منشوراً جديداً (طلب أو عرض خدمة)
                 </h3>
                 
+                <!-- 2. 🟢 كبسولة التحكم الجغرافية اللحظية (تظهر لمقدمي الخدمة وتظهر للـ Admin للمعاينة) 🟢 -->
+                {% if request.user.user_type == 'provider' or request.user.is_superuser %}
+                    <div style="margin-bottom: 18px; background: rgba(46,196,182,0.06); padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(46,196,182,0.15); display: flex; align-items: center; justify-content: space-between; direction: rtl; box-sizing: border-box; width: 100%;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: {% if request.user.is_active_now %}#2ec4b6; animation: status-pulse 2s infinite;{% else %}#64748b;{% endif %} display: inline-block;"></span>
+                            <span style="font-size: 13px; font-weight: 800; color: var(--text-main);">حالة العمل الفورية: <span id="status-text" style="color: {% if request.user.is_active_now %}#2ec4b6;{% else %}var(--text-muted);{% endif %};">{% if request.user.is_active_now %} انت متاح للعمل  ⚡{% else %}أنت غير متاح حالياً 💤{% endif %}</span></span>
+                        </div>
+                        <!-- مفتاح التشغيل التفاعلي الفاخر -->
+                        <label class="switch-premium" style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer; flex-shrink: 0;">
+                            <input type="checkbox" id="geo-toggle-input" onchange="toggleLiveAvailability(this)" {% if request.user.is_active_now %}checked{% endif %} style="opacity: 0; width: 0; height: 0;">
+                            <span class="slider-premium" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px;"></span>
+                        </label>
+                    </div>
+                {% endif %}
+                
+                <!-- 3. بداية الاستمارة وحقل الكتابة والميديا -->
                 <form method="POST" enctype="multipart/form-data" action="/" style="margin: 0; padding: 0;">
                     {% csrf_token %}
                     
-                    <!-- حقل النص العصري المنساب بنعومة وبدون قيود دجانجو المخفية -->
                     <textarea name="content" required placeholder="ماذا يدور في ذهنك؟ اكتب تفاصيل طلبك هنا... 💡" rows="3" style="width: 100%; border-radius: 16px; padding: 15px; border: 1px solid var(--border); outline: none; font-family: inherit; background-color: var(--input-bg); color: var(--text-main); box-sizing: border-box; resize: none; font-size: 14px; font-weight: 600; line-height: 1.6;"></textarea>
-                    <!-- أزرار الميديا واختيار التخصص بنظام التبويب الرشيق -->
+                    
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 18px; gap: 12px; direction: rtl;">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <!-- زر كبسولة إضافة صورة -->
                             <div id="txt-add-img" onclick="document.getElementById('post_image_input').click();" style="background: rgba(29, 161, 242, 0.08); color: #1DA1F2; padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(29, 161, 242, 0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>📷</span> أضف صورة
                             </div>
                             <input type="file" id="post_image_input" name="image" accept="image/*" style="display: none;" onchange="previewPostImage(this)">
                             
-                            <!-- زر كبسولة إضافة فيديو -->
                             <div id="txt-add-video" onclick="document.getElementById('post_video_input').click();" style="background: rgba(255, 77, 109, 0.08); color: #ff4d6d; padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(255, 77, 109, 0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>🎬</span> أضف فيديو
                             </div>
                             <input type="file" id="post_video_input" name="video" accept="video/*" style="display: none;" onchange="previewPostVideo(this)">
                         </div>
-                        
+
                         <!-- قائمة اختيار القسم العصرية والمفتوحة الصلاحيات لمنع الحجب البصري -->
                         <div style="min-width: 160px; max-width: 100%;">
                             <select name="category" required style="width: 100%; padding: 0 14px; border-radius: 30px; border: 1px solid var(--border); background-color: var(--input-bg); color: var(--text-main); font-size: 12px; font-weight: 700; outline: none; cursor: pointer; height: 38px; display: block !important; -webkit-appearance: menulist !important; appearance: menulist !important; box-sizing: border-box;">
@@ -237,23 +268,21 @@
                             </select>
                         </div>
                     </div>
+                        <div id="post_img_preview_container" style="display: none; position: relative; margin-top: 10px;">
+                            <img id="post_img_preview" src="" style="max-width: 80px; max-height: 80px; border-radius: 8px; object-fit: cover;">
+                            <span onclick="removePostImage()" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
+                        </div>
+                        <div id="post_vid_preview_container" style="display: none; position: relative; margin-top: 10px;">
+                            <span style="font-size: 20px;">🎬 📽️</span>
+                            <span onclick="removePostVideo()" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
+                        </div>
 
-                    <!-- حاويات المعاينة اللحظية الفاخرة للميديا -->
-                    <div id="post_img_preview_container" style="display: none; margin-top: 15px; position: relative; border-radius: 16px; overflow: hidden; max-height: 200px; border: 1px solid var(--border); background: var(--input-bg);">
-                        <img id="post_img_preview" src="" style="max-width: 100%; max-height: 200px; object-fit: contain; display: block; margin: 0 auto;">
-                        <span onclick="removePostImage()" style="position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; width: 26px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">×</span>
+                        <button type="submit" id="btn-submit-post" name="submit_post" style="background-color: #1DA1F2; color: white; padding: 10px 24px; border-radius: 30px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(29,161,242,0.2);">نشر المنشور 🚀</button>
                     </div>
-
-                    <div id="post_vid_preview_container" style="display: none; margin-top: 15px; position: relative; border-radius: 16px; overflow: hidden; max-height: 200px; border: 1px solid var(--border); background: #000;">
-                        <video id="post_vid_preview" src="" controls muted style="max-width: 100%; max-height: 200px; display: block; margin: 0 auto;"></video>
-                        <span onclick="removePostVideo()" style="position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; width: 26px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">×</span>
-                    </div>
-
-                    <!-- زر النشر الفخم الحر المستقل تماماً والمقاوم للتعليق -->
-                    <button type="submit" name="submit_post" id="btn-submit-post" style="width: 100%; background: #0d1b2a; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; margin-top: 15px; cursor: pointer; display: block !important; font-size: 14px; box-shadow: 0 4px 15px rgba(13,27,42,0.15);">نشر المنشور 🚀</button>
                 </form>
             </div>
         {% endif %}
+
 
         <!-- ج) شريط فلترة التايم لاين حسب الاهتمامات (تصميم كبسولات مرن) -->
         <div style="margin-bottom: 25px; display: flex; gap: 10px; align-items: center; overflow-x: auto; padding-bottom: 8px; direction: rtl; -webkit-overflow-scrolling: touch;">
@@ -267,20 +296,33 @@
                 <!-- كارت المنشور العصري الموحد (النسخة الخرافية) -->
                 <div id="post-container-{{ post.id }}" class="feed-card">
                     
-                    <!-- ترويسة كرت المنشور وبيانات المستخدم الفخمة -->
+                    <!-- ترويسة كرت المنشور وبيانات المستخدم الفخمة (المحقونة بشارة الإتاحة لايف 🟢) -->
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
                         <div style="display: flex; align-items: center; gap: 14px;">
-                            <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; display: flex; align-items: center;">
+                            
+                            <!-- صورة البروفايل المحصنة بنبض الإتاحة لايف -->
+                            <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; display: flex; align-items: center; position: relative; flex-shrink: 0;">
                                 {% if post.user.profile_picture %}
-                                    <img src="{{ post.user.profile_picture.url }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #1DA1F2;">
+                                    <img src="{{ post.user.profile_picture.url }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid {% if post.user.is_active_now %}#2ec4b6{% else %}#1DA1F2{% endif %};">
                                 {% else %}
                                     <div style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #4a5568; font-size: 22px; font-weight: bold; border: 2px solid var(--border);">👤</div>
                                 {% endif %}
+                                
+                                <!-- النقطة النيونية النابضة تلتصق بالصورة الفردية للفني النشط الحين -->
+                                {% if post.user.is_active_now %}
+                                    <span style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #2ec4b6; border: 2px solid var(--card-bg); border-radius: 50%; animation: status-pulse 2s infinite;"></span>
+                                {% endif %}
                             </a>
-                            <div>
-                                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
-                                    <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; color: inherit;">
+                            
+                            <!-- تفاصيل بيانات الكاتب والتوثيق -->
+                            <div style="text-align: right;">
+                                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; direction: rtl;">
+                                    <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
                                         <strong style="color: var(--text-main); font-size: 15px; font-weight: 800;">{{ post.user.username }}</strong>
+                                        <!-- شارة نصية تأكيدية ملفتة بجانب الاسم -->
+                                        {% if post.user.is_active_now %}
+                                            <span style="background: rgba(46,196,182,0.12); color: #2ec4b6; font-size: 9px; padding: 2px 8px; border-radius: 30px; font-weight: 900; white-space: nowrap;">متاح لايف ⚡</span>
+                                        {% endif %}
                                     </a>
                                     {% if post.user.is_verified_provider %}
                                         <span style="background-color: rgba(29, 161, 242, 0.08); color: #1DA1F2; font-size: 10px; padding: 3px 10px; border-radius: 30px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">✔️ موثق</span>
@@ -289,10 +331,11 @@
                                         <span style="background: rgba(255, 183, 3, 0.08); color: #ffb703; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 30px; display: inline-flex; align-items: center; gap: 3px;">⭐ {{ post.user.get_average_rating }}</span>
                                     {% endif %}
                                 </div>
-                                <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 3px; font-weight: 600;">📍 {{ post.user.governorate.name_ar }} - {{ post.user.city.name_ar }}</span>
+                                <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px; font-weight: 600;">📍 {{ post.user.governorate.name_ar }} - {{ post.user.city.name_ar }}</span>
                             </div>
                         </div>
                     </div>
+
                     
                     <!-- متن نص البوست وعرض الصور والفيديوهات -->
                     <p style="font-size: 15px; color: var(--text-main); line-height: 1.7; white-space: pre-line; margin: 12px 0; font-weight: 600;">
@@ -325,11 +368,13 @@
                                 <span onclick="if(confirm('هل أنت متأكد من حذف هذا المنشور نهائياً؟')) navTo('/post/delete/{{ post.id }}/')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 14px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(239,68,68,0.15);">🗑️ حذف</span>
                             {% endif %}
 
-                            {% if post.user.phone_number %}
-                                <a href="tel:{{ post.user.phone_number }}" class="btn-call-txt" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(46,196,182,0.25);">
-                                    <span style="font-size: 15px; animation: pulse 2s infinite; display: inline-block;">📞</span> <span>اتصال سريع بالفني ⚡</span>
+                            <!-- 🔐 كبسولة الاتصال الصوتي عبر الشات: محصورة بشرط الإتاحة الفورية الفعالة للفني 🔐 -->
+                            {% if post.user.phone_number and post.user.is_active_now %}
+                                <a href="{% url 'trigger_voice_call' post.user.id %}" class="btn-call-txt" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #1DA1F2, #0d1b2a); color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(29,161,242,0.25);">
+                                    <span style="font-size: 15px; animation: status-pulse 2s infinite; display: inline-block;">📞</span> <span>اتصال صوتي  ⚡</span>
                                 </a>
                             {% endif %}
+
 
                             {% if request.user.is_authenticated and request.user != post.user %}
                                 {% if post.friend_status == 'accepted' %}
@@ -548,6 +593,38 @@
                 }
             }
         }
+                // 🚀 محرك المزامنة اللحظية لحالة الإتاحة والـ GPS لايف للسيرفر 🚀
+        function toggleLiveAvailability(checkboxEl) {
+            const isActive = checkboxEl.checked;
+            const dot = document.getElementById('status-dot');
+            const txt = document.getElementById('status-text');
+            
+            // تحديث بصري مؤقت لسرعة الـ UX
+            if (isActive) {
+                dot.style.background = '#2ec4b6'; dot.style.animation = 'status-pulse 2s infinite';
+                txt.textContent = 'جاري التقاط إشارات الـ GPS وبدء البث لايف... 🧭'; txt.style.color = '#2ec4b6';
+            } else {
+                dot.style.background = '#64748b'; dot.style.animation = 'none';
+                txt.textContent = 'أنت غير متاح حالياً 💤'; txt.style.color = 'var(--text-muted)';
+            }
+
+            // إرسال الإشارة فورياً لباك إند دجانجو عبر الـ API
+            const formData = new FormData();
+            formData.append('is_active_now', isActive ? 'true' : 'false');
+            
+            // في الفترات القادمة سنقوم بحقن الـ latitude والـ longitude القادمين من فلاتر هنا بالملي
+            formData.append('latitude', '31.4175');  // إحداثيات افتراضية مؤقتة لحين ربط الـ GPS
+            formData.append('longitude', '31.8144'); // لحين تشغيل مستشعر الموبايل
+            
+            fetch('/api/location/update/', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success' && isActive) {
+                    txt.textContent = 'أنت متاح للعمل  ⚡';
+                }
+            }).catch(e => console.error("Error updating availability:", e));
+        }
+
 
         function previewPostImage(input) {
             if (input.files && input.files[0]) {

@@ -93,21 +93,44 @@
 </head>
 <body>
 
-    <div class="friend-box">
+    <div class="friend-box" style="direction: rtl; text-align: right;">
         <h3 id="txt-friends-title" style="color: var(--text-main); margin-top: 0; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; font-size: 18px;">👥 قائمة أصدقائي الحاليين:</h3>
         
-        <div id="friends-list-container">
+        <div id="friends-list-container" style="display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box; margin-top: 15px;">
             {% for friend in friends %}
-                <div class="friend-item">
-                    <span class="friend-name-txt">👤 {{ friend.username }} ({{ friend.get_user_type_display }})</span>
-                    <a href="{% url 'public_profile' friend.id %}" class="btn-profile-txt btn-profile">عرض البروفايل 👤</a>
+                <div class="friend-item" style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px; border-radius: 16px; border: 1px solid var(--border-color); box-sizing: border-box; width: 100%;">
+                    
+                    <!-- جهة اليمين: الصورة المحصنة بالنبض والبيانات -->
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <!-- 🚀 حقن الصورة الحقيقية والشارة النيونية 🟢 بصفحة قائمة الأصدقاء 🚀 -->
+                        <div style="position: relative; width: 46px; height: 46px; flex-shrink: 0; display: inline-block;">
+                            {% if friend.profile_picture %}
+                                <img src="{{ friend.profile_picture.url }}" style="width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid {% if friend.is_active_now %}#2ec4b6{% else %}var(--border-color){% endif %};">
+                            {% else %}
+                                <div style="width: 46px; height: 46px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 20px; font-weight: bold;">👤</div>
+                            {% endif %}
+                            
+                            <!-- إضاءة شارات الأصدقاء المتاحين لايف الحين -->
+                            {% if friend.is_active_now %}
+                                <span style="position: absolute; bottom: 0; right: 0; width: 11px; height: 11px; background: #2ec4b6; border: 2px solid var(--card-bg); border-radius: 50%; animation: chat-pulse 2s infinite; display: inline-block;"></span>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <span class="friend-name-txt" style="display: block; font-size: 14px; font-weight: 800; color: var(--text-main);">{{ friend.username }}</span>
+                            <span style="display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 2px;">({{ friend.get_user_type_display }})</span>
+                        </div>
+                    </div>
+
+                    <!-- جهة اليسار: زر الانتقال للبروفايل المترجم -->
+                    <a href="{% url 'public_profile' friend.id %}" class="btn-profile-txt btn-profile" style="flex-shrink: 0; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 30px;">عرض البروفايل 👤</a>
                 </div>
             {% empty %}
-                <p id="txt-no-friends" style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px; margin: 0;">لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!</p>
+                <p id="txt-no-friends" style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 30px; background-color: var(--card-bg) !important; border-radius: 12px; border: 1px dashed var(--border-color); margin: 0; font-weight: 700;">لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!</p>
             {% endfor %}
         </div>
         
-        <a href="{% url 'home' %}" id="txt-back-home" class="nav-link-back">🏠 الرئيسية</a>
+        <a href="{% url 'home' %}" id="txt-back-home" class="nav-link-back" style="margin-top: 20px; display: inline-block;">🏠 الرئيسية</a>
     </div>
 
     <!-- سكريبت الوراثة والترجمة اللحظية المورثة بدون أزرار مكررة -->
@@ -126,13 +149,13 @@
                     'title': '👥 قائمة أصدقائي الحاليين:',
                     'view_btn': 'عرض البروفايل 👤',
                     'no_friends': 'لا يوجد أصدقاء مضافون حالياً. جرب التواصل وإضافة الفنيين من التايم لاين!',
-                    'back_home': '🏠 الرئيسية   '
+                    'back_home': '🏠 الرئيسية'
                 },
                 'en': {
                     'title': '👥 My Current Friends List:',
                     'view_btn': 'View Profile 👤',
                     'no_friends': 'No friends added yet. Try connecting with providers on the timeline!',
-                    'back_home': '🏠 Return to Main Timeline'
+                    'back_home': '🏠 Main Timeline'
                 }
             };
 
@@ -143,5 +166,14 @@
             document.querySelectorAll('.btn-profile-txt').forEach(el => el.textContent = t['view_btn']);
         });
     </script>
+
+    <style>
+        /* 🟢 تأثير النبض الحركي لشارات غرف المحادثات لايف 🟢 */
+        @keyframes chat-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+    </style>
 </body>
 </html>

@@ -76,6 +76,12 @@
             box-shadow: 0 4px 12px rgba(13,27,42,0.15);
         }
         .btn-chat:hover { background-color: #1DA1F2; }
+                @keyframes profile-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.6); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 10px rgba(46,196,182,0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        }
+
 
         /* 📱 الـ Media Query المطاطي للبروفايل العام 📱 */
         @media (max-width: 768px) {
@@ -97,11 +103,29 @@
 <body>
 
     <div class="profile-card">
-        {% if target_user.profile_picture %}
-            <img src="{{ target_user.profile_picture.url }}" class="avatar" alt="صورة البروفايل">
-        {% else %}
-            <div class="avatar" style="background: #cbd5e0; display: inline-flex; align-items: center; justify-content: center; font-size: 45px; color: #0d1b2a;">👤</div>
+        <!-- 🟢 الصورة الدائرية الكبيرة بالبروفايل العام الموحدة بالملي على الكائن الحقيقي (target_user) 🟢 -->
+        <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto;">
+            <!-- 🚀 تم التوحيد على target_user لسحب الصورة الحقيقية للفني المستهدف فوريّاً وبدون أخطاء 🚀 -->
+            {% if target_user.profile_picture %}
+                <img src="{{ target_user.profile_picture.url }}" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid {% if target_user.is_active_now %}#2ec4b6{% else %}#1da1f2{% endif %};">
+            {% else %}
+                <div style="width: 110px; height: 110px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 42px;">👤</div>
+            {% endif %}
+            
+            <!-- نقطة النور النيوني النابض تتبع نفس الفني المستهدف (target_user) لايف وبقمة الشياكة -->
+            {% if target_user.is_active_now %}
+                <span style="position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px; background: #2ec4b6; border: 3.5px solid var(--card-bg); border-radius: 50%; animation: profile-pulse 2s infinite; display: inline-block; box-sizing: border-box;"></span>
+            {% endif %}
+        </div>
+        <!-- 📞 كبسولة الاتصال الصوتية الفاخرة بداخل البروفايل تظهر وتنبثق فقط واليوزر متاح 📞 -->
+        {% if target_user.is_active_now %}
+            <div style="text-align: center; margin-top: 10px;">
+                <a href="{% url 'trigger_voice_call' target_user.id %}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 10px 26px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 5px 20px rgba(46,196,182,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                    <span style="font-size: 16px; animation: status-pulse 2s infinite; display: inline-block;">📞</span>  اتصال ⚡
+                </a>
+            </div>
         {% endif %}
+
         
         <h2 style="margin: 0 0 5px 0; color: var(--text-main);">{{ target_user.username }}</h2>
         <p id="txt-account-type" style="margin: 0 0 25px 0; color: var(--text-muted); font-weight: 600;">📌 نوع الحساب: {{ target_user.get_user_type_display }}</p>
