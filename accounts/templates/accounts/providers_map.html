@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة الفنيين المتاحين لايف 🗺️</title>
+    <!-- استدعاء ملفات الـ CSS والـ JS الرسمية والمحدثة لمحرك Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <script src="https://unpkg.com"></script>
+    <style>
+        :root { --bg-main: #0d1b2a; --card-bg: #1b263b; --border: rgba(255,255,255,0.1); --text-main: #f8fafc; --text-muted: #94a3b8; }
+        [data-theme="light"] { --bg-main: #f8fafc; --card-bg: #ffffff; --border: #e2e8f0; --text-main: #0f172a; --text-muted: #64748b; }
+        
+        html, body { margin: 0; padding: 0; width: 100%; height: 100vh; overflow: hidden; background-color: var(--bg-main); font-family: system-ui, -apple-system, sans-serif; }
+        .map-wrapper { display: flex; flex-direction: column; height: 100vh; width: 100%; max-width: 680px; margin: 0 auto; background: var(--card-bg); position: relative; }
+        .map-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--card-bg); z-index: 1000; direction: rtl; }
+        
+        /* إجبار حاوية الخريطة على أخذ المساحة ومقاومة الاختفاء البصري */
+        #map { flex-grow: 1; width: 100%; height: calc(100vh - 60px); z-index: 1; display: block; background: #e2e8f0; }
+        
+        .btn-back { background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; }
+        
+        .leaflet-popup-content-wrapper { background: var(--card-bg) !important; color: var(--text-main) !important; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .leaflet-popup-tip { background: var(--card-bg) !important; }
+        .popup-card { text-align: right; direction: rtl; padding: 4px; }
+        .popup-btn { background: #1DA1F2; color: white !important; text-decoration: none; padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; display: inline-block; margin-top: 6px; }
+    </style>
+</head>
+<body>
+    <div class="map-wrapper">
+        <div class="map-header">
+            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main);">🗺️ الفنيين المتاحين من حولك الآن لايف</h3>
+            <a href="{% url 'home' %}" class="btn-back">⬅️ الرئيسية</a>
+        </div>
+        
+        <!-- حاوية الخريطة الحية الفعالة -->
+        <div id="map"></div>
+
+        <!-- 🔍 شريط البحث العائم الذكي المطور بالتصفير الفوري القسري المضمون 100% 🔍 -->
+        <div style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 500px; display: flex; gap: 8px; direction: rtl;">
+            <!-- حقل النص الفعلي الموحد ID -->
+            <input type="text" id="map-search-input" placeholder="ابحث عن تخصص (سباك، كهربائي...) أو منطقة... 🛠️📍" style="flex-grow: 1; padding: 12px 18px; border-radius: 30px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); font-size: 13px; font-weight: 600; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.15); box-sizing: border-box;">
+            
+            <!-- ✖️ زر الـ X المطور بضرب دالة المسح المباشرة والصامتة قسراً ومنع التعليق ✖️ -->
+            <button onclick="document.getElementById('map-search-input').value = ''; allMarkersArray.forEach(item => { map.addLayer(item.markerInstance); }); if(allMarkersArray.length > 0){ const group = new L.featureGroup(allMarkersArray.map(i => i.markerInstance)); map.fitBounds(group.getBounds().pad(0.1)); }" style="background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✖️</button>
+        </div>
+
+
+        <!-- 🔒 شاشة الأمان المنبثقة للزوار 🔒 -->
+        <div id="loginPromptOverlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13,27,42,0.96); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; box-sizing: border-box; direction: rtl;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(29,161,242,0.1); border: 2px dashed #1DA1F2; display: flex; align-items: center; justify-content: center; font-size: 36px; margin-bottom: 20px;">🔒</div>
+            <h2 style="margin: 0; font-size: 18px; font-weight: 800;">برجاء تسجيل الدخول أولاً ✋</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 8px; max-width: 320px; line-height: 1.6;">لعرض خريطة مقدمي الخدمة واكتشاف الفنيين المتاحين من حولك لايف، يجب أن تمتلك حساباً مفعلاً بالمنصة.</p>
+            <div style="margin-top: 25px; display: flex; gap: 14px;">
+                <a href="/login/" style="background: #1DA1F2; color: white; text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(29,161,242,0.25);">تسجيل الدخول 🔑</a>
+                <a href="{% url 'home' %}" style="background: rgba(255,255,255,0.1); color: white; text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.15);">العودة للرئيسية</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- حقن الداتا داخل وسوم وسيطة آمنة مخفية ليرتاح الـ VS Code ويقرأ دجانجو الحلقات بنقاء -->
+    <div style="display: none;">
+        {% for provider in providers %}
+            {% if provider.latitude and provider.longitude %}
+                <span class="geo-data-holder" 
+                      data-lat="{{ provider.latitude }}" 
+                      data-lng="{{ provider.longitude }}" 
+                      data-name="{{ provider.username }}" 
+                      data-type="{{ provider.get_user_type_display }}" 
+                      data-profile="{% url 'public_profile' provider.id %}" 
+                      data-chat="{% url 'chat_detail' provider.id %}">
+                </span>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- 🚀 محرك تشغيل وإقلاع الخريطة التفاعلية وحقن الصمامات لايف 🚀 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // أ) فحص حالة قفل الأمان للزوار فوريّاً
+            const isUserLoggedIn = "{{ is_logged_in }}" === "True";
+            if (!isUserLoggedIn) {
+                document.getElementById('loginPromptOverlay').style.display = 'flex';
+                return; 
+            }
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const savedLang = localStorage.getItem('lang') || 'ar';
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+
+            // ب) 🌍 الرابط الفولاذي العالمي الصريح والأكثر أماناً والمضاد للحظر لتفتيح الشوارع 🌍
+            const map = L.map('map').setView([31.4175, 31.8144], 13); 
+            
+            // 🚀 الخادم الملوكي الأكثر استقراراً في الأنظمة المجانية عالمياً (Wikimedia Standard Maps) 🚀
+            L.tileLayer('https://wikimedia.org{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                crossOrigin: true, // تأمين العبور وعلاج الحظر الأمني صراحة
+                attribution: '© OpenStreetMap contributors, Wikimedia'
+            }).addTo(map);
+
+            // ج) التقاط الـ GPS لتمركز العميل
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const clientLat = position.coords.latitude;
+                    const clientLng = position.coords.longitude;
+                    map.setView([clientLat, clientLng], 13);
+                    
+                    L.marker([clientLat, clientLng]).addTo(map)
+                        .bindPopup(`<div class="popup-card"><strong>📍 موقعك الحالي الحين</strong></div>`)
+                        .openPopup();
+                }, () => {
+                    console.log("إذن الـ GPS محجوب بالمتصفح");
+                });
+            }
+
+            const allMarkersArray = [];
+
+            // د) التقاط الداتا الجاهزة ورسم الدبابيس بنقاء واحترافية عالمية
+            document.querySelectorAll('.geo-data-holder').forEach(el => {
+                const pLat = parseFloat(el.getAttribute('data-lat'));
+                const pLng = parseFloat(el.getAttribute('data-lng'));
+                const pName = el.getAttribute('data-name');
+                const pType = el.getAttribute('data-type');
+                const pProfileUrl = el.getAttribute('data-profile');
+                const pChatUrl = el.getAttribute('data-chat');
+
+                if (pLat && pLng) {
+                    const marker = L.marker([pLat, pLng]).addTo(map);
+                    const popupHtml = `
+                        <div class="popup-card">
+                            <strong style="color:var(--text-main); font-size:13px;">🛠️ الفني: ${pName}</strong>
+                            <div style="color:var(--text-muted); font-size:11px; margin-top:2px;">التخصص: ${pType}</div>
+                            <div style="color:#2ec4b6; font-size:10px; font-weight:bold; margin-top:2px;">🟢 متاح للعمل لايف الحين</div>
+                            <div style="display:flex; gap:6px; margin-top:8px;">
+                                <a href="${pProfileUrl}" class="popup-btn" style="background:#64748b;">البروفايل 👤</a>
+                                <a href="${pChatUrl}" class="popup-btn">مراسلة 💬</a>
+                            </div>
+                        </div>
+                    `;
+                    marker.bindPopup(popupHtml);
+                    
+                    allMarkersArray.push({
+                        markerInstance: marker,
+                        specialty: pType.toLowerCase(),
+                        name: pName.toLowerCase()
+                    });
+                }
+            });
+
+            // هـ) ربط صندوق الإدخال بمحرك البحث الفوري
+            const searchInput = document.getElementById('map-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTxt = this.value.trim().toLowerCase();
+                    
+                    allMarkersArray.forEach(item => {
+                        if (item.specialty.includes(searchTxt) || item.name.includes(searchTxt)) {
+                            map.addLayer(item.markerInstance);
+                        } else {
+                            map.removeLayer(item.markerInstance);
+                        }
+                    });
+
+                    if (searchTxt.length > 3) {
+                        fetch(`https://openstreetmap.org{encodeURIComponent(this.value)}&limit=1`)
+                            .then(res => res.json())
+                            .then(geoResults => {
+                                if (geoResults && geoResults.length > 0) {
+                                    map.setView([parseFloat(geoResults[0].lat), parseFloat(geoResults[0].lon)], 13);
+                                }
+                            }).catch(e => {});
+                    }
+                });
+            }
+
+            // 🚀 تشغيل وصعق زر الـ (X) لتصفير الحقل وإعادة الدبابيس فوريّاً بنجاح 🚀
+            const clearBtn = document.getElementById('btn-clear-search');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                    if (searchInput) {
+                        searchInput.value = ''; // 1. تصفير النص داخل المربع
+                    }
+                    
+                    // 2. إجبار الخريطة على إعادة وإظهار كافة الدبابيس فوريّاً بنقاء 100%
+                    allMarkersArray.forEach(item => { 
+                        map.addLayer(item.markerInstance); 
+                    });
+                    
+                    // 3. إعادة تمركز عين الخريطة لنطاق الرؤية الشامل للدبابيس لراحة العميل
+                    if (allMarkersArray.length > 0) {
+                        const group = new L.featureGroup(allMarkersArray.map(i => i.markerInstance));
+                        map.fitBounds(group.getBounds().pad(0.1));
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

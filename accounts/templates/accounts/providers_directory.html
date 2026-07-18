@@ -5,48 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Otlop - Providers Directory</title>
     <style>
+        /* 🎨 توحيد لوحة ألوان البراند بوك الملوكي الجديد للمظهرين مع الرئيسية 🎨 */
         :root {
-            --bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; 
-            --border: #e2e8f0; --input-bg: #f1f5f9; --accent: #1da1f2;
+            --bg-main: #0d1b2a;         /* الكحلي الغامق الفاخر */
+            --card-bg: #142444;         /* الأزرق الداكن لكروت الخدمات */
+            --accent-blue: #1e88ff;     /* الأزرق النيوني المضيء للأزرار */
+            --neon-cyan: #2ec4b6;       /* السيان لشارات الإتاحة */
+            --text-main: #f8fafc;       /* الأبيض الصافي للنصوص */
+            --text-muted: #94a3b8;      /* الرمادي الهادئ للفرعيات */
+            --border: rgba(255, 255, 255, 0.08); 
+            --input-bg: rgba(255, 255, 255, 0.03);
         }
-        [data-theme="dark"] {
-            --bg: #0b0f19; --card-bg: #151d30; --text-main: #f8fafc !important; --text-muted: #94a3b8 !important; 
-            --border: #24314f; --input-bg: #0e1626 !important;
+        [data-theme="light"] {
+            --bg-main: #f8fafc;         
+            --card-bg: #ffffff;         
+            --accent-blue: #1d9bf0;     
+            --neon-cyan: #00ba7c;       
+            --text-main: #0f172a;       
+            --text-muted: #64748b;      
+            --border: #e2e8f0; 
+            --input-bg: #f1f5f9;
         }
+
         html, body {
-            margin: 0; padding: 0; min-height: 100vh; background-color: var(--bg) !important;
-            color: var(--text-main) !important; font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0; padding: 0; min-height: 100vh; background-color: var(--bg-main) !important;
+            color: var(--text-main) !important; font-family: system-ui, -apple-system, sans-serif;
             transition: background-color 0.2s, color 0.2s; box-sizing: border-box;
         }
-        .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 40px 16px; box-sizing: border-box; width: 100%; }
+        /* تعديل الحاوية لإضافة مساحة سفلية كافية للشريط العائم منعاً للتداخل */
+        .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px 16px; box-sizing: border-box; width: 100%; }
         
-        /* ضبط شريط الفلترة والبحث الذكي العلوي */
         .search-grid { 
             display: grid; grid-template-columns: 90px 1.2fr 2fr; gap: 10px; width: 100%; 
             background: var(--card-bg); padding: 12px; border-radius: 18px; 
-            border: 1px solid var(--border); box-shadow: 0 4px 25px rgba(0,0,0,0.01); box-sizing: border-box; margin-bottom: 25px; 
+            border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.15); box-sizing: border-box; margin-bottom: 25px; 
         }
         .search-grid input, .search-grid select, .search-grid button { height: 44px; border: none; outline: none; background: var(--input-bg); color: var(--text-main); border-radius: 12px; font-size: 13px; font-weight: 600; box-sizing: border-box; width: 100%; }
         .search-grid input { padding: 0 16px; text-align: right; border: 1px solid var(--border) !important; }
-        .search-grid select { padding: 0 12px; cursor: pointer; -webkit-appearance: menulist !important; appearance: menulist !important; border: 1px solid var(--border) !important; }
-        .search-grid button { background: #2ec4b6 !important; color: white !important; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(46,196,182,0.15); }
+        .search-grid select { padding: 0 12px; cursor: pointer; -webkit-appearance: menulist !important; appearance: menulist !important; border: 1px solid var(--border) !important; background-color: var(--card-bg) !important; }
+        .search-grid button { background: var(--neon-cyan) !important; color: white !important; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(46,196,182,0.15); }
         
-        /* كروت مقدمي الخدمات الفخمة بنظام الأبعاد الملمومة ميكانيكياً */
-        .provider-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 22px; box-shadow: 0 4px 25px rgba(0,0,0,0.005); box-sizing: border-box; width: 100%; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-                /* ستايل نبض شارة الإتاحة بصفحة دليل مقدمي الخدمات */
+        .provider-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 22px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.6); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
             70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.08); opacity: 0.95; }
-            100% { transform: scale(1); opacity: 1; }
-        }
         @media (max-width: 768px) { .search-grid { grid-template-columns: 1fr !important; gap: 8px !important; } }
+
+        /* 📱 شريط التنقل السفلي العائم فائق الحداثة المتناسق بالملي بكسل 📱 */
+        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 450px; box-sizing: border-box; }
+        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
     </style>
+
 </head>
 <body>
     <!-- الحاوية الفاخرة المحكومة بـ 680 بكسل لتتوسط اللاب توب وتتمدد بالكامل على الموبايل -->
@@ -57,7 +71,17 @@
             <button type="button" onclick="window.location.href='/'" style="background: none; border: none; color: #1da1f2; font-weight: bold; font-size: 14px; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 4px;">
                 <span>➡️</span> عودة للرئيسية
             </button>
+                <!-- 📱 شريط التنقل السفلي العائم فائق الحداثة (Bottom Navbar للفلترة والملاحة الموحدة) 📱 -->
+    <div class="bottom-nav-premium">
+        <a href="{% url 'home' %}" class="bottom-nav-link" title="الرئيسية">🏠</a>
+        <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
+    </div>
+
         </div>
+
 
         <!-- شريط الفلترة والبحث الذكي المطور (اسم، تخصص، هاتف، محافظة) -->
         <form method="GET" action="/providers/" class="search-grid">
@@ -70,6 +94,14 @@
             </select>
             <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="ابحث بالاسم، الهاتف، أو نوع الخدمة... 🛠️">
         </form>
+
+                            <!-- 🗺️ 🌟 زر كبسولة الانتقال الفوري لخريطة الفنيين الحية لايف لاكتشاف الأقرب 🌟 🗺️ -->
+            <div style="margin-top: 14px; text-align: center; width: 100%;">
+                <a href="{% url 'providers_map' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 12px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 6px 20px rgba(46,196,182,0.3); border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; box-sizing: border-box; transition: 0.2s;">
+                    <span style="font-size: 18px; animation: status-pulse 2s infinite; display: inline-block;">🗺️</span>
+                    <span>اكتشف الفنيين القريبين منك الآن على الخريطة لايف ⚡</span>
+                </a>
+            </div>
 
         <!-- شبكة عرض كروت مقدمي الخدمات الملمومة والموسطة هندسياً -->
         <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; box-sizing: border-box;">

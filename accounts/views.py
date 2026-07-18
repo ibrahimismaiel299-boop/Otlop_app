@@ -514,3 +514,24 @@ def end_voice_call_api(request, room_id):
                 call.save()
             return JsonResponse({"status": "success", "msg": "تم إنهاء المكالمة وتطهير جداول قاعدة البيانات 🟢"})
     return JsonResponse({"status": "error", "msg": "طلب غير مسموح به"}, status=400)
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import User
+
+# accounts/views.py
+
+def providers_map_view(request):
+    """دالة جلب الفنيين المتاحين لايف الحين وعرض إحداثياتهم الجغرافية على الخريطة للجميع مع صمام أمان للزوار"""
+    # جلب الفنيين المشغلين لزر "متاح الآن" والذين يملكون إحداثيات موقع صريحة
+    active_providers = User.objects.filter(
+        user_type='provider', 
+        is_active_now=True,
+        latitude__isnull=False,
+        longitude__isnull=False
+    )
+    
+    return render(request, 'accounts/providers_map.html', {
+        'providers': active_providers,
+        'is_logged_in': request.user.is_authenticated  # تمرير حالة تسجيل الدخول فوريّاً للفرونت إند
+    })

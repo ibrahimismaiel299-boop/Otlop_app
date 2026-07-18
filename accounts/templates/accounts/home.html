@@ -2,528 +2,289 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Otlop - Super App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otlop - سوبر آب الخدمات 🚀</title>
     <style>
+        /* 🎨 لوحة البراند بوك العالمي للمظهرين الداكن والفاتح الموحد 🎨 */
         :root {
-            --bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --text-muted: #64748b; 
-            --border: #e2e8f0; --input-bg: #f1f5f9; --accent: #1da1f2; --accent-hover: #1a91da;
+            --bg-main: #0d1b2a;         
+            --card-bg: #142444;         
+            --accent-blue: #1e88ff;     
+            --neon-cyan: #2ec4b6;       
+            --text-main: #f8fafc;       
+            --text-muted: #94a3b8;      
+            --border: rgba(255, 255, 255, 0.08); 
+            --input-bg: rgba(255, 255, 255, 0.03);
         }
-        [data-theme="dark"] {
-            --bg: #0b0f19; --card-bg: #151d30; --text-main: #f8fafc !important; --text-muted: #94a3b8 !important; 
-            --border: #24314f; --input-bg: #0e1626 !important; --accent: #1da1f2; --accent-hover: #1a91da;
+        [data-theme="light"] {
+            --bg-main: #f8fafc;         
+            --card-bg: #ffffff;         
+            --accent-blue: #1d9bf0;     
+            --neon-cyan: #00ba7c;       
+            --text-main: #0f172a;       
+            --text-muted: #64748b;      
+            --border: #e2e8f0; 
+            --input-bg: #f1f5f9;
         }
-        html, body {
-            margin: 0; padding: 0; min-height: 100vh; background-color: var(--bg) !important;
-            color: var(--text-main) !important; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            transition: background-color 0.2s, color 0.2s; box-sizing: border-box;
-        }
-        .container { max-width: 680px; margin: 0 auto; padding: 0 16px 40px reconstruction; box-sizing: border-box; width: 100%; }
-        .app-header { background-color: #0d1b2a; color: white; padding: 14px 20px; text-align: center; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .brand { font-size: 26px; font-weight: 900; margin: 0; letter-spacing: -0.5px; }
-        .brand span { color: var(--accent); }
-        .sidebar { height: 100%; width: 0; position: fixed; z-index: 9999; top: 0; right: 0; background-color: #0d1b2a; overflow-x: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding-top: 60px; text-align: right; box-shadow: -5px 0 25px rgba(0,0,0,0.2); }
-        .sidebar-link { display: block; padding: 14px 24px; color: #e2e8f0; text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s; }
-        .sidebar-link:hover { background: rgba(255,255,255,0.05); color: white; }
-        .premium-btn { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 50px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(29,161,242,0.15); box-sizing: border-box; }
-        .premium-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
-        .search-grid { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; background: var(--card-bg); padding: 10px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.01); box-sizing: border-box; margin: 20px 0; }
-        .search-grid input { height: 44px; border: none; outline: none; background: var(--input-bg); color: var(--text-main); padding: 0 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: right; box-sizing: border-box; width: 100%; }
-        .pill-tab { padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; }
-        .feed-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.005); box-sizing: border-box; width: 100%; margin-bottom: 20px; }
-                /* ستايل زر التبديل الجغرافي الفخم */
+
+        body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background 0.3s; }
+        .main-responsive-container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px 16px; box-sizing: border-box; width: 100%; }
+        .feed-card { background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin-bottom: 24px; box-sizing: border-box; width: 100%; text-align: right; position: relative; }
+        
+        .slider-premium { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; }
         .slider-premium:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider-premium { background-color: #2ec4b6 !important; }
+        input:checked + .slider-premium { background-color: var(--neon-cyan) !important; }
         input:checked + .slider-premium:before { transform: translateX(20px); }
         
-        /* تأثير النبض النيوني للشارة الخضراء الحية */
         @keyframes status-pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
             70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
         }
-
-         /* إلغاء الهوامش الداخلية وتمدد المحتوى بكامل مساحة الشاشة على الهاتف */
         
-        @media (max-width: 768px) {
-            .main-responsive-container {
-                max-width: 100% !important;
-                padding: 15px 10px 40px 10px !important;
-            }
-        }
-
-                /* تأثير النبض الحركي الفخم لأيقونة الاتصال */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
+        /* 📱 شريط التنقل السفلي العائم فائق الحداثة (Bottom Navbar) 📱 */
+        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 450px; box-sizing: border-box; }
+        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
     </style>
 </head>
 <body>
-        <!-- ☰ القائمة الجانبية المنزلقة العالمية (النسخة الفاخرة) ☰ -->
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" onclick="closeNav()" style="position: absolute; top: 15px; left: 24px; font-size: 36px; color: #94a3b8; text-decoration: none; line-height: 1;">&times;</a>
-        <div style="padding: 20px 0;">
-            <a href="javascript:void(0)" onclick="navTo('/?clean=1')" class="sidebar-link">🏠 الرئيسية</a>
-            {% if request.user.is_authenticated %}
-                {% if request.user.is_superuser or request.user.is_staff %}
-                    <a href="javascript:void(0)" onclick="navTo('/admin/')" class="sidebar-link" style="color: #ffb703; font-weight: 800; border-bottom: 1px dashed rgba(255,183,3,0.2); padding-bottom: 10px; margin-bottom: 10px;">👑 لوحة المدير العام</a>
-                {% endif %}
-                <a href="javascript:void(0)" onclick="navTo('/profile/')" class="sidebar-link">👤 ملفي الشخصي</a>
-                <a href="javascript:void(0)" onclick="navTo('/friends/')" class="sidebar-link">👥 قائمة الأصدقاء</a>
-                <a href="javascript:void(0)" onclick="navTo('/chats/')" class="sidebar-link">💬 صندوق الرسائل</a>
-                <a href="javascript:void(0)" onclick="navTo('/logout/')" class="sidebar-link" style="color: #ef4444; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">🚪 تسجيل الخروج</a>
-            {% else %}
-                <a href="javascript:void(0)" onclick="navTo('/login/')" class="sidebar-link" style="color: #2ec4b6;">🔑 تسجيل الدخول</a>
-                <a href="javascript:void(0)" onclick="navTo('/signup/')" class="sidebar-link" style="color: var(--accent);">➕ إنشاء حساب جديد</a>
-            {% endif %}
-        </div>
-    </div>
-    <!-- 🚀 حاوية الحصر السحرية الموحدة: لتوسط اللابتوب وتمدد الموبايل بكامل مساحة الشاشة 🚀 -->
-    <div class="main-responsive-container" style="max-width: 680px; margin: 0 auto; padding: 20px 16px 40px 16px; box-sizing: border-box; width: 100%;">
+    <!-- 🚀 حاوية الحصر السحرية الموحدة لضبط أبعاد الشاشات 🚀 -->
+    <div class="main-responsive-container">
 
-    <!-- 🔝 حاوية الأمان الخارجية: المخصصة لفرض التوسط والحد الأقصى للأبعاد على اللاب توب 🔝 -->
-    <div style="width: 100%; background-color: #0d1b2a; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 1000; display: flex; justify-content: center;">
-        
-        <!-- الهيدر الفعلي المحكوم بـ 680 بكسل بالملي ليصطف فوق التايم لاين تماماً على اللاب توب -->
-        <div style="max-width: 680px; width: 100%; padding: 12px 16px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; direction: rtl;">
-            
-            <!-- جهة اليمين: زر القائمة الجانبية (☰) الفخم مع اللوجو -->
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <span onclick="openNav()" style="font-size: 22px; cursor: pointer; color: white; background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 12px; transition: 0.2s; display: inline-block; line-height: 1;">☰</span>
-                <h1 style="font-size: 22px; font-weight: 900; margin: 0; color: white; letter-spacing: -0.5px; line-height: 1;">Otlo<span style="color: #1da1f2;">p</span></h1>
+        <!-- أ) ترويسة قمة الصفحة الفاخرة المدمج بها محركات التحكم اللحظية -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; direction: rtl; width: 100%;">
+            <!-- 🚀 توحيد لون الاسم ليتطابق مع لون الكلمة واللوجو الرسمي للسوبر آب 100% 🚀 -->
+            <!-- 🚀 حقن الاسم بنظام الـ Bi-color المتجاوب لتطابق اللوجو الرسمي بالملي بكسل 🚀 -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 25px; font-weight: 900; color: var(--text-main); letter-spacing: 0.5px;">Otlo<span style="color: var(--accent-blue);">p</span></span>
             </div>
-
-            <!-- جهة اليسار: كبسولة التحكم الرقمية الموحدة لجمع كافة الأزرار أفقياً بنظافة -->
-            {% if request.user.is_authenticated %}
-                <div style="display: flex; align-items: center; gap: 14px; direction: ltr; box-sizing: border-box;">
-                    
-                    <!-- أ) زر الوضع الليلي التفاعلي المباشر -->
-                    <button type="button" onclick="toggleTheme()" id="theme-btn" style="background: none; border: none; font-size: 18px; cursor: pointer; padding: 0; line-height: 1; display: inline-block;">🌙</button>
-                    
-                    <!-- ب) زر تبديل اللغة الأنيق والمحكوم الأبعاد -->
-                    <button type="button" onclick="toggleLanguage()" id="lang-btn" style="background: rgba(255,255,255,0.12); color: white; border: none; padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; line-height: 1; height: 26px;">EN</button>
-                    
-                    <!-- ج) كبسولة الرسائل والشات المباشر المؤمّنة -->
-                    <div style="position: relative; display: flex; align-items: center; cursor: pointer; height: 24px; width: 24px; justify-content: center;" onclick="navTo('/chats/')">
-                        <span style="font-size: 18px; line-height: 1;">💬</span>
-                        <span id="chat-msg-count" style="display: none; position: absolute; top: -6px; left: -8px; background: #2ec4b6; color: white; border-radius: 50%; width: 14px; height: 14px; font-size: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #0d1b2a;">0</span>
-                    </div>
-
-                    <!-- د) جرس الإشعارات الذكي المانع للبعثرة والإنبثاق الجانبي -->
-                    <div style="position: relative; cursor: pointer; display: flex; align-items: center; height: 24px; width: 24px; justify-content: center;" onclick="openNotificationsAndClearCounter()">
-                        <span style="font-size: 18px; line-height: 1;">🔔</span>
-                        {% if unread_notifications.count > 0 %}
-                            <span id="notif-count" style="position: absolute; top: -6px; right: -6px; background: #ef4444; color: white; border-radius: 50%; width: 14px; height: 14px; font-size: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #0d1b2a;">{{ unread_notifications.count }}</span>
-                        {% endif %}
-                        
-                        <!-- منيو الإشعارات المنبثق هندسياً لأسفل لمنع كسر عناصر قمة الهاتف -->
-                        <div id="notificationsMenu" style="display: none; position: absolute; top: 32px; right: -40px; background: var(--card-bg); width: 260px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); text-align: right; overflow: hidden; z-index: 99999; direction: rtl;">
-                            <div style="background: #0d1b2a; color: white; padding: 10px; font-size: 12px; font-weight: bold; text-align: center;">الإشعارات والتنبيهات 🎯</div>
-                            <div style="max-height: 200px; overflow-y: auto; padding: 4px 0;">
-                                {% for notif in unread_notifications %}
-                                    <a href="#post-container-{{ notif.post.id }}" onclick="toggleNotificationsMenu();" style="text-decoration: none; display: block;">
-                                        <div style="padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-main); background: var(--input-bg);">
-                                            <strong>{{ notif.sender.username }}</strong> {{ notif.get_notification_type_display }}
-                                        </div>
-                                    </a>
-                                {% empty %}
-                                    <p style="text-align: center; color: var(--text-muted); font-size: 11px; padding: 15px; margin: 0;">لا توجد تنبيهات جديدة.</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- هـ) صورة البروفايل الدائرية المنظمة بجهة أقصى اليسار مكمّلة المظهر العالمي -->
-                    <div onclick="navTo('/profile/')" style="cursor: pointer; display: flex; align-items: center; margin-left: 4px;">
-                        {% if request.user.profile_picture %}
-                            <img src="{{ request.user.profile_picture.url }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
-                        {% else %}
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold;">👤</div>
-                        {% endif %}
-                    </div>
-
-                </div>
-            {% else %}
-                <!-- زوار المنصة (غير مسجلي الدخول): أزرار ولوج رشيقة ومصطفة أفقياً -->
-                <div style="display: flex; gap: 8px; direction: rtl;">
-                    <button type="button" onclick="navTo('/signup/')" style="background:#1DA1F2; color:white; padding:6px 14px; border-radius:30px; border:none; font-weight:bold; font-size:12px; cursor:pointer;">سجل حسابك</button>
-                    <button type="button" onclick="navTo('/login/')" style="background:rgba(255,255,255,0.1); color:white; padding:6px 14px; border-radius:30px; border:none; font-weight:bold; font-size:12px; cursor:pointer;">دخول</button>
-                </div>
-            {% endif %}
-
-        </div>
-    </div>
-
-    <!-- شريط التنبيه عند تصفح المنصة أوفلاين (مستقر تحت الهيدر مباشرة) -->
-    <div id="offline-alert" style="display: none; background-color: #ffb703; color: #0d1b2a; text-align: center; padding: 8px; font-weight: bold; font-size: 13px; position: sticky; top: 0; z-index: 999;">
-        ⚠️ أنت تتصفح النسخة المحفوظة أوفلاين حالياً لعدم استقرار شبكة الإنترنت.
-    </div>
-
-        <!-- 👥 زر الوصول السريع المطور لدليل الفنيين بقمة الرئيسية 👥 -->
-        <button type="button" onclick="navTo('/providers/')" style="width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 16px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 161, 242, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; margin-top: 20px; transition: 0.2s;">
-            <span>🔍👥</span> <span id="txt-btn-go-directory">دليل مقدمي الخدمات والفنيين المتاحين</span>
-        </button>
-
-        <!-- 🔍 صندوق البحث والفلترة الذكي الموحد الشامل (اسم، تخصص، هاتف) 🔍 -->
-        <form method="GET" action="/providers/" class="search-grid">
-            <input type="text" name="q" id="input-smart-search" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الخدمة... 🛠️">
-            <button type="submit" id="btn-search-txt" class="premium-btn" style="border-radius: 12px; height: 44px; padding: 0 20px;">بحث 🔍</button>
-        </form>
-
-        <!-- 💰 مساحة إعلانية ممولة ومستهدفة للمستقبل (Premium Ad Banner Space) 💰 -->
-        <div style="width: 100%; margin: 0 auto 25px auto; box-sizing: border-box;">
-            <div style="background: linear-gradient(135deg, #0f172a, #1da1f2); color: white; padding: 18px; border-radius: 18px; text-align: center; font-weight: 800; font-size: 13px; box-shadow: 0 6px 20px rgba(29,161,242,0.15); border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden;">
-                <span style="position: absolute; top: 8px; left: 12px; background: rgba(255,255,255,0.15); color: white; font-size: 9px; padding: 2px 8px; border-radius: 20px; font-weight: 700; text-transform: uppercase;">Sponsored</span>
-                📢 مساحة إعلانية ممولةً 🚀
-                <span id="txt-ad-desc" style="display: block; font-size: 11px; font-weight: 600; opacity: 0.85; margin-top: 6px; letter-spacing: -0.1px;">للإعلان عن شركتك أو خدماتك الفنية هنا، تواصل مع إدارة التطبيق</span>
-            </div>
-        </div>
-    <!-- 🌟 شريط المهن والاحتياجات الدائري العصري بسطر واحد (Horizontal Endless Scroll) 🌟 -->
-    <div style="width: 100%; overflow-x: auto; white-space: nowrap; padding-bottom: 12px; margin-bottom: 25px; direction: rtl; box-sizing: border-box; -webkit-overflow-scrolling: touch; scroll-behavior: smooth;">
-        <div style="display: inline-flex; gap: 12px; padding: 0 4px;">
-            {% for cat in category_choices %}
-                <a href="?category={{ cat.id }}" style="text-decoration: none; color: inherit; display: inline-block;">
-                    <!-- كرت المهنة الدائري الصغير المطور بـ Neumorphic Shadow -->
-                    <div style="background-color: var(--card-bg); padding: 10px 16px; border-radius: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.015); border: 1px solid var(--border); display: flex; align-items: center; gap: 8px; box-sizing: border-box; transition: transform 0.2s;">
-                        <span style="font-size: 18px; line-height: 1;">{{ cat.icon_emoji }}</span>
-                        <span class="lang-cat" data-ar="{{ cat.name_ar }}" data-en="{{ cat.name_en|default:cat.name_ar }}" style="font-size: 12px; font-weight: 800; color: var(--text-main);">{{ cat.name_ar }}</span>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-
-        <!-- 👥 لوحة استقبال طلبات الصداقة والاتصال الواردة 👥 -->
-        <div id="live-friend-requests-box" style="{% if not pending_requests %}display: none;{% endif %} background-color: var(--card-bg); padding: 16px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: 1px solid var(--border); margin-bottom: 25px; text-align: right;">
-            <h4 id="txt-friend-req" style="margin: 0 0 12px 0; font-size: 14px; font-weight: 800; color: var(--text-main);">👥 طلبات صداقة واردة قيد الانتظار:</h4>
-            <div id="live-requests-list">
-                {% for req in pending_requests %}
-                    <div id="req-item-{{ req.id }}" style="display: flex; justify-content: space-between; align-items: center; background-color: var(--input-bg); padding: 12px; border-radius: 12px; margin-bottom: 6px;">
-                        <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">👤 طلب اتصال من: {{ req.from_user.username }}</span>
-                        <div style="display: flex; gap: 6px;">
-                            <a href="{% url 'accept_friend_request' req.id %}" class="btn-accept-txt" style="background: #2ec4b6; color: white; text-decoration: none; padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 700; box-shadow: 0 3px 8px rgba(46,196,182,0.15);">قبول ✔️</a>
-                            <a href="{% url 'reject_friend_request' req.id %}" class="btn-reject-txt" style="background: #ef4444; color: white; text-decoration: none; padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 700; box-shadow: 0 3px 8px rgba(239,68,68,0.15);">رفض ❌</a>
-                        </div>
-                    </div>
-                {% endfor %}
+            <!-- أزرار شحن المظهر واللغة النيونية فائقة الشياكة -->
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button type="button" id="theme-btn" onclick="toggleTheme()" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">☀️</button>
+                <button type="button" id="lang-btn" onclick="toggleLanguage()" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); height: 40px; padding: 0 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">EN</button>
             </div>
         </div>
 
-    <!-- 🚀 حاوية الحصر السحرية الموحدة: تضمن توسط اللابتوب وتمدد الموبايل بكامل مساحة الشاشة 🚀 -->
-    <div class="main-responsive-container" style="max-width: 680px; margin: 0 auto; padding: 20px 16px 40px 16px; box-sizing: border-box; width: 100%;">
-
-        <!-- 📝 صندوق كتابة منشور جديد العصري الفخم (مستقل تماماً ومقاوم للتجمد) 📝 -->
+        <!-- ب) 🔍 محرك وشريط البحث الشامل والذكي الفوري (البحث بالهاتف والمحافظة والاسم) 🔍 -->
+        <div style="background: var(--card-bg); padding: 14px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box;">
+            <form method="GET" action="/" id="search-form" style="display: flex; gap: 10px; align-items: center; width: 100%; margin: 0; padding: 0; direction: rtl;">
+                <input type="text" name="q" value="{{ request.GET.q|default:'' }}" id="input-smart-search" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍" style="flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border); height: 44px; box-sizing: border-box;">
+                <button type="submit" style="background: var(--accent-blue); color: white; border: none; padding: 0 22px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.2); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
+                    <span>🔍</span> <span id="txt-search-btn">بحث</span>
+                </button>
+            </form>
+        </div>
+        <!-- 📝 صندوق كتابة منشور جديد العصري الفخم (النسخة الشاملة المعززة) 📝 -->
         {% if request.user.is_authenticated %}
-            <div style="background: var(--card-bg); padding: 22px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border); margin-bottom: 30px; text-align: right; box-sizing: border-box; width: 100%;">
+            <div style="background: var(--card-bg); padding: 22px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); margin-bottom: 30px; text-align: right; box-sizing: border-box; width: 100%;">
                 
-                <!-- 1. عنوان الصندوق السينمائي النظيف -->
                 <h3 id="txt-post-title" style="margin-top: 0; margin-bottom: 18px; font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
                     <span>✍️</span> أنشئ منشوراً جديداً (طلب أو عرض خدمة)
                 </h3>
                 
-                <!-- 2. 🟢 كبسولة التحكم الجغرافية اللحظية (تظهر لمقدمي الخدمة وتظهر للـ Admin للمعاينة) 🟢 -->
+                <!-- 🟢 كبسولة التحكم الجغرافية اللحظية للمتاحين (مستقلة تماماً) 🟢 -->
                 {% if request.user.user_type == 'provider' or request.user.is_superuser %}
                     <div style="margin-bottom: 18px; background: rgba(46,196,182,0.06); padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(46,196,182,0.15); display: flex; align-items: center; justify-content: space-between; direction: rtl; box-sizing: border-box; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: {% if request.user.is_active_now %}#2ec4b6; animation: status-pulse 2s infinite;{% else %}#64748b;{% endif %} display: inline-block;"></span>
-                            <span style="font-size: 13px; font-weight: 800; color: var(--text-main);">حالة العمل الفورية: <span id="status-text" style="color: {% if request.user.is_active_now %}#2ec4b6;{% else %}var(--text-muted);{% endif %};">{% if request.user.is_active_now %} انت متاح للعمل  ⚡{% else %}أنت غير متاح حالياً 💤{% endif %}</span></span>
+                            <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: {% if request.user.is_active_now %}var(--neon-cyan); animation: status-pulse 2s infinite;{% else %}#64748b;{% endif %} display: inline-block;"></span>
+                            <span style="font-size: 13px; font-weight: 800; color: var(--text-main);">حالة العمل الفورية: <span id="status-text" style="color: {% if request.user.is_active_now %}var(--neon-cyan);{% else %}var(--text-muted);{% endif %};">{% if request.user.is_active_now %}أنت متاح للعمل لايف الحين ⚡{% else %}أنت غير متاح حالياً 💤{% endif %}</span></span>
                         </div>
-                        <!-- مفتاح التشغيل التفاعلي الفاخر -->
                         <label class="switch-premium" style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer; flex-shrink: 0;">
                             <input type="checkbox" id="geo-toggle-input" onchange="toggleLiveAvailability(this)" {% if request.user.is_active_now %}checked{% endif %} style="opacity: 0; width: 0; height: 0;">
-                            <span class="slider-premium" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px;"></span>
+                            <span class="slider-premium"></span>
                         </label>
                     </div>
                 {% endif %}
                 
-                <!-- 3. بداية الاستمارة وحقل الكتابة والميديا -->
+                <!-- بداية استمارة الرفع الشاملة الداعمة للصور والفيديوهات -->
                 <form method="POST" enctype="multipart/form-data" action="/" style="margin: 0; padding: 0;">
                     {% csrf_token %}
-                    
                     <textarea name="content" required placeholder="ماذا يدور في ذهنك؟ اكتب تفاصيل طلبك هنا... 💡" rows="3" style="width: 100%; border-radius: 16px; padding: 15px; border: 1px solid var(--border); outline: none; font-family: inherit; background-color: var(--input-bg); color: var(--text-main); box-sizing: border-box; resize: none; font-size: 14px; font-weight: 600; line-height: 1.6;"></textarea>
                     
+                    <!-- صف أزرار اختيار الميديا وإرجاع كبسولة الفيديو الصريحة -->
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 18px; gap: 12px; direction: rtl;">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <div id="txt-add-img" onclick="document.getElementById('post_image_input').click();" style="background: rgba(29, 161, 242, 0.08); color: #1DA1F2; padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(29, 161, 242, 0.15); display: inline-flex; align-items: center; gap: 6px;">
+                            <!-- أ) زر كبسولة إضافة صورة -->
+                            <div id="txt-add-img" onclick="document.getElementById('post_image_input').click();" style="background: rgba(30,136,255,0.08); color: var(--accent-blue); padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(30,136,255,0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>📷</span> أضف صورة
                             </div>
                             <input type="file" id="post_image_input" name="image" accept="image/*" style="display: none;" onchange="previewPostImage(this)">
                             
-                            <div id="txt-add-video" onclick="document.getElementById('post_video_input').click();" style="background: rgba(255, 77, 109, 0.08); color: #ff4d6d; padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(255, 77, 109, 0.15); display: inline-flex; align-items: center; gap: 6px;">
+                            <!-- ب) زر كبسولة إضافة فيديو المشحونة فوريّاً -->
+                            <div id="txt-add-video" onclick="document.getElementById('post_video_input').click();" style="background: rgba(46,196,182,0.08); color: var(--neon-cyan); padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(46,196,182,0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>🎬</span> أضف فيديو
                             </div>
                             <input type="file" id="post_video_input" name="video" accept="video/*" style="display: none;" onchange="previewPostVideo(this)">
                         </div>
 
-                        <!-- قائمة اختيار القسم العصرية والمفتوحة الصلاحيات لمنع الحجب البصري -->
-                        <div style="min-width: 160px; max-width: 100%;">
-                            <select name="category" required style="width: 100%; padding: 0 14px; border-radius: 30px; border: 1px solid var(--border); background-color: var(--input-bg); color: var(--text-main); font-size: 12px; font-weight: 700; outline: none; cursor: pointer; height: 38px; display: block !important; -webkit-appearance: menulist !important; appearance: menulist !important; box-sizing: border-box;">
-                                <option value="">🎯 حدد قسم المنشور</option>
-                                {% for cat in category_choices %}
-                                    <option value="{{ cat.id }}">{{ cat.icon_emoji }} {{ cat.name_ar }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        <button type="submit" id="btn-submit-post" name="submit_post" style="background-color: var(--accent-blue); color: white; padding: 10px 24px; border-radius: 30px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.2);">نشر المنشور 🚀</button>
                     </div>
-                        <div id="post_img_preview_container" style="display: none; position: relative; margin-top: 10px;">
-                            <img id="post_img_preview" src="" style="max-width: 80px; max-height: 80px; border-radius: 8px; object-fit: cover;">
-                            <span onclick="removePostImage()" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
-                        </div>
-                        <div id="post_vid_preview_container" style="display: none; position: relative; margin-top: 10px;">
-                            <span style="font-size: 20px;">🎬 📽️</span>
-                            <span onclick="removePostVideo()" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
-                        </div>
 
-                        <button type="submit" id="btn-submit-post" name="submit_post" style="background-color: #1DA1F2; color: white; padding: 10px 24px; border-radius: 30px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(29,161,242,0.2);">نشر المنشور 🚀</button>
+                    <!-- حاويات وعناصر المعاينة الفورية الذكية تحت صندوق الكتابة بالملي -->
+                    <div id="post_img_preview_container" style="display: none; position: relative; margin-top: 15px; text-align: right;">
+                        <img id="post_img_preview" src="" style="max-width: 100px; max-height: 100px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border);">
+                        <span onclick="removePostImage()" style="position: absolute; top: -5px; right: 85px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
+                    </div>
+                    <div id="post_vid_preview_container" style="display: none; position: relative; margin-top: 15px; text-align: right;">
+                        <span style="font-size: 13px; color: var(--neon-cyan); font-weight: bold;">🎥 تم اختيار مقطع الفيديو بنجاح وجاهز للبث!</span>
+                        <span onclick="removePostVideo()" style="background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; margin-right: 8px;">✕</span>
                     </div>
                 </form>
             </div>
         {% endif %}
-
-
-        <!-- ج) شريط فلترة التايم لاين حسب الاهتمامات (تصميم كبسولات مرن) -->
-        <div style="margin-bottom: 25px; display: flex; gap: 10px; align-items: center; overflow-x: auto; padding-bottom: 8px; direction: rtl; -webkit-overflow-scrolling: touch;">
-            <span id="txt-interests" style="font-weight: 800; color: var(--text-main); white-space: nowrap; font-size: 14px;">🎯 التايم لاين:</span>
-            <a href="{% url 'home' %}" id="txt-all" style="padding: 8px 20px; border-radius: 30px; text-decoration: none; font-size: 13px; font-weight: 700; background: #0d1b2a; color: white; white-space: nowrap; box-shadow: 0 4px 12px rgba(13,27,42,0.15);">الكل 🌍</a>
+                <!-- 👥 🌟 زر كبسولة الانتقال الفوري لدليل الفنيين ومقدمي الخدمات المتاحين 🌟 👥 -->
+        <div style="margin-bottom: 20px; text-align: center; width: 100%;">
+            <a href="{% url 'providers_directory' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(30,136,255,0.08); color: var(--accent-blue); text-decoration: none; padding: 14px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; border: 1px solid rgba(30,136,255,0.2); width: 100%; box-sizing: border-box; transition: 0.2s;">
+                <span style="font-size: 18px;">📋</span>
+                <span id="txt-view-directory">تصفح دليل الفنيين ومقدمي الخدمات الحاليين ↩️</span>
+            </a>
         </div>
 
-        <!-- د) عرض البوستات والتايم لاين الفعلي (Premium Post Feed Grid) -->
+        <!-- 🗺️ زر كبسولة الانتقال الفوري لخريطة الفنيين الحية لايف لاكتشاف الأقرب 🗺️ -->
+        <div style="margin-bottom: 30px; text-align: center; width: 100%;">
+            <a href="{% url 'providers_map' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--neon-cyan), #20a396); color: white; text-decoration: none; padding: 14px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 6px 20px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box;">
+                <span style="font-size: 18px; animation: status-pulse 2s infinite; display: inline-block;">🗺️</span>
+                <span id="txt-interests">اكتشف الفنيين القريبين منك الآن على الخريطة لايف ⚡</span>
+            </a>
+        </div>
+
+        <!-- د) شبكة عرض كروت البوستات والتايم لاين الفعلي الموحد بالبراند بوك -->
         <div style="display: flex; flex-direction: column; gap: 24px; direction: rtl; text-align: right; width: 100%;">
             {% for post in posts %}
-                <!-- كارت المنشور العصري الموحد (النسخة الخرافية) -->
                 <div id="post-container-{{ post.id }}" class="feed-card">
                     
-                    <!-- ترويسة كرت المنشور وبيانات المستخدم الفخمة (المحقونة بشارة الإتاحة لايف 🟢) -->
+                    <!-- ترويسة كرت المنشور وبيانات المستخدم الفخمة المحقونة بشارات الإتاحة والتحكم ⚙️ -->
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
                         <div style="display: flex; align-items: center; gap: 14px;">
                             
-                            <!-- صورة البروفايل المحصنة بنبض الإتاحة لايف -->
                             <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; display: flex; align-items: center; position: relative; flex-shrink: 0;">
                                 {% if post.user.profile_picture %}
-                                    <img src="{{ post.user.profile_picture.url }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid {% if post.user.is_active_now %}#2ec4b6{% else %}#1DA1F2{% endif %};">
+                                    <img src="{{ post.user.profile_picture.url }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid {% if post.user.is_active_now %}var(--neon-cyan){% else %}var(--accent-blue){% endif %};">
                                 {% else %}
                                     <div style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #4a5568; font-size: 22px; font-weight: bold; border: 2px solid var(--border);">👤</div>
                                 {% endif %}
-                                
-                                <!-- النقطة النيونية النابضة تلتصق بالصورة الفردية للفني النشط الحين -->
                                 {% if post.user.is_active_now %}
-                                    <span style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #2ec4b6; border: 2px solid var(--card-bg); border-radius: 50%; animation: status-pulse 2s infinite;"></span>
+                                    <span style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: var(--neon-cyan); border: 2px solid var(--card-bg); border-radius: 50%; animation: status-pulse 2s infinite;"></span>
                                 {% endif %}
                             </a>
                             
-                            <!-- تفاصيل بيانات الكاتب والتوثيق -->
                             <div style="text-align: right;">
                                 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; direction: rtl;">
                                     <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
                                         <strong style="color: var(--text-main); font-size: 15px; font-weight: 800;">{{ post.user.username }}</strong>
-                                        <!-- شارة نصية تأكيدية ملفتة بجانب الاسم -->
-                                        {% if post.user.is_active_now %}
-                                            <span style="background: rgba(46,196,182,0.12); color: #2ec4b6; font-size: 9px; padding: 2px 8px; border-radius: 30px; font-weight: 900; white-space: nowrap;">متاح لايف ⚡</span>
-                                        {% endif %}
                                     </a>
                                     {% if post.user.is_verified_provider %}
-                                        <span style="background-color: rgba(29, 161, 242, 0.08); color: #1DA1F2; font-size: 10px; padding: 3px 10px; border-radius: 30px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">✔️ موثق</span>
+                                        <span style="background-color: rgba(30,136,255,0.08); color: var(--accent-blue); font-size: 10px; padding: 3px 10px; border-radius: 30px; font-weight: 800;">✔️ موثق</span>
                                     {% endif %}
                                     {% if post.user.user_type == 'provider' %}
-                                        <span style="background: rgba(255, 183, 3, 0.08); color: #ffb703; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 30px; display: inline-flex; align-items: center; gap: 3px;">⭐ {{ post.user.get_average_rating }}</span>
+                                        <span style="background: rgba(255,183,3,0.08); color: #ffb703; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 30px;">⭐ {{ post.user.get_average_rating }}</span>
                                     {% endif %}
                                 </div>
                                 <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px; font-weight: 600;">📍 {{ post.user.governorate.name_ar }} - {{ post.user.city.name_ar }}</span>
                             </div>
                         </div>
+
+                        <!-- ⚙️ كبسولة الثلاث نقاط المنبثقة لإبادة وحذف المنشور المخالف ⚙️ -->
+                        {% if request.user.is_authenticated %}
+                            {% if post.user == request.user or request.user.is_superuser %}
+                                <div style="position: relative; display: inline-block;">
+                                    <span onclick="event.stopPropagation(); const menu = document.getElementById('post-menu-{{ post.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 0 8px; font-weight: bold;">⋮</span>
+                                    <div id="post-menu-{{ post.id }}" style="display: none; position: absolute; top: 22px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 100; min-width: 100px; text-align: center;">
+                                        <span onclick="if(confirm('هل تريد حذف هذا المنشور نهائياً من التايم لاين؟')) navTo('/post/delete/{{ post.id }}/')" style="display: block; padding: 8px 12px; color: #ef4444; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ حذف البوست</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                     </div>
 
-                    
-                    <!-- متن نص البوست وعرض الصور والفيديوهات -->
+                    <!-- متن نص البوست وعرض الميديا المرفوعة -->
                     <p style="font-size: 15px; color: var(--text-main); line-height: 1.7; white-space: pre-line; margin: 12px 0; font-weight: 600;">
                         <span class="post-text-content">{{ post.content }}</span>
                     </p>
+                    
                     {% if post.image %}
-                        <div style="margin-top: 15px; border-radius: 18px; overflow: hidden; max-height: 380px; background: var(--input-bg); display: flex; justify-content: center; align-items: center; border: 1px solid var(--border);">
-                            <img src="{{ post.image.url }}" alt="صورة المنشور" style="max-width: 100%; max-height: 380px; object-fit: contain;">
-                        </div>
+                        <img src="{{ post.image.url }}" style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px;">
                     {% endif %}
                     {% if post.video %}
-                        <div style="margin-top: 15px; border-radius: 18px; overflow: hidden; max-height: 380px; background: #000; border: 1px solid var(--border);">
-                            <video src="{{ post.video.url }}" controls playsinline style="width: 100%; max-height: 380px; object-fit: contain;"></video>
-                        </div>
+                        <video src="{{ post.video.url }}" controls style="width: 100%; max-height: 380px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px; background: #000;"></video>
                     {% endif %}
-
-                    <!-- شريط أزرار التفاعل والإعجاب والاتصال العصري -->
+                    <!-- شريط أزرار التفاعل والإعجاب والاتصال الصوتية لايف عبر الشات -->
                     <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; direction: rtl;">
-                        <div style="display: flex; gap: 10px; align-items: center; direction: ltr;">
-                            <button type="button" onclick="sendPostAction('{{ post.id }}', 'like')" style="background: var(--input-bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <span>👍</span> <span class="btn-like-txt">إعجاب</span> <span id="like-count-{{ post.id }}">({{ post.likes_count|default:0 }})</span>
-                            </button>
-                            <button type="button" onclick="sendPostAction('{{ post.id }}', 'dislike')" style="background: var(--input-bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <span>👎</span> <span class="btn-dislike-txt">رفض</span> <span id="dislike-count-{{ post.id }}">({{ post.dislikes_count|default:0 }})</span>
-                            </button>
-                        </div>
+                        <button type="button" onclick="sendPostAction('{{ post.id }}', 'like')" style="background: var(--input-bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <span>👍</span> <span class="btn-like-txt">إعجاب</span> <span id="like-count-{{ post.id }}">({{ post.likes_count|default:0 }})</span>
+                        </button>
 
-                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            {% if request.user.is_authenticated and post.user == request.user %}
-                                <span onclick="if(confirm('هل أنت متأكد من حذف هذا المنشور نهائياً؟')) navTo('/post/delete/{{ post.id }}/')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 14px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(239,68,68,0.15);">🗑️ حذف</span>
-                            {% endif %}
-
-                            <!-- 🔐 كبسولة الاتصال الصوتي عبر الشات: محصورة بشرط الإتاحة الفورية الفعالة للفني 🔐 -->
-                            {% if post.user.phone_number and post.user.is_active_now %}
-                                <a href="{% url 'trigger_voice_call' post.user.id %}" class="btn-call-txt" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #1DA1F2, #0d1b2a); color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(29,161,242,0.25);">
-                                    <span style="font-size: 15px; animation: status-pulse 2s infinite; display: inline-block;">📞</span> <span>اتصال صوتي  ⚡</span>
-                                </a>
-                            {% endif %}
-
-
-                            {% if request.user.is_authenticated and request.user != post.user %}
-                                {% if post.friend_status == 'accepted' %}
-                                    <span class="btn-friends-status" style="display: inline-flex; align-items: center; gap: 6px; background: var(--input-bg); color: var(--text-muted); padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; border: 1px solid var(--border);">👥 أصدقاء</span>
-                                {% elif post.friend_status == 'pending' %}
-                                    <span class="btn-pending-status" style="display: inline-block; background: #fff3cd; color: #b7791f; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px;">⏳ قيد الانتظار</span>
-                                {% else %}
-                                    <a href="{% url 'send_friend_request' post.user.id %}" class="btn-add-friend-txt" style="display: inline-flex; align-items: center; gap: 6px; background: #1DA1F2; color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 12px rgba(29,161,242,0.15);">👥 اتصال</a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
+                        {% if post.user.phone_number and post.user.is_active_now %}
+                            <a href="{% url 'trigger_voice_call' post.user.id %}" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--accent-blue), var(--bg-main)); color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(30,136,255,0.25);">
+                                <span>📞</span> <span>اتصال صوتي لايف ⚡</span>
+                            </a>
+                        {% endif %}
                     </div>
 
-                    <!-- صندوق عروض الأسعار والردود العصري المطور -->
+                    <!-- صندوق عروض الأسعار والردود العصري المطور (النسخة الرشيقة الانسيابية) -->
                     <div style="margin-top: 22px; background-color: var(--input-bg); padding: 18px; border-radius: 18px; border: 1px solid var(--border); box-sizing: border-box; width: 100%;">
-                        <h4 class="txt-replies-title" style="margin: 0 0 16px 0; font-size: 13px; font-weight: 700; color: var(--text-muted);">💬 الردود وعروض الأسعار ({{ post.comments.count }}):</h4>
+                        <h4 style="margin: 0 0 16px 0; font-size: 13px; font-weight: 700; color: var(--text-muted);">💬 الردود وعروض الأسعار ({{ post.comments.count }}):</h4>
                         
-                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
                             {% for comment in post.comments.all %}
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; position: relative;">
-                                                        <a href="{% url 'public_profile' comment.user.id %}" style="text-decoration: none;"><strong style="font-size: 12px; color: var(--text-main); font-weight: 800;">{{ comment.user.username }}</strong></a>
-                                                        
-                                                        <!-- ⚙️ كبسولة الثلاث نقاط المنبثقة الحصنية للتعليقات ⚙️ -->
-                                                        {% if request.user.is_authenticated %}
-                                                            {% if comment.user == request.user or request.user.is_staff or request.user.is_superuser %}
-                                                                <div style="position: relative; display: inline-block;">
-                                                                    <span onclick="event.stopPropagation(); const menu = document.getElementById('comment-menu-{{ comment.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 0 4px; font-weight: bold; line-height: 1;">⋮</span>
-                                                                    <!-- منيو الإجراءات الصغير -->
-                                                                    <div id="comment-menu-{{ comment.id }}" style="display: none; position: absolute; top: 18px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; min-width: 90px; text-align: center;">
-                                                                        <span onclick="if(confirm('هل تريد حذف هذا التعليق نهائياً؟')) navTo('/comment/delete/{{ comment.id }}/')" style="display: block; padding: 6px 10px; color: #ef4444; font-size: 11px; font-weight: 700; cursor: pointer;">🗑️ حذف</span>
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </div>
-                            
                                 {% if not comment.parent %}
-                                    <!-- 💬 كرت التعليق الرئيسي المنساب المضغوط (Compact Minimal Comment) 💬 -->
-                                    <div class="comment-item-{{ post.id }}" style="background-color: var(--card-bg); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; box-sizing: border-box; width: 100%; {% if forloop.counter > 2 %}display: none;{% endif %}">
-                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                                    <div class="comment-item-{{ post.id }}" style="background-color: var(--card-bg); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); box-sizing: border-box; width: 100%; {% if forloop.counter > 2 %}display: none;{% endif %}">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
+                                            <a href="{% url 'public_profile' comment.user.id %}" style="text-decoration: none;"><strong style="font-size: 12px; color: var(--text-main); font-weight: 800;">{{ comment.user.username }}</strong></a>
                                             
-                                            <!-- جهة اليمين: الصورة المصغرة والنص مصطفين أفقياً بنظافة مذهلة -->
-                                            <div style="display: flex; gap: 8px; align-items: flex-start; flex-grow: 1;">
-                                                <a href="{% url 'public_profile' comment.user.id %}" style="flex-shrink: 0; display: block; margin-top: 2px;">
-                                                    {% if comment.user.profile_picture %}
-                                                        <img src="{{ comment.user.profile_picture.url }}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border);">
-                                                    {% else %}
-                                                        <div style="width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border);">👤</div>
-                                                    {% endif %}
-                                                </a>
-                                                <div style="flex-grow: 1; text-align: right;">
-                                                    <div style="display: flex; align-items: center; gap: 6px;">
-                                                        <a href="{% url 'public_profile' comment.user.id %}" style="text-decoration: none;"><strong style="font-size: 12px; color: var(--text-main); font-weight: 800;">{{ comment.user.username }}</strong></a>
-                                                    </div>
-                                                    <!-- متن الرد أو عرض السعر مضغوط وقريب جداً من الاسم -->
-                                                    <p style="margin: 2px 0 4px 0; font-size: 13px; color: var(--text-main); font-weight: 600; line-height: 1.4; word-break: break-word;">
-                                                        <span class="comment-text-content">{{ comment.content }}</span>
-                                                    </p>
-                                                    <!-- كباري التحكم اللحظية -->
-                                                    {% if request.user.is_authenticated %}
-                                                        <span onclick="document.getElementById('reply-box-{{ comment.id }}').style.display = 'block';" style="color: #1DA1F2; font-size: 11px; font-weight: 800; cursor: pointer; display: inline-block;">↩️ رد فرعي</span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <!-- الردود الفرعية المتداخلة التابعة للتعليق (ملمومة ومحاذية بالملي) -->
-                                        <div style="margin-right: 24px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; border-right: 1.5px solid var(--border); padding-right: 10px; box-sizing: border-box;">
-                                            {% for reply in comment.replies.all %}
-                                                <div style="background-color: var(--input-bg); padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; width: 100%;">
-                                                    <div style="font-size: 12px; text-align: right; word-break: break-word;">
-                                                        <strong style="color: var(--text-main); font-weight: 800;">{{ reply.user.username }}</strong>:
-                                                        <span style="color: var(--text-main); font-weight: 600;">{{ reply.content }}</span>
+                                            {% if request.user.is_authenticated and comment.user == request.user or request.user.is_superuser %}
+                                                <div style="position: relative; display: inline-block;">
+                                                    <span onclick="event.stopPropagation(); const menu = document.getElementById('comment-menu-{{ comment.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 0 4px; font-weight: bold;">⋮</span>
+                                                    <div id="comment-menu-{{ comment.id }}" style="display: none; position: absolute; top: 18px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; min-width: 90px; text-align: center;">
+                                                        <span onclick="if(confirm('هل تريد حذف هذا التعليق؟')) navTo('/comment/delete/{{ comment.id }}/')" style="display: block; padding: 6px 10px; color: #ef4444; font-size: 11px; font-weight: 700; cursor: pointer;">🗑️ حذف</span>
                                                     </div>
                                                 </div>
-                                            {% endfor %}
-                                            
-                                            <!-- حقل كتابة الرد الفرعي المتداخل بالسهم الصاروخي الموفر للمساحة -->
-                                            <div id="reply-box-{{ comment.id }}" style="display: none; margin-top: 6px; box-sizing: border-box; width: 100%;">
-                                                <form method="POST" style="display: flex; gap: 6px; align-items: center; margin: 0; padding: 0; width: 100%; direction: rtl;">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="post_id" value="{{ post.id }}">
-                                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                                    <input type="text" name="comment_content" placeholder="اكتب ردك الفرعي..." required style="flex-grow: 1; padding: 0 12px; border-radius: 30px; font-size: 12px; font-weight: 600; outline: none; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); height: 32px; box-sizing: border-box;">
-                                                    <button type="submit" name="submit_comment" style="background: #1DA1F2; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; padding: 0; box-shadow: 0 2px 6px rgba(29,161,242,0.15); flex-shrink: 0;">✈️</button>
-                                                </form>
-                                            </div>
+                                            {% endif %}
                                         </div>
+                                        <p style="margin: 2px 0 0 0; font-size: 13px; color: var(--text-main); font-weight: 600; word-break: break-word;">{{ comment.content }}</p>
                                     </div>
                                 {% endif %}
                             {% endfor %}
-
                         </div>
-                        <!-- زر مشاهدة بقية عروض الأسعار المخفية المشروط -->
+
                         {% if post.comments.count > 2 %}
-                            <button type="button" onclick="showAllComments('{{ post.id }}', this)" style="background: none; border: none; color: #1DA1F2; font-weight: 800; font-size: 13px; margin-top: 15px; cursor: pointer; padding: 0; display: block;">مشاهدة بقية عروض الأسعار والردود السابقة... ↩️</button>
+                            <button type="button" onclick="showAllComments('{{ post.id }}', this)" style="background: none; border: none; color: var(--accent-blue); font-weight: 800; font-size: 13px; margin-top: 12px; cursor: pointer; padding: 0; display: block;">مشاهدة بقية عروض الأسعار والردود السابقة... ↩️</button>
                         {% endif %}
 
-                        <!-- 🌟 صندوق كتابة الرد الرئيسي المطور بالإرسال اللحظي الصامت منعاً للـ Refresh 🌟 -->
                         {% if request.user.is_authenticated %}
-                            <form method="POST" id="reply-form-{{ post.id }}" onsubmit="submitCommentAjax(event, '{{ post.id }}')" style="margin-top: 18px; display: flex; gap: 10px; align-items: center; margin-bottom: 0; padding: 0; width: 100%; box-sizing: border-box; direction: rtl;">
+                            <form method="POST" id="reply-form-{{ post.id }}" onsubmit="submitCommentAjax(event, '{{ post.id }}')" style="margin-top: 14px; display: flex; gap: 8px; align-items: center; width: 100%; box-sizing: border-box;">
                                 {% csrf_token %}
                                 <input type="hidden" name="post_id" value="{{ post.id }}">
-                                <input type="text" name="comment_content" id="comment-input-{{ post.id }}" placeholder="اكتب ردك أو قدم عرض سعرك الفني هنا... 💵✍️" required style="flex-grow: 1; padding: 0 18px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); height: 44px; box-sizing: border-box;">
-                                <!-- زر السهم الطائر الفاخر الموفر بالكامل لمساحة الشاشة والمحاذي أفقياً بالملي -->
-                                <button type="submit" style="background: #0d1b2a; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; padding: 0; box-shadow: 0 4px 12px rgba(13,27,42,0.15); flex-shrink: 0;">✈️</button>
+                                <input type="text" name="comment_content" id="comment-input-{{ post.id }}" placeholder="اكتب ردك أو قدم عرض سعرك الفني هنا... 💵✍️" required style="flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); height: 40px; box-sizing: border-box;">
+                                <button type="submit" style="background: var(--bg-main); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">✈️</button>
                             </form>
                         {% endif %}
-                    </div> <!-- قفل صندوق عروض الأسعار والردود العصري المطور -->
-                </div> <!-- قفل كارت المنشور feed-card الرئيسي -->
+                    </div>
+                </div>
             {% empty %}
-                <!-- 🚀 وسم الـ empty الرئيسي والأصلي للتايم لاين مستقر هنا بنقاء 100% وبدون أي خطأ 🚀 -->
                 <p id="txt-no-posts" style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 24px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد منشورات متوفرة في التايم لاين حالياً.</p>
             {% endfor %}
-        </div> <!-- قفل شبكة عرض البوستات الفعلي -->
-    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية main-responsive-container في نهاية التايم لاين بالملي 🔒 -->
+        </div>
+    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية main-responsive-container بالملي 🔒 -->
 
+    <!-- 📱 🌟 شريط التنقل السفلي العائم فائق الحداثة بديل الأيقونات القديمة (Premium Floating Navbar) 🌟 📱 -->
+    <div class="bottom-nav-premium">
+        <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
+        <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
+    </div>
 
+    <!-- 🚀 محركات الجافا سكريبت الشاملة والفولاذية الموحدة بالكامل 🚀 -->
     <script>
         function navTo(path) { window.location.href = window.location.origin + path; }
-        function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
-        function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-        
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById("mySidebar");
-            const toggleBtn = event.target.closest('span[onclick="openNav()"]');
-            if (sidebar && sidebar.style.width === "280px" && !sidebar.contains(event.target) && !toggleBtn) {
-                closeNav();
-            }
-                        // إغلاق كافة قوائم التعليقات المفتوحة تلقائياً عند النقر بالخارج
-            document.querySelectorAll('[id^="comment-menu-"]').forEach(menu => {
-                menu.style.display = 'none';
-            });
-
-        });
         
         function showAllComments(postId, btnEl) {
             document.querySelectorAll(`.comment-item-${postId}`).forEach(el => { el.style.display = 'block'; });
             btnEl.style.display = 'none';
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            let targetTheme = (currentTheme === 'dark') ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', targetTheme);
-            localStorage.setItem('theme', targetTheme);
-            const themeBtn = document.getElementById('theme-btn');
-            if(themeBtn) themeBtn.textContent = targetTheme === 'dark' ? '☀️' : '🌙';
         }
 
         function sendPostAction(postId, actionType) {
@@ -532,141 +293,76 @@
                 .then(data => {
                     if (data.status === 'success') {
                         const likeEl = document.getElementById(`like-count-${postId}`);
-                        const dislikeEl = document.getElementById(`dislike-count-${postId}`);
                         if (likeEl) likeEl.textContent = `(${data.likes})`;
-                        if (dislikeEl) dislikeEl.textContent = `(${data.dislikes})`;
                     }
                 }).catch(e => console.error(e));
         }
 
-                // 🚀 محرك الـ AJAX السحري لإرسال الردود فوراً بدون ريفريش وبدون خروج من البوست 🚀
+        // 🚀 محرك الـ AJAX السحري لإرسال الردود فوراً بدون ريفريش وبدون خروج من البوست 🚀
         function submitCommentAjax(event, postId) {
-            event.preventDefault(); // 🛡️ كسر وإلغاء الريفريش التلقائي للمتصفح عند ضغط Enter أو الزر 🛡️
-            
+            event.preventDefault(); 
             const form = document.getElementById(`reply-form-${postId}`);
             const inputEl = document.getElementById(`comment-input-${postId}`);
             const formData = new FormData(form);
-            
-            // إضافة اسم الزر للتوافق مع شرط 'submit_comment' في الـ views.py
             formData.append('submit_comment', 'true'); 
             
             fetch('/', {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(res => {
-                // تصفير حقل الكتابة فوراً لراحة العميل
                 inputEl.value = '';
-                // عمل ريفريش خفيف وموضعي للتايم لاين أو إخطار العميل بنجاح الرد
-                // يمكنك توجيه المستخدم لعمل تحديث للتعليقات فقط عبر لود ديناميكي، أو إعادة تحميل الصفحة بأمان
-                window.location.reload(); // لو حابب ريفريش آمن يثبت مكانه أو اترك السيرفر يجدولها
+                window.location.reload(); 
             }).catch(e => console.error("Error submitting comment:", e));
         }
 
-        // 🚀 محرك حصر وقص النصوص الطويلة "عرض المزيد" (Read More Engine) 🚀
-        function setupReadMore() {
-            document.querySelectorAll('.post-text-content, .comment-text-content').forEach(el => {
-                if (el.getAttribute('data-processed')) return;
-                el.setAttribute('data-processed', 'true');
-                
-                const fullText = el.textContent.trim();
-                const maxChars = 140; // عدد الحروف المسموح بها قبل القص
-                
-                if (fullText.length > maxChars) {
-                    const shortText = fullText.substring(0, maxChars) + '...';
-                    el.innerHTML = `<span class="text-short">${shortText}</span><span class="text-full" style="display:none;">${fullText}</span> <span class="read-more-btn" onclick="toggleReadMore(this)" style="color:#1DA1F2; font-weight:800; cursor:pointer; font-size:13px; display:inline-block; margin-right:4px;">عرض المزيد</span>`;
-                }
-            });
-        }
-        function toggleReadMore(btnEl) {
-            const container = btnEl.parentElement;
-            const shortSpan = container.querySelector('.text-short');
-            const fullSpan = container.querySelector('.text-full');
-            if (shortSpan && fullSpan) {
-                if (fullSpan.style.display === 'none') {
-                    fullSpan.style.display = 'inline'; shortSpan.style.display = 'none'; btnEl.textContent = 'عرض أقل';
-                } else {
-                    fullSpan.style.display = 'none'; shortSpan.style.display = 'inline'; btnEl.textContent = 'عرض المزيد';
-                }
-            }
-        }
-                // 🚀 محرك المزامنة اللحظية لحالة الإتاحة والـ GPS لايف للسيرفر 🚀
+        // 🟢 محرك المزامنة اللحظية لحالة الإتاحة والـ GPS لايف للسيرفر 🟢
         function toggleLiveAvailability(checkboxEl) {
             const isActive = checkboxEl.checked;
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('status-text');
             
-            // تحديث بصري مؤقت لسرعة الـ UX
             if (isActive) {
-                dot.style.background = '#2ec4b6'; dot.style.animation = 'status-pulse 2s infinite';
-                txt.textContent = 'جاري التقاط إشارات الـ GPS وبدء البث لايف... 🧭'; txt.style.color = '#2ec4b6';
+                dot.style.background = 'var(--neon-cyan)'; dot.style.animation = 'status-pulse 2s infinite';
+                txt.textContent = 'أنت متاح للعمل لايف الحين ⚡'; txt.style.color = 'var(--neon-cyan)';
             } else {
                 dot.style.background = '#64748b'; dot.style.animation = 'none';
                 txt.textContent = 'أنت غير متاح حالياً 💤'; txt.style.color = 'var(--text-muted)';
             }
 
-            // إرسال الإشارة فورياً لباك إند دجانجو عبر الـ API
             const formData = new FormData();
             formData.append('is_active_now', isActive ? 'true' : 'false');
+            formData.append('latitude', '31.4175');  
+            formData.append('longitude', '31.8144'); 
             
-            // في الفترات القادمة سنقوم بحقن الـ latitude والـ longitude القادمين من فلاتر هنا بالملي
-            formData.append('latitude', '31.4175');  // إحداثيات افتراضية مؤقتة لحين ربط الـ GPS
-            formData.append('longitude', '31.8144'); // لحين تشغيل مستشعر الموبايل
-            
-            fetch('/api/location/update/', { method: 'POST', body: formData })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success' && isActive) {
-                    txt.textContent = 'أنت متاح للعمل  ⚡';
-                }
-            }).catch(e => console.error("Error updating availability:", e));
+            fetch('/api/location/update/', { method: 'POST', body: formData }).catch(e => console.error(e));
         }
 
-
-        function previewPostImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('post_img_preview').src = e.target.result;
-                    document.getElementById('post_img_preview_container').style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        function removePostImage() {
-            document.getElementById('post_image_input').value = "";
-            document.getElementById('post_img_preview_container').style.display = 'none';
-        }
-        function previewPostVideo(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('post_vid_preview').src = e.target.result;
-                    document.getElementById('post_vid_preview_container').style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        function removePostVideo() {
-            document.getElementById('post_video_input').value = "";
-            document.getElementById('post_vid_preview_container').style.display = 'none';
+        // ☀️🌙 محرك قلب المظهر والوضع الليلي اللحظي وحفظ الخيار بالهاتف ☀️🌙
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            let targetTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('theme', targetTheme);
+            const themeBtn = document.getElementById('theme-btn');
+            if(themeBtn) themeBtn.textContent = targetTheme === 'dark' ? '☀️' : '🌙';
         }
 
+        // 🌐 قاموس الترجمة اللحظية المورثة للرئيسية والتايم لاين 🌐
         const translations = {
             'ar': {
-                'header_desc': 'اختر الخدمة التي تحتاجها محلياً وبأعلى أمان', 'btn_go_dir': 'دليل مقدمي الخدمات والفنيين المتاحين',
-                'smart_search_holder': 'ابحث باسم مقدم الخدمه، الهاتف، أو نوع الخدمة... 🛠️', 'post_title': '📝 أنشئ منشوراً جديداً (طلب أو عرض خدمة)',
-                'add_img': '📷 أضف صورة', 'btn_post': 'نشر المنشور 🚀', 'interests': '🎯 التايم لاين:', 'all': 'الكل 🌍',
-                'friend_req': '👥 طلبات صداقة واردة قيد الانتظار:', 'accept': 'قبول ✔️', 'reject': 'رفض ❌', 'call': '📞 اتصل', 'add_friend': '👥 اتصال', 'no_posts': 'لا توجد منشورات متوفرة في التايم لاين حالياً.'
+                'post_title': '📝 أنشئ منشوراً جديداً (طلب أو عرض خدمة)',
+                'add_img': '📷 أضف صورة', 'add_vid': '🎬 أضف فيديو', 'search_holder': 'ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍',
+                'search_btn': 'بحث', 'no_posts': 'لا توجد منشورات متوفرة في التايم لاين حالياً.',
+                'view_directory': 'تصفح دليل الفنيين ومقدمي الخدمات الحاليين ↩️',
+
             },
             'en': {
-                'header_desc': 'Choose the service you need locally with highest security', 'btn_go_dir': 'View Providers & Technicians Directory 📍',
-                'smart_search_holder': 'Search by name, phone, or service type... 🛠️', 'post_title': '📝 Create a New Post (Order or Offer a Service)',
-                'add_img': '📷 Add Image', 'btn_post': 'Publish Post 🚀', 'interests': '🎯 Timeline:', 'all': 'All 🌍',
-                'friend_req': '👥 Pending Friend Requests:', 'accept': 'Accept ✔️', 'reject': 'Reject ❌', 'call': '📞 Call', 'add_friend': '👥 Connect', 'no_posts': 'No posts available right now.'
+                'post_title': '📝 Create a New Post (Order or Offer a Service)',
+                'add_img': '📷 Add Image', 'add_vid': '🎬 Add Video', 'search_holder': 'Search by name, phone, specialty or city... 🛠️📍',
+                'search_btn': 'Search', 'no_posts': 'No posts available right now.',
+                'view_directory': 'Browse Providers and Technicians Directory ↩️',
             }
         };
 
@@ -684,67 +380,53 @@
             document.documentElement.lang = lang;
             const t = translations[lang];
             
-            document.querySelectorAll('.lang-cat').forEach(el => {
-                if (el) el.textContent = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-            });
-            
-            if(document.getElementById('txt-header-desc')) document.getElementById('txt-header-desc').textContent = t['header_desc'];
-            if(document.getElementById('txt-btn-go-directory')) document.getElementById('txt-btn-go-directory').textContent = t['btn_go_dir'];
-            if(document.getElementById('input-smart-search')) document.getElementById('input-smart-search').placeholder = t['smart_search_holder'];
-            if(document.getElementById('txt-post-title')) document.getElementById('txt-post-title').textContent = t['post_title'];
+            if(document.getElementById('txt-post-title')) document.getElementById('txt-post-title').innerHTML = `<span>✍️</span> ${t['post_title']}`;
             if(document.getElementById('txt-add-img')) document.getElementById('txt-add-img').innerHTML = `<span>📷</span> ${t['add_img']}`;
-            if(document.getElementById('btn-submit-post')) document.getElementById('btn-submit-post').textContent = t['btn_post'];
-            if(document.getElementById('txt-interests')) document.getElementById('txt-interests').textContent = t['interests'];
-            if(document.getElementById('txt-all')) document.getElementById('txt-all').textContent = t['all'];
-            if(document.getElementById('txt-friend-req')) document.getElementById('txt-friend-req').textContent = t['friend_req'];
+            if(document.getElementById('txt-add-video')) document.getElementById('txt-add-video').innerHTML = `<span>🎬</span> ${t['add_vid']}`;
+            if(document.getElementById('input-smart-search')) document.getElementById('input-smart-search').placeholder = t['search_holder'];
+            if(document.getElementById('txt-search-btn')) document.getElementById('txt-search-btn').textContent = t['search_btn'];
             if(document.getElementById('txt-no-posts')) document.getElementById('txt-no-posts').textContent = t['no_posts'];
+            if(document.getElementById('txt-view-directory')) document.getElementById('txt-view-directory').textContent = t['view_directory'];
 
-            document.querySelectorAll('.btn-like-txt').forEach(el => { if (el) el.textContent = lang === 'ar' ? 'إعجاب' : 'Like'; });
-            document.querySelectorAll('.btn-dislike-txt').forEach(el => { if (el) el.textContent = lang === 'ar' ? 'رفض' : 'Dislike'; });
-            document.querySelectorAll('.btn-friends-status').forEach(el => { if (el) el.textContent = lang === 'ar' ? '👥 أصدقاء' : '👥 Friends'; });
-            document.querySelectorAll('.btn-pending-status').forEach(el => { if (el) el.textContent = lang === 'ar' ? '⏳ قيد الانتظار' : '⏳ Pending'; });
-            
-            document.querySelectorAll('.btn-accept-txt').forEach(el => { if (el && t['accept']) el.textContent = t['accept']; });
-            document.querySelectorAll('.btn-reject-txt').forEach(el => { if (el && t['reject']) el.textContent = t['reject']; });
-            document.querySelectorAll('.btn-call-txt').forEach(el => { if (el && t['call']) el.textContent = t['call']; });
-            document.querySelectorAll('.btn-add-friend-txt').forEach(el => { if (el && t['add_friend']) el.textContent = t['add_friend']; });
         }
-    </script>
 
-    {% if request.user.is_authenticated %}
-    {% verbatim %}
-    <script>
-        let lastNotifCount = 0; let lastChatCount = 0;
-        setInterval(function() {
-            fetch('/live/updates/').then(res => res.json()).then(data => {
-                const countBadge = document.getElementById('notif-count');
-                if (data.unread_count > 0 && countBadge) {
-                    countBadge.textContent = data.unread_count; countBadge.style.display = 'flex';
-                    if (data.unread_count > lastNotifCount) { new Audio('https://mixkit.co').play().catch(e => {}); }
-                    lastNotifCount = data.unread_count;
+        // كباري معاينات اختيار ملفات الميديا فورياً
+        function previewPostImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('post_img_preview').src = e.target.result;
+                    document.getElementById('post_img_preview_container').style.display = 'block';
                 }
-            });
-            fetch('/live/messages-count/').then(res => res.json()).then(msgData => {
-                const chatBadge = document.getElementById('chat-msg-count');
-                if (chatBadge && msgData.unread_messages_count > 0) {
-                    chatBadge.textContent = msgData.unread_messages_count; chatBadge.style.display = 'flex';
-                    if (msgData.unread_messages_count > lastChatCount) { new Audio('https://mixkit.co').play().catch(e => {}); }
-                    lastChatCount = msgData.unread_messages_count;
-                }
-            });
-        }, 3000);
-    </script>
-    {% endverbatim %}
-    {% endif %}
-    
-    <script>
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function removePostImage() {
+            document.getElementById('post_image_input').value = "";
+            document.getElementById('post_img_preview_container').style.display = 'none';
+        }
+        function previewPostVideo(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('post_vid_preview_container').style.display = 'block';
+            }
+        }
+        function removePostVideo() {
+            document.getElementById('post_video_input').value = "";
+            document.getElementById('post_vid_preview_container').style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
+            const themeBtn = document.getElementById('theme-btn');
+            if(themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            
             const savedLang = localStorage.getItem('lang') || 'ar';
-            if (typeof applyLanguage === 'function') { applyLanguage(savedLang); }
-            // تشغيل محرك قص النصوص وعرض المزيد أوتوماتيكياً
-            setupReadMore();
+            applyLanguage(savedLang);
+        });
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('[id^="post-menu-"], [id^="comment-menu-"]').forEach(menu => { menu.style.display = 'none'; });
         });
     </script>
 </body>
