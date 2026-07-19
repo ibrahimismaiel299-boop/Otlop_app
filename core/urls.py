@@ -21,7 +21,7 @@ urlpatterns = [
     
     # 🚀 الحصن البرمجي الحاسم: دعم كلا المسارين (الفارغ والمائل) لمنع تجميد وفشل نشر البوستات 🚀
     path('', home_view, name='home'),
-    path('/', home_view, name='home_slash'), # المسار السحري الاحتياطي الذي سيفجر قفل النشر فوريًا!
+    path('home/', home_view, name='home_redirect'),  # المسار السحري الاحتياطي الذي سيفجر قفل النشر فوريًا!
     
     path('signup/', signup_view, name='signup'),
     path('login/', login_view, name='login'),

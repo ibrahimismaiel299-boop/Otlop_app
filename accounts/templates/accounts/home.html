@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otlop - سوبر آب الخدمات 🚀</title>
     <style>
-        /* 🎨 لوحة البراند بوك العالمي للمظهرين الداكن والفاتح الموحد 🎨 */
+        /* 🎨 لوحة ألوان Otlop الرسمية المستوحاة من الهوية العالمية بالبراند بوك 🎨 */
         :root {
-            --bg-main: #0d1b2a;         
-            --card-bg: #142444;         
-            --accent-blue: #1e88ff;     
-            --neon-cyan: #2ec4b6;       
-            --text-main: #f8fafc;       
-            --text-muted: #94a3b8;      
-            --border: rgba(255, 255, 255, 0.08); 
-            --input-bg: rgba(255, 255, 255, 0.03);
+            --bg-main: #0d1b2a;         /* الكحلي الغامق الفاخر للخلفية الأساسية */
+            --card-bg: #142444;         /* الأزرق الداكن المعتمد في الكتيب للكروت والهيدر */
+            --accent-blue: #1e88ff;     /* الأزرق النيوني المضيء للأزرار والسهم الطائر */
+            --neon-cyan: #2ec4b6;       /* اللون الأخضر/السيان لشارات الإتاحة والاتصال */
+            --text-main: #f8fafc;       /* الأبيض الصافي للنصوص والعناوين */
+            --text-muted: #94a3b8;      /* الرمادي الهادئ للنصوص الثانوية والتوقيت */
+            --border: rgba(255, 255, 255, 0.08); /* جدران الحواف الشفافة الرشيقة */
+            --input-bg: rgba(255, 255, 255, 0.04);
         }
+        
+        /* 🚀 تعديل ثوري: حظر قلب ألوان الهيدر والبحث في الوضع الفاتح وإجبارها على الكحلي الفخم 🚀 */
         [data-theme="light"] {
             --bg-main: #f8fafc;         
             --card-bg: #ffffff;         
@@ -26,65 +28,185 @@
             --border: #e2e8f0; 
             --input-bg: #f1f5f9;
         }
-
-        body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background 0.3s; }
-        .main-responsive-container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px 16px; box-sizing: border-box; width: 100%; }
-        .feed-card { background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin-bottom: 24px; box-sizing: border-box; width: 100%; text-align: right; position: relative; }
-        
-        .slider-premium { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; }
-        .slider-premium:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider-premium { background-color: var(--neon-cyan) !important; }
-        input:checked + .slider-premium:before { transform: translateX(20px); }
-        
-        @keyframes status-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
+        /* 📱 التحديث النهائي: إنزال وتثبيت الشريط العائم في قاع الجوال تماماً حافة بحافة 📱 */
+        .bottom-nav-premium { 
+            position: fixed; 
+            bottom: 00px; /* 🚀 الإنزال الهندسي الموزون ليلتصق بقاع الجوال ويعزل الفراغات 🚀 */
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(20, 36, 68, 0.95); /* تعتيم ملوكي فاخر للبراند بوك الداكن */
+            backdrop-filter: blur(12px); 
+            border: 1px solid var(--border); 
+            padding: 12px 24px; 
+            border-radius: 40px; 
+            display: flex; 
+            gap: 30px; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            width: 90%; 
+            max-width: 450px; 
+            box-sizing: border-box; 
         }
-        
-        /* 📱 شريط التنقل السفلي العائم فائق الحداثة (Bottom Navbar) 📱 */
-        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 450px; box-sizing: border-box; }
-        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
         .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
+
+        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.92); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+        .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
+
+
+        body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background 0.3s; }
+        .main-responsive-container { max-width: 680px; margin: 0 auto; padding: 20px 16px 110px 16px; box-sizing: border-box; width: 100%; }
+        
+        /* 🔵 تثبيت كبسولة الهيدر العلوي بلون الكتيب الداكن دائماً وأبداً 🔵 */
+        .premium-header-box { background: #142444 !important; padding: 14px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; direction: rtl; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+        .premium-header-text { color: #f8fafc !important; } /* إجبار نصوص الهيدر على الأبيض الفخم */
+        
+        /* 🔍 تثبيت صندوق البحث العلوي بلون الكتيب الداكن دائماً وأبداً 🔍 */
+        .premium-search-box { background: #142444 !important; padding: 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
+        .premium-search-input { flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: rgba(255,255,255,0.04) !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.08) !important; height: 44px; box-sizing: border-box; }
+        
+        .feed-card { background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin-bottom: 24px; box-sizing: border-box; width: 100%; text-align: right; position: relative; }
+        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; margin-top: 15px; box-sizing: border-box; }
+        .category-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 18px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer; transition: 0.2s ease-in-out; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .category-box:hover, .category-box.active { border-color: var(--accent-blue); background: rgba(30,136,255,0.04); transform: translateY(-2px); }
+        .category-icon { font-size: 26px; }
+        .category-txt { font-size: 13px; font-weight: 800; color: var(--text-main); line-height: 1.4; }
     </style>
+
 </head>
 <body>
     <!-- 🚀 حاوية الحصر السحرية الموحدة لضبط أبعاد الشاشات 🚀 -->
     <div class="main-responsive-container">
 
-        <!-- أ) ترويسة قمة الصفحة الفاخرة المدمج بها محركات التحكم اللحظية -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; direction: rtl; width: 100%;">
-            <!-- 🚀 توحيد لون الاسم ليتطابق مع لون الكلمة واللوجو الرسمي للسوبر آب 100% 🚀 -->
-            <!-- 🚀 حقن الاسم بنظام الـ Bi-color المتجاوب لتطابق اللوجو الرسمي بالملي بكسل 🚀 -->
+        <!-- أ) الترويسة العلوية الفاخرة المثبتة بلون الكتيب الداكن دائماً وأبداً لـ Otlop -->
+        <div class="premium-header-box">
             <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 25px; font-weight: 900; color: var(--text-main); letter-spacing: 0.5px;">Otlo<span style="color: var(--accent-blue);">p</span></span>
+                <!-- اللوجو ثنائي الألوان الملوكي المضيء -->
+                <span style="font-size: 25px; font-weight: 900; color: #f8fafc !important; letter-spacing: 0.5px;">Otlo<span style="color: #1e88ff;">p</span></span>
             </div>
-            <!-- أزرار شحن المظهر واللغة النيونية فائقة الشياكة -->
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <button type="button" id="theme-btn" onclick="toggleTheme()" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">☀️</button>
-                <button type="button" id="lang-btn" onclick="toggleLanguage()" style="background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); height: 40px; padding: 0 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">EN</button>
+            
+            <!-- أزرار شحن المظهر واللغة وجرس الإشعارات الأبيض -->
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <a href="#" onclick="markNotificationsRead(); return false;" style="position: relative; text-decoration: none; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; color: #f8fafc !important;">
+                    🔔
+                    {% if unread_notifications.count > 0 %}
+                        <span id="nav-notif-count" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; border: 1px solid #142444;">{{ unread_notifications.count }}</span>
+                    {% endif %}
+                </a>
+                <!-- 🛠️ زر صفحة الإدارة للآدمن والسوبر يوزر (يظهر مشروطاً بأعلى قمة الهيدر) 🛠️ -->
+                {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+                    <a href="/admin/" style="background: rgba(255,183,3,0.1); border: 1px solid rgba(255,183,3,0.2); color: #ffb703 !important; height: 36px; padding: 0 14px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(255,183,3,0.05); margin-left: 4px;">
+                        <span>⚙️ لوحة الإدارة</span>
+                    </a>
+                {% endif %}
+
+                <button type="button" id="theme-btn" onclick="toggleTheme()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; width: 36px; height: 36px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">☀️</button>
+                <button type="button" id="lang-btn" onclick="toggleLanguage()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; height: 36px; padding: 0 12px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer;">EN</button>
             </div>
         </div>
 
-        <!-- ب) 🔍 محرك وشريط البحث الشامل والذكي الفوري (البحث بالهاتف والمحافظة والاسم) 🔍 -->
-        <div style="background: var(--card-bg); padding: 14px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box;">
+        <!-- ب) 🔍 صندوق ومحرك البحث الذكي الموحد المثبت بلون الكتيب الكحلي الداكن 🔍 -->
+        <div class="premium-search-box">
             <form method="GET" action="/" id="search-form" style="display: flex; gap: 10px; align-items: center; width: 100%; margin: 0; padding: 0; direction: rtl;">
-                <input type="text" name="q" value="{{ request.GET.q|default:'' }}" id="input-smart-search" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍" style="flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border); height: 44px; box-sizing: border-box;">
-                <button type="submit" style="background: var(--accent-blue); color: white; border: none; padding: 0 22px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.2); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
-                    <span>🔍</span> <span id="txt-search-btn">بحث</span>
+                <input type="text" name="q" value="{{ request.GET.q|default:'' }}" id="input-smart-search" class="premium-search-input" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍">
+                <button type="submit" style="background: #1e88ff; color: white !important; border: none; padding: 0 22px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.25); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
+                    <span>🔍</span> <span id="txt-search-btn" style="color: white !important;">بحث</span>
                 </button>
             </form>
         </div>
+
+        <!-- ج) شبكة لوحة التصنيفات والأقسام الرئيسية الديناميكية (تتبع المظهر المختار) -->
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; box-sizing: border-box; text-align: right; direction: rtl;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 id="txt-categories-title" style="margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main);">الأقسام الرئيسية</h4>
+            </div>
+
+            <div class="category-grid">
+                {% for cat in category_choices %}
+                    <a href="/?category={{ cat.id }}" class="category-box {% if selected_category == cat.id %}active{% endif %}" id="cat-box-{{ forloop.counter }}" style="{% if forloop.counter > 6 %}display: none;{% endif %}">
+                        <span class="category-icon">{{ cat.icon_emoji }}</span>
+                        <span class="category-txt">{{ cat.name_ar }}</span>
+                    </a>
+                {% endfor %}
+                
+                <div class="category-box" id="btn-toggle-more-cats" onclick="toggleMoreCategoriesVisibility()" style="border: 2px dashed #1e88ff; background: rgba(30,136,255,0.02); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;">
+                    <span class="category-icon" style="color: #1e88ff;" id="icon-toggle-plus">➕</span>
+                    <span class="category-txt" style="color: #1e88ff; font-weight: 900;" id="label-toggle-text">عرض المزيد</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- د) عرض الأقسام الفرعية (Subcategories) تظهر حصرياً تحت القسم الأب المختار -->
+        {% if subcategories %}
+            <div style="background: var(--card-bg); padding: 16px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 24px; width: 100%; box-sizing: border-box; text-align: right; direction: rtl;">
+                <h5 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <span>🌿</span> الأقسام الفرعية والتخصصات لـ {{ category_obj.name_ar }}:
+                </h5>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; direction: rtl;">
+                    <a href="/?category={{ category_obj.id }}" style="background: var(--input-bg); color: var(--text-main); text-decoration: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; border: 1px solid var(--border);">الكل 📑</a>
+                    {% for sub in subcategories %}
+                        <a href="/?category={{ sub.id }}" style="background: rgba(30,136,255,0.08); color: #1e88ff; text-decoration: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 800; border: 1px solid rgba(30,136,255,0.15);">
+                            {{ sub.icon_emoji }} {{ sub.name_ar }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- ⚠️ يمكنك إلصاق الأجزاء الـ 4 والـ 5 والـ 6 القديمة بملفك كما هي لإنهاء بقية التايم لاين والـ سكريبتات ⚠️ -->
+
+        <!-- هـ) 🧭 🟢 رادار البحث التلقائي عن أقرب مقدمي الخدمة المتاحين + زر الخريطة 🟢 🧭 -->
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; box-sizing: border-box; text-align: right; direction: rtl;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                    <span style="animation: status-pulse 2s infinite; width: 8px; height: 8px; background: var(--neon-cyan); border-radius: 50%; display: inline-block;"></span>
+                    <span>الفنيين الأقرب منك لايف الحين 🧭</span>
+                </h4>
+                <!-- زر الطيران لصفحة الخريطة الجغرافية الشاملة -->
+                <a href="{% url 'providers_map' %}" style="font-size: 13px; font-weight: 800; color: var(--accent-blue); text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                    <span>🗺️ عرض على الخريطة</span>
+                </a>
+            </div>
+
+            <!-- قائمة الفنيين الأقرب (تلقيم لحظي بالمسافات المستنتجة) -->
+            <div style="display: flex; flex-direction: column; gap: 12px; max-height: 180px; overflow-y: auto; padding-left: 4px;">
+                {% for provider in nearby_providers %}
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); padding: 10px 14px; border-radius: 16px; border: 1px solid var(--border);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 20px;">🛠️</span>
+                            <div>
+                                <strong style="font-size: 13px; color: var(--text-main); display: block;">{{ provider.username }}</strong>
+                                <span style="font-size: 11px; color: var(--text-muted);">{{ provider.get_user_type_display }}</span>
+                            </div>
+                        </div>
+                        <!-- عرض المسافة المحسوبة بالـ GPS بدقة متناهية -->
+                        <span style="background: rgba(46,196,182,0.12); color: var(--neon-cyan); font-size: 11px; padding: 4px 10px; border-radius: 30px; font-weight: 800;">على بُعد {{ provider.computed_distance }} كم 📍</span>
+                    </div>
+                {% empty %}
+                    <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin: 10px 0; font-weight: 700;">جاري التقاط إشارات الـ GPS... قم بتفعيل موقع الجوال لرؤية أقرب الفنيين 🗺️</p>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- 📋 🌟 زر كبسولة الانتقال الفوري لدليل ومقدمي الخدمات الحاليين 🌟 📋 -->
+        <div style="margin-bottom: 24px; text-align: center; width: 100%;">
+            <a href="{% url 'providers_directory' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(30,136,255,0.06); color: var(--accent-blue); text-decoration: none; padding: 14px 24px; border-radius: 30px; font-weight: 800; font-size: 13px; border: 1px solid rgba(30,136,255,0.15); width: 100%; box-sizing: border-box; transition: 0.2s;">
+                <span>📋</span>
+                <span id="txt-view-directory">تصفح دليل الفنيين ومقدمي الخدمات الحاليين ↩️</span>
+            </a>
+        </div>
+
         <!-- 📝 صندوق كتابة منشور جديد العصري الفخم (النسخة الشاملة المعززة) 📝 -->
         {% if request.user.is_authenticated %}
-            <div style="background: var(--card-bg); padding: 22px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); margin-bottom: 30px; text-align: right; box-sizing: border-box; width: 100%;">
-                
+            <div style="background: var(--card-bg); padding: 22px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid var(--border); margin-bottom: 30px; text-align: right; box-sizing: border-box; width: 100%;">
                 <h3 id="txt-post-title" style="margin-top: 0; margin-bottom: 18px; font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
                     <span>✍️</span> أنشئ منشوراً جديداً (طلب أو عرض خدمة)
                 </h3>
                 
-                <!-- 🟢 كبسولة التحكم الجغرافية اللحظية للمتاحين (مستقلة تماماً) 🟢 -->
+                <!-- كبسولة التحكم الجغرافية اللحظية للمتاحين (مستقلة تماماً) -->
                 {% if request.user.user_type == 'provider' or request.user.is_superuser %}
                     <div style="margin-bottom: 18px; background: rgba(46,196,182,0.06); padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(46,196,182,0.15); display: flex; align-items: center; justify-content: space-between; direction: rtl; box-sizing: border-box; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -97,32 +219,25 @@
                         </label>
                     </div>
                 {% endif %}
-                
-                <!-- بداية استمارة الرفع الشاملة الداعمة للصور والفيديوهات -->
                 <form method="POST" enctype="multipart/form-data" action="/" style="margin: 0; padding: 0;">
                     {% csrf_token %}
                     <textarea name="content" required placeholder="ماذا يدور في ذهنك؟ اكتب تفاصيل طلبك هنا... 💡" rows="3" style="width: 100%; border-radius: 16px; padding: 15px; border: 1px solid var(--border); outline: none; font-family: inherit; background-color: var(--input-bg); color: var(--text-main); box-sizing: border-box; resize: none; font-size: 14px; font-weight: 600; line-height: 1.6;"></textarea>
                     
-                    <!-- صف أزرار اختيار الميديا وإرجاع كبسولة الفيديو الصريحة -->
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 18px; gap: 12px; direction: rtl;">
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <!-- أ) زر كبسولة إضافة صورة -->
                             <div id="txt-add-img" onclick="document.getElementById('post_image_input').click();" style="background: rgba(30,136,255,0.08); color: var(--accent-blue); padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(30,136,255,0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>📷</span> أضف صورة
                             </div>
                             <input type="file" id="post_image_input" name="image" accept="image/*" style="display: none;" onchange="previewPostImage(this)">
                             
-                            <!-- ب) زر كبسولة إضافة فيديو المشحونة فوريّاً -->
                             <div id="txt-add-video" onclick="document.getElementById('post_video_input').click();" style="background: rgba(46,196,182,0.08); color: var(--neon-cyan); padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12px; cursor: pointer; border: 1px solid rgba(46,196,182,0.15); display: inline-flex; align-items: center; gap: 6px;">
                                 <span>🎬</span> أضف فيديو
                             </div>
                             <input type="file" id="post_video_input" name="video" accept="video/*" style="display: none;" onchange="previewPostVideo(this)">
                         </div>
-
                         <button type="submit" id="btn-submit-post" name="submit_post" style="background-color: var(--accent-blue); color: white; padding: 10px 24px; border-radius: 30px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.2);">نشر المنشور 🚀</button>
                     </div>
 
-                    <!-- حاويات وعناصر المعاينة الفورية الذكية تحت صندوق الكتابة بالملي -->
                     <div id="post_img_preview_container" style="display: none; position: relative; margin-top: 15px; text-align: right;">
                         <img id="post_img_preview" src="" style="max-width: 100px; max-height: 100px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border);">
                         <span onclick="removePostImage()" style="position: absolute; top: -5px; right: 85px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold;">✕</span>
@@ -134,31 +249,13 @@
                 </form>
             </div>
         {% endif %}
-                <!-- 👥 🌟 زر كبسولة الانتقال الفوري لدليل الفنيين ومقدمي الخدمات المتاحين 🌟 👥 -->
-        <div style="margin-bottom: 20px; text-align: center; width: 100%;">
-            <a href="{% url 'providers_directory' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(30,136,255,0.08); color: var(--accent-blue); text-decoration: none; padding: 14px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; border: 1px solid rgba(30,136,255,0.2); width: 100%; box-sizing: border-box; transition: 0.2s;">
-                <span style="font-size: 18px;">📋</span>
-                <span id="txt-view-directory">تصفح دليل الفنيين ومقدمي الخدمات الحاليين ↩️</span>
-            </a>
-        </div>
 
-        <!-- 🗺️ زر كبسولة الانتقال الفوري لخريطة الفنيين الحية لايف لاكتشاف الأقرب 🗺️ -->
-        <div style="margin-bottom: 30px; text-align: center; width: 100%;">
-            <a href="{% url 'providers_map' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--neon-cyan), #20a396); color: white; text-decoration: none; padding: 14px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 6px 20px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box;">
-                <span style="font-size: 18px; animation: status-pulse 2s infinite; display: inline-block;">🗺️</span>
-                <span id="txt-interests">اكتشف الفنيين القريبين منك الآن على الخريطة لايف ⚡</span>
-            </a>
-        </div>
-
-        <!-- د) شبكة عرض كروت البوستات والتايم لاين الفعلي الموحد بالبراند بوك -->
+        <!-- و) شبكة عرض كروت البوستات المفلترة بالقسم والـ Subcategory المختار لايف -->
         <div style="display: flex; flex-direction: column; gap: 24px; direction: rtl; text-align: right; width: 100%;">
             {% for post in posts %}
                 <div id="post-container-{{ post.id }}" class="feed-card">
-                    
-                    <!-- ترويسة كرت المنشور وبيانات المستخدم الفخمة المحقونة بشارات الإتاحة والتحكم ⚙️ -->
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
                         <div style="display: flex; align-items: center; gap: 14px;">
-                            
                             <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; display: flex; align-items: center; position: relative; flex-shrink: 0;">
                                 {% if post.user.profile_picture %}
                                     <img src="{{ post.user.profile_picture.url }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid {% if post.user.is_active_now %}var(--neon-cyan){% else %}var(--accent-blue){% endif %};">
@@ -169,107 +266,41 @@
                                     <span style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: var(--neon-cyan); border: 2px solid var(--card-bg); border-radius: 50%; animation: status-pulse 2s infinite;"></span>
                                 {% endif %}
                             </a>
-                            
                             <div style="text-align: right;">
                                 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; direction: rtl;">
                                     <a href="{% url 'public_profile' post.user.id %}" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
                                         <strong style="color: var(--text-main); font-size: 15px; font-weight: 800;">{{ post.user.username }}</strong>
                                     </a>
-                                    {% if post.user.is_verified_provider %}
-                                        <span style="background-color: rgba(30,136,255,0.08); color: var(--accent-blue); font-size: 10px; padding: 3px 10px; border-radius: 30px; font-weight: 800;">✔️ موثق</span>
-                                    {% endif %}
-                                    {% if post.user.user_type == 'provider' %}
-                                        <span style="background: rgba(255,183,3,0.08); color: #ffb703; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 30px;">⭐ {{ post.user.get_average_rating }}</span>
-                                    {% endif %}
                                 </div>
                                 <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px; font-weight: 600;">📍 {{ post.user.governorate.name_ar }} - {{ post.user.city.name_ar }}</span>
                             </div>
                         </div>
 
-                        <!-- ⚙️ كبسولة الثلاث نقاط المنبثقة لإبادة وحذف المنشور المخالف ⚙️ -->
-                        {% if request.user.is_authenticated %}
-                            {% if post.user == request.user or request.user.is_superuser %}
-                                <div style="position: relative; display: inline-block;">
-                                    <span onclick="event.stopPropagation(); const menu = document.getElementById('post-menu-{{ post.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 0 8px; font-weight: bold;">⋮</span>
-                                    <div id="post-menu-{{ post.id }}" style="display: none; position: absolute; top: 22px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 100; min-width: 100px; text-align: center;">
-                                        <span onclick="if(confirm('هل تريد حذف هذا المنشور نهائياً من التايم لاين؟')) navTo('/post/delete/{{ post.id }}/')" style="display: block; padding: 8px 12px; color: #ef4444; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ حذف البوست</span>
-                                    </div>
+                        {% if request.user.is_authenticated and post.user == request.user or request.user.is_superuser %}
+                            <div style="position: relative; display: inline-block;">
+                                <span onclick="event.stopPropagation(); const menu = document.getElementById('post-menu-{{ post.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 0 8px; font-weight: bold;">⋮</span>
+                                <div id="post-menu-{{ post.id }}" style="display: none; position: absolute; top: 22px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 100; min-width: 100px; text-align: center;">
+                                    <span onclick="if(confirm('هل تريد حذف هذا المنشور نهائياً؟')) navTo('/post/delete/{{ post.id }}/')" style="display: block; padding: 8px 12px; color: #ef4444; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ حذف البوست</span>
                                 </div>
-                            {% endif %}
+                            </div>
                         {% endif %}
                     </div>
 
-                    <!-- متن نص البوست وعرض الميديا المرفوعة -->
-                    <p style="font-size: 15px; color: var(--text-main); line-height: 1.7; white-space: pre-line; margin: 12px 0; font-weight: 600;">
-                        <span class="post-text-content">{{ post.content }}</span>
-                    </p>
-                    
+                    <p style="font-size: 15px; color: var(--text-main); line-height: 1.7; white-space: pre-line; margin: 12px 0; font-weight: 600;">{{ post.content }}</p>
                     {% if post.image %}
                         <img src="{{ post.image.url }}" style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px;">
                     {% endif %}
                     {% if post.video %}
                         <video src="{{ post.video.url }}" controls style="width: 100%; max-height: 380px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px; background: #000;"></video>
                     {% endif %}
-                    <!-- شريط أزرار التفاعل والإعجاب والاتصال الصوتية لايف عبر الشات -->
-                    <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; direction: rtl;">
-                        <button type="button" onclick="sendPostAction('{{ post.id }}', 'like')" style="background: var(--input-bg); border: 1px solid var(--border); padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                            <span>👍</span> <span class="btn-like-txt">إعجاب</span> <span id="like-count-{{ post.id }}">({{ post.likes_count|default:0 }})</span>
-                        </button>
-
-                        {% if post.user.phone_number and post.user.is_active_now %}
-                            <a href="{% url 'trigger_voice_call' post.user.id %}" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--accent-blue), var(--bg-main)); color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(30,136,255,0.25);">
-                                <span>📞</span> <span>اتصال صوتي لايف ⚡</span>
-                            </a>
-                        {% endif %}
-                    </div>
-
-                    <!-- صندوق عروض الأسعار والردود العصري المطور (النسخة الرشيقة الانسيابية) -->
-                    <div style="margin-top: 22px; background-color: var(--input-bg); padding: 18px; border-radius: 18px; border: 1px solid var(--border); box-sizing: border-box; width: 100%;">
-                        <h4 style="margin: 0 0 16px 0; font-size: 13px; font-weight: 700; color: var(--text-muted);">💬 الردود وعروض الأسعار ({{ post.comments.count }}):</h4>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            {% for comment in post.comments.all %}
-                                {% if not comment.parent %}
-                                    <div class="comment-item-{{ post.id }}" style="background-color: var(--card-bg); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); box-sizing: border-box; width: 100%; {% if forloop.counter > 2 %}display: none;{% endif %}">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
-                                            <a href="{% url 'public_profile' comment.user.id %}" style="text-decoration: none;"><strong style="font-size: 12px; color: var(--text-main); font-weight: 800;">{{ comment.user.username }}</strong></a>
-                                            
-                                            {% if request.user.is_authenticated and comment.user == request.user or request.user.is_superuser %}
-                                                <div style="position: relative; display: inline-block;">
-                                                    <span onclick="event.stopPropagation(); const menu = document.getElementById('comment-menu-{{ comment.id }}'); menu.style.display = menu.style.display === 'none' ? 'block' : 'none';" style="font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 0 4px; font-weight: bold;">⋮</span>
-                                                    <div id="comment-menu-{{ comment.id }}" style="display: none; position: absolute; top: 18px; left: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; min-width: 90px; text-align: center;">
-                                                        <span onclick="if(confirm('هل تريد حذف هذا التعليق؟')) navTo('/comment/delete/{{ comment.id }}/')" style="display: block; padding: 6px 10px; color: #ef4444; font-size: 11px; font-weight: 700; cursor: pointer;">🗑️ حذف</span>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                        <p style="margin: 2px 0 0 0; font-size: 13px; color: var(--text-main); font-weight: 600; word-break: break-word;">{{ comment.content }}</p>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-
-                        {% if post.comments.count > 2 %}
-                            <button type="button" onclick="showAllComments('{{ post.id }}', this)" style="background: none; border: none; color: var(--accent-blue); font-weight: 800; font-size: 13px; margin-top: 12px; cursor: pointer; padding: 0; display: block;">مشاهدة بقية عروض الأسعار والردود السابقة... ↩️</button>
-                        {% endif %}
-
-                        {% if request.user.is_authenticated %}
-                            <form method="POST" id="reply-form-{{ post.id }}" onsubmit="submitCommentAjax(event, '{{ post.id }}')" style="margin-top: 14px; display: flex; gap: 8px; align-items: center; width: 100%; box-sizing: border-box;">
-                                {% csrf_token %}
-                                <input type="hidden" name="post_id" value="{{ post.id }}">
-                                <input type="text" name="comment_content" id="comment-input-{{ post.id }}" placeholder="اكتب ردك أو قدم عرض سعرك الفني هنا... 💵✍️" required style="flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); height: 40px; box-sizing: border-box;">
-                                <button type="submit" style="background: var(--bg-main); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">✈️</button>
-                            </form>
-                        {% endif %}
-                    </div>
                 </div>
             {% empty %}
-                <p id="txt-no-posts" style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 24px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد منشورات متوفرة في التايم لاين حالياً.</p>
+                <p id="txt-no-posts" style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 24px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد منشورات متوفرة في هذا القسم حالياً.</p>
             {% endfor %}
         </div>
     </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية main-responsive-container بالملي 🔒 -->
 
-    <!-- 📱 🌟 شريط التنقل السفلي العائم فائق الحداثة بديل الأيقونات القديمة (Premium Floating Navbar) 🌟 📱 -->
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم الفخم المحدث المرفوع فوق بار الجوال (Premium Floating Navbar) 🌟 📱 -->
     <div class="bottom-nav-premium">
         <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
         <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
@@ -278,15 +309,11 @@
         <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
 
+
     <!-- 🚀 محركات الجافا سكريبت الشاملة والفولاذية الموحدة بالكامل 🚀 -->
     <script>
         function navTo(path) { window.location.href = window.location.origin + path; }
         
-        function showAllComments(postId, btnEl) {
-            document.querySelectorAll(`.comment-item-${postId}`).forEach(el => { el.style.display = 'block'; });
-            btnEl.style.display = 'none';
-        }
-
         function sendPostAction(postId, actionType) {
             fetch(`/post/action/${postId}/${actionType}/`)
                 .then(res => res.json())
@@ -298,23 +325,28 @@
                 }).catch(e => console.error(e));
         }
 
-        // 🚀 محرك الـ AJAX السحري لإرسال الردود فوراً بدون ريفريش وبدون خروج من البوست 🚀
-        function submitCommentAjax(event, postId) {
-            event.preventDefault(); 
-            const form = document.getElementById(`reply-form-${postId}`);
-            const inputEl = document.getElementById(`comment-input-${postId}`);
-            const formData = new FormData(form);
-            formData.append('submit_comment', 'true'); 
+        // 🟢 ➕ محرك كود الكارت السابع لفتح وتصفير الأقسام أوتوماتيكياً وتغيير الـ إيموجي ➕ 🟢
+        let isMoreCatsVisible = false;
+        function toggleMoreCategoriesVisibility() {
+            isMoreCatsVisible = !isMoreCatsVisible;
+            const labelText = document.getElementById('label-toggle-text');
+            const iconToggle = document.getElementById('icon-toggle-plus');
             
-            fetch('/', {
-                method: 'POST',
-                body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then(res => {
-                inputEl.value = '';
-                window.location.reload(); 
-            }).catch(e => console.error("Error submitting comment:", e));
+            // إخفاء وإظهار الأقسام بعد رقم 6 فوريّاً
+            document.querySelectorAll('.category-box').forEach((box, index) => {
+                if (index + 1 > 6 && box.id !== 'btn-toggle-more-cats') {
+                    box.style.display = isMoreCatsVisible ? 'flex' : 'none';
+                }
+            });
+            
+            const currentLang = localStorage.getItem('lang') || 'ar';
+            if (isMoreCatsVisible) {
+                if (labelText) labelText.textContent = currentLang === 'ar' ? 'عرض أقل' : 'Show Less';
+                if (iconToggle) iconToggle.textContent = '➖';
+            } else {
+                if (labelText) labelText.textContent = currentLang === 'ar' ? 'عرض المزيد' : 'Show More';
+                if (iconToggle) iconToggle.textContent = '➕';
+            }
         }
 
         // 🟢 محرك المزامنة اللحظية لحالة الإتاحة والـ GPS لايف للسيرفر 🟢
@@ -324,22 +356,19 @@
             const txt = document.getElementById('status-text');
             
             if (isActive) {
-                dot.style.background = 'var(--neon-cyan)'; dot.style.animation = 'status-pulse 2s infinite';
-                txt.textContent = 'أنت متاح للعمل لايف الحين ⚡'; txt.style.color = 'var(--neon-cyan)';
+                if (dot) { dot.style.background = 'var(--neon-cyan)'; dot.style.animation = 'status-pulse 2s infinite'; }
+                if (txt) { txt.textContent = 'أنت متاح للعمل لايف الحين ⚡'; txt.style.color = 'var(--neon-cyan)'; }
             } else {
-                dot.style.background = '#64748b'; dot.style.animation = 'none';
-                txt.textContent = 'أنت غير متاح حالياً 💤'; txt.style.color = 'var(--text-muted)';
+                if (dot) { dot.style.background = '#64748b'; dot.style.animation = 'none'; }
+                if (txt) { txt.textContent = 'أنت غير متاح حالياً 💤'; txt.style.color = 'var(--text-muted)'; }
             }
 
             const formData = new FormData();
             formData.append('is_active_now', isActive ? 'true' : 'false');
             formData.append('latitude', '31.4175');  
             formData.append('longitude', '31.8144'); 
-            
             fetch('/api/location/update/', { method: 'POST', body: formData }).catch(e => console.error(e));
         }
-
-        // ☀️🌙 محرك قلب المظهر والوضع الليلي اللحظي وحفظ الخيار بالهاتف ☀️🌙
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             let targetTheme = (currentTheme === 'dark') ? 'light' : 'dark';
@@ -349,20 +378,17 @@
             if(themeBtn) themeBtn.textContent = targetTheme === 'dark' ? '☀️' : '🌙';
         }
 
-        // 🌐 قاموس الترجمة اللحظية المورثة للرئيسية والتايم لاين 🌐
+        // 🌐 قاموس الترجمة اللحظية المورثة لهيكل الأقسام والبحث 🌐
         const translations = {
             'ar': {
-                'post_title': '📝 أنشئ منشوراً جديداً (طلب أو عرض خدمة)',
-                'add_img': '📷 أضف صورة', 'add_vid': '🎬 أضف فيديو', 'search_holder': 'ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍',
-                'search_btn': 'بحث', 'no_posts': 'لا توجد منشورات متوفرة في التايم لاين حالياً.',
+                'categories_title': 'الأقسام الرئيسية', 'show_more': 'عرض المزيد', 'show_less': 'عرض أقل',
+                'search_holder': 'ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍', 'search_btn': 'بحث',
                 'view_directory': 'تصفح دليل الفنيين ومقدمي الخدمات الحاليين ↩️',
-
             },
             'en': {
-                'post_title': '📝 Create a New Post (Order or Offer a Service)',
-                'add_img': '📷 Add Image', 'add_vid': '🎬 Add Video', 'search_holder': 'Search by name, phone, specialty or city... 🛠️📍',
-                'search_btn': 'Search', 'no_posts': 'No posts available right now.',
-                'view_directory': 'Browse Providers and Technicians Directory ↩️',
+                'categories_title': 'Main Categories', 'show_more': 'Show More', 'show_less': 'Show Less',
+                'search_holder': 'Search by name, phone, specialty or city... 🛠️📍', 'search_btn': 'Search',
+                 'view_directory': 'Browse Providers and Technicians Directory↩️',
             }
         };
 
@@ -380,17 +406,27 @@
             document.documentElement.lang = lang;
             const t = translations[lang];
             
-            if(document.getElementById('txt-post-title')) document.getElementById('txt-post-title').innerHTML = `<span>✍️</span> ${t['post_title']}`;
-            if(document.getElementById('txt-add-img')) document.getElementById('txt-add-img').innerHTML = `<span>📷</span> ${t['add_img']}`;
-            if(document.getElementById('txt-add-video')) document.getElementById('txt-add-video').innerHTML = `<span>🎬</span> ${t['add_vid']}`;
+            if(document.getElementById('txt-categories-title')) document.getElementById('txt-categories-title').textContent = t['categories_title'];
+            if(document.getElementById('label-toggle-text')) {
+                document.getElementById('label-toggle-text').textContent = isMoreCatsVisible ? t['show_less'] : t['show_more'];
+            }
             if(document.getElementById('input-smart-search')) document.getElementById('input-smart-search').placeholder = t['search_holder'];
             if(document.getElementById('txt-search-btn')) document.getElementById('txt-search-btn').textContent = t['search_btn'];
-            if(document.getElementById('txt-no-posts')) document.getElementById('txt-no-posts').textContent = t['no_posts'];
             if(document.getElementById('txt-view-directory')) document.getElementById('txt-view-directory').textContent = t['view_directory'];
 
         }
 
-        // كباري معاينات اختيار ملفات الميديا فورياً
+        function markNotificationsRead() {
+            fetch('{% url "mark_notifications_read" %}', { method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'} })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    const countEl = document.getElementById('nav-notif-count');
+                    if(countEl) countEl.style.display = 'none';
+                }
+            }).catch(e => {});
+        }
+
         function previewPostImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -416,7 +452,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             const themeBtn = document.getElementById('theme-btn');
             if(themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
@@ -426,7 +462,7 @@
         });
 
         document.addEventListener('click', () => {
-            document.querySelectorAll('[id^="post-menu-"], [id^="comment-menu-"]').forEach(menu => { menu.style.display = 'none'; });
+            document.querySelectorAll('[id^="post-menu-"]').forEach(menu => { menu.style.display = 'none'; });
         });
     </script>
 </body>

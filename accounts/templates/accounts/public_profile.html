@@ -81,6 +81,31 @@
             70% { transform: scale(1.15); box-shadow: 0 0 0 10px rgba(46,196,182,0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
         }
+                /* 📱 التحديث النهائي: إنزال وتثبيت الشريط العائم في قاع الجوال تماماً حافة بحافة 📱 */
+        .bottom-nav-premium { 
+            position: fixed; 
+            bottom: 0px; /* 🚀 الإنزال الهندسي الموزون ليلتصق بقاع الجوال ويعزل الفراغات 🚀 */
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(20, 36, 68, 0.95); /* تعتيم ملوكي فاخر للبراند بوك الداكن */
+            backdrop-filter: blur(12px); 
+            border: 1px solid var(--border); 
+            padding: 12px 24px; 
+            border-radius: 40px; 
+            display: flex; 
+            gap: 30px; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+            width: 90%; 
+            max-width: 450px; 
+            box-sizing: border-box; 
+        }
+        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+        .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
+
 
 
         /* 📱 الـ Media Query المطاطي للبروفايل العام 📱 */
@@ -196,6 +221,15 @@
 
         <a href="{% url 'home' %}" id="txt-return-home" style="display: block; text-align: center; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: bold;">🏠 العودة للرئيسية</a>
     </div>
+        <!-- 📱 🌟 شريط الأيقونات الطائرة العائم الفخم المحدث المرفوع فوق بار الجوال (Premium Floating Navbar) 🌟 📱 -->
+    <div class="bottom-nav-premium">
+        <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
+        <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
+    </div>
+
 
     <script>
         function submitPublicRating(providerId, starsCount) {

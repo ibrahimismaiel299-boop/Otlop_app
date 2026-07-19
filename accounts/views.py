@@ -279,17 +279,19 @@ def friends_list_view(request):
             
     return render(request, 'accounts/friends_list.html', {'friends': friends})
 
-# 🌟 دالة الرئيسية الشاملة والموحدة (النسخة الفولاذية النهائية المصلحة للنشر) 🌟
+# accounts/views.py [جزء 1 من 2]
+import math
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import models
+from django.contrib.auth.decorators import login_required
+from .models import Category, Post, User, Comment, FriendRequest, Governorate
+from .forms import PostForm # تأكد من اسم الفورم عندك
+
 def home_view(request):
-    # 1. جلب البيانات الأساسية للأقسام الشجرية والمحافظات الحية
-    category_choices = Category.objects.filter(parent=None)
-    gov_choices = Governorate.objects.all()
-    selected_category = request.GET.get('category')
-    
-    # 2. معالجة عمليات الـ POST وحفظ المنشورات والتعليقات (المحرك المحرر لفتح بوابات النشر)
+    """دالة الرئيسية الشاملة المحدثة لتشغيل واجهة الأقسام والـ Subcategories والـ Live GPS"""
+    # 1. معالجة عمليات الـ POST وحفظ المنشورات والتعليقات بدون ريفريش
     if request.user.is_authenticated and request.method == 'POST':
         if 'submit_post' in request.POST:
-            # التقاط النصوص والصور والفيديوهات القصيرة فوريًا من الـ HTML المطور
             form = PostForm(request.POST, request.FILES) 
             if form.is_valid():
                 post = form.save(commit=False)
@@ -303,31 +305,28 @@ def home_view(request):
             
             if comment_content and post_id:
                 post_obj = get_object_or_404(Post, id=post_id)
-                parent_obj = None
-                if parent_id:
-                    parent_obj = get_object_or_404(Comment, id=parent_id)
-                
-                Comment.objects.create(
-                    post=post_obj, 
-                    user=request.user, 
-                    content=comment_content,
-                    parent=parent_obj
-                )
+                parent_obj = get_object_or_404(Comment, id=parent_id) if parent_id else None
+                Comment.objects.create(post=post_obj, user=request.user, content=comment_content, parent=parent_obj)
                 return redirect('home')
 
-    # 3. تهيئة استمارة المنشور الافتراضية لحالات الـ GET السادة
+    # 2. تهيئة استمارة المنشور الافتراضية
     post_form = PostForm()
     if hasattr(post_form.fields, 'get') and 'category' in post_form.fields:
         post_form.fields['category'].queryset = Category.objects.all()
             
-    # 4. جلب طلبات الاتصال المعلقة وعدادات الإشعارات اللحظية الحية للمسجلين
-    unread_notifications = []
-    pending_friend_requests = []
+    # 3. جلب العدادات والإشعارات اللحظية للمسجلين
+    unread_notifications, pending_friend_requests = [], []
     if request.user.is_authenticated:
         unread_notifications = request.user.notifications.filter(is_read=False)
         pending_friend_requests = request.user.received_friend_requests.filter(status='pending')
+# accounts/views.py [جزء 2 من 2 والختامي]
 
-    # 5. تجميع التايم لاين وتفعيل الفلترة الشجرية العميقة للاحتياجات
+    # 4. جلب الأقسام الرئيسية (التي ليس لها parent) والمحافظات الحية للشبكة الفخمة
+    category_choices = Category.objects.filter(parent=None)
+    gov_choices = Governorate.objects.all()
+    selected_category = request.GET.get('category')
+    
+    # 5. تجميع التايم لاين وتفعيل الفلترة الشجرية العميقة للأقسام والـ Subcategories
     posts = Post.objects.all().order_by('-created_at')
     
     if request.user.is_authenticated and request.user.user_type == 'customer' and not selected_category:
@@ -335,16 +334,43 @@ def home_view(request):
         if user_interests_ids.exists():
             posts = posts.filter(category_id__in=user_interests_ids)
 
+    # ميكانيكية دحرجة وفحص الأقسام الفرعية عند النقر
+    subcategories = []
+    category_obj = None
     if selected_category:
         category_obj = get_object_or_404(Category, id=selected_category)
+        subcategories = category_obj.children.all() # جلب الأقسام الفرعية التابعة له
+        
         sub_categories_ids = [category_obj.id]
-        for child1 in category_obj.children.all():
+        for child1 in subcategories:
             sub_categories_ids.append(child1.id)
             for child2 in child1.children.all():
                 sub_categories_ids.append(child2.id)
         posts = posts.filter(category_id__in=sub_categories_ids)
+
+    # 6. 🧭 رادار حساب المسافات الجغرافية التلقائي لاكتشاف أقرب الفنيين المتاحين حول العميل 🧭
+    nearby_providers = []
+    client_lat = request.GET.get('user_lat') or request.session.get('user_lat')
+    client_lng = request.GET.get('user_lng') or request.session.get('user_lng')
+
+    if client_lat and client_lng:
+        c_lat, c_lng = float(client_lat), float(client_lng)
+        # جلب الفنيين المتاحين أونلاين الحين والذين يملكون إحداثيات موقع صريحة بالسيرفر
+        active_providers = User.objects.filter(user_type='provider', is_active_now=True, latitude__isnull=False, longitude__isnull=False)
         
-    # 6. فحص ومطالعة علاقات الصداقة لحجب وتثبيت أزرار التفاعل بالتايم لاين
+        R = 6371.0 # نصف قطر الأرض بالكيلومترات
+        for p in active_providers:
+            dlat = math.radians(p.latitude - c_lat)
+            dlon = math.radians(p.longitude - c_lng)
+            a = math.sin(dlat/2)**2 + math.cos(math.radians(c_lat)) * math.cos(math.radians(p.latitude)) * math.sin(dlon/2)**2
+            distance = R * (2 * math.atan2(math.sqrt(a), math.sqrt(1-a)))
+            
+            # فلترة وتجهيز مقدمي الخدمة المتواجدين في نطاق 15 كم فقط من العميل
+            if distance <= 15.0:
+                p.computed_distance = round(distance, 1) # حقن المسافة في كائن اليوزر ديناميكياً
+                nearby_providers.append(p)
+
+    # 7. فحص ومطالعة علاقات الصداقة لحجب وتثبيت أزرار التفاعل بالتايم لاين
     for post in posts:
         post.friend_status = None
         if request.user.is_authenticated:
@@ -355,17 +381,21 @@ def home_view(request):
             if rel: 
                 post.friend_status = rel.status
 
-    # 7. 🔒 حزمة الـ Context الأصلية المكتملة والمحقونة بالبيانات الحية بالملي 🔒
+    # 8. 🔒 حزمة الـ Context الأصلية والمعدلة بالكامل لتصميم الشبكة الفخمة 🔒
     context = {
         'gov_choices': gov_choices,
         'category_choices': category_choices,
         'selected_category': int(selected_category) if selected_category else None,
+        'category_obj': category_obj,
+        'subcategories': subcategories,
         'posts': posts,
         'post_form': post_form,
         'unread_notifications': unread_notifications,
         'pending_requests': pending_friend_requests,
+        'nearby_providers': nearby_providers, # تجميع أقرب الفنيين المتاحين
     }
     return render(request, 'accounts/home.html', context)
+
 
 
 # 2. 🚀 دالة صفحة دليل الفنيين المستقلة الجديدة تماماً (تستقبل البحث الذكي والفلترة) 🚀
