@@ -3,235 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{{ target_user.username }} - Otlop</title>
+    <title>{{ target_user.username }} - Otlop 🚀</title>
     <style>
+        /* 🎨 توحيد لوحة ألوان البراند بوك الملوكي الجديد للمظهرين مع الرئيسية 🎨 */
         :root {
-            --bg: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-main: #0d1b2a;
-            --text-muted: #718096;
-            --border-color: #edf2f7;
-            --input-bg: #f8fafc;
+            --bg-main: #0d1b2a;         
+            --card-bg: #142444;         
+            --accent-blue: #1e88ff;     
+            --neon-cyan: #2ec4b6;       
+            --text-main: #f8fafc;       
+            --text-muted: #94a3b8;      
+            --border: rgba(255, 255, 255, 0.08); 
+            --input-bg: rgba(255, 255, 255, 0.03);
         }
-        [data-theme="dark"] {
-            --bg: #0b132b;          
-            --card-bg: #1c2541;     
-            --text-main: #ffffff !important; 
-            --text-muted: #cbd5e0 !important; 
-            --border-color: #3a4764;
-            --input-bg: #131a35 !important; 
+        [data-theme="light"] {
+            --bg-main: #f8fafc;         
+            --card-bg: #ffffff;         
+            --accent-blue: #1d9bf0;     
+            --neon-cyan: #00ba7c;       
+            --text-main: #0f172a;       
+            --text-muted: #64748b;      
+            --border: #e2e8f0; 
+            --input-bg: #f1f5f9;
         }
+
         html, body {
-            margin: 0; padding: 20px; min-height: 100vh;
-            background-color: var(--bg) !important;
+            margin: 0; padding: 0; min-height: 100vh;
+            background-color: var(--bg-main) !important;
             color: var(--text-main) !important;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             transition: background-color 0.2s, color 0.2s;
             box-sizing: border-box;
         }
-        .profile-card {
-            max-width: 500px;
-            background-color: var(--card-bg) !important;
-            margin: 30px auto;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 1px solid var(--border-color);
+        
+        /* 🚀 🌟 حاوية الحصر السحرية لمنع تمدد وانفراط البروفايل على اللابتوب نهائياً 🌟 🚀 */
+        .main-responsive-container { 
+            max-width: 600px; /* إجبار المحتوى على عدم تخطي هذا العرض الجمالي في الكمبيوتر */
+            margin: 0 auto; 
+            padding: 30px 16px 120px 16px; 
+            box-sizing: border-box; 
+            width: 100%; 
         }
+        
+        .profile-card {
+            background-color: var(--card-bg) !important;
+            padding: 30px 24px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            text-align: center;
+            border: 1px solid var(--border);
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #0d1b2a;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            border: 3px solid var(--accent-blue);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            margin: 0 auto 15px auto;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
+
         .info-row {
             text-align: right;
             background-color: var(--input-bg) !important;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 15px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
             color: var(--text-main) !important;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            direction: rtl;
         }
-        .info-row strong {
-            color: var(--text-muted) !important;
-        }
-        .btn-chat {
-            display: block;
-            background-color: #0d1b2a;
-            color: white !important;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 30px;
-            font-weight: bold;
-            transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(13,27,42,0.15);
-        }
-        .btn-chat:hover { background-color: #1DA1F2; }
-                @keyframes profile-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.6); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 10px rgba(46,196,182,0); }
+        .info-row strong { color: var(--text-muted) !important; font-weight: bold; }
+        
+        @keyframes profile-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(46,196,182,0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
         }
-                /* 📱 التحديث النهائي: إنزال وتثبيت الشريط العائم في قاع الجوال تماماً حافة بحافة 📱 */
-        .bottom-nav-premium { 
-            position: fixed; 
-            bottom: 0px; /* 🚀 الإنزال الهندسي الموزون ليلتصق بقاع الجوال ويعزل الفراغات 🚀 */
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: rgba(20, 36, 68, 0.95); /* تعتيم ملوكي فاخر للبراند بوك الداكن */
-            backdrop-filter: blur(12px); 
-            border: 1px solid var(--border); 
-            padding: 12px 24px; 
-            border-radius: 40px; 
-            display: flex; 
-            gap: 30px; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 9999; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            width: 90%; 
-            max-width: 450px; 
-            box-sizing: border-box; 
-        }
-        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+
+        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: 90%; max-width: 450px; box-sizing: border-box; }
         .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
-
-
-
-        /* 📱 الـ Media Query المطاطي للبروفايل العام 📱 */
-        @media (max-width: 768px) {
-            html, body { padding: 0 !important; margin: 0 !important; }
-            .profile-card {
-                margin: 0 !important;
-                padding: 25px 20px !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                min-height: 100vh;
-                border-radius: 0 !important;
-                border: none !important;
-                box-shadow: none !important;
-                box-sizing: border-box !important;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- 🚀 بدء الحاوية المستجيبة لحصر وميكنة الأبعاد ومنع الانفراط على اللابتوب 🚀 -->
+    <div class="main-responsive-container">
 
-    <div class="profile-card">
-        <!-- 🟢 الصورة الدائرية الكبيرة بالبروفايل العام الموحدة بالملي على الكائن الحقيقي (target_user) 🟢 -->
-        <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto;">
-            <!-- 🚀 تم التوحيد على target_user لسحب الصورة الحقيقية للفني المستهدف فوريّاً وبدون أخطاء 🚀 -->
-            {% if target_user.profile_picture %}
-                <img src="{{ target_user.profile_picture.url }}" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid {% if target_user.is_active_now %}#2ec4b6{% else %}#1da1f2{% endif %};">
-            {% else %}
-                <div style="width: 110px; height: 110px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 42px;">👤</div>
-            {% endif %}
-            
-            <!-- نقطة النور النيوني النابض تتبع نفس الفني المستهدف (target_user) لايف وبقمة الشياكة -->
-            {% if target_user.is_active_now %}
-                <span style="position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px; background: #2ec4b6; border: 3.5px solid var(--card-bg); border-radius: 50%; animation: profile-pulse 2s infinite; display: inline-block; box-sizing: border-box;"></span>
-            {% endif %}
-        </div>
-        <!-- 📞 كبسولة الاتصال الصوتية الفاخرة بداخل البروفايل تظهر وتنبثق فقط واليوزر متاح 📞 -->
-        {% if target_user.is_active_now %}
-            <div style="text-align: center; margin-top: 10px;">
-                <a href="{% url 'trigger_voice_call' target_user.id %}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 10px 26px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 5px 20px rgba(46,196,182,0.3); border: 1px solid rgba(255,255,255,0.1);">
-                    <span style="font-size: 16px; animation: status-pulse 2s infinite; display: inline-block;">📞</span>  اتصال ⚡
-                </a>
-            </div>
-        {% endif %}
-
-        
-        <h2 style="margin: 0 0 5px 0; color: var(--text-main);">{{ target_user.username }}</h2>
-        <p id="txt-account-type" style="margin: 0 0 25px 0; color: var(--text-muted); font-weight: 600;">📌 نوع الحساب: {{ target_user.get_user_type_display }}</p>
-
-        {% if target_user.user_type == 'provider' %}
-            <div style="background: #fff8e7; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe3b3; text-align: center; color: #ffb703;">
-                <div style="font-weight: bold; font-size: 17px; margin-bottom: 8px;">
-                    ⭐ <span id="txt-avg-rating-lbl">متوسط التقييم الحالي:</span> <span id="public-avg-rating">{{ target_user.get_average_rating }}</span> / 5.0
-                </div>
+        <div class="profile-card">
+            <!-- 🟢 الصورة الدائرية الكبيرة بالبروفايل العام الموحدة بالملي على الكائن الحقيقي target_user 🟢 -->
+            <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 15px auto;">
+                {% if target_user.profile_picture %}
+                    <img src="{{ target_user.profile_picture.url }}" class="avatar" style="margin-bottom: 0;">
+                {% else %}
+                    <div style="width: 110px; height: 110px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 42px; margin: 0 auto;">👤</div>
+                {% endif %}
                 
-                {% if request.user.is_authenticated and request.user != target_user %}
-                    <div style="direction: ltr; display: flex; gap: 6px; justify-content: center; align-items: center; margin-top: 10px;">
-                        <span id="txt-click-stars" style="font-size: 13px; color: var(--text-muted); font-family: sans-serif; direction: rtl; margin-right: 5px;">اضغط على النجوم لتقييم الفني:</span>
-                        <span onclick="submitPublicRating('{{ target_user.id }}', 1)" style="cursor:pointer; font-size:22px; color:#cbd5e0;">★</span>
-                        <span onclick="submitPublicRating('{{ target_user.id }}', 2)" style="cursor:pointer; font-size:22px; color:#cbd5e0;">★</span>
-                        <span onclick="submitPublicRating('{{ target_user.id }}', 3)" style="cursor:pointer; font-size:22px; color:#cbd5e0;">★</span>
-                        <span onclick="submitPublicRating('{{ target_user.id }}', 4)" style="cursor:pointer; font-size:22px; color:#cbd5e0;">★</span>
-                        <span onclick="submitPublicRating('{{ target_user.id }}', 5)" style="cursor:pointer; font-size:22px; color:#cbd5e0;">★</span>
-                    </div>
+                <!-- نقطة النور النيوني النابض لايف وبقمة الشياكة -->
+                {% if target_user.is_active_now %}
+                    <span style="position: absolute; bottom: 4px; right: 4px; width: 22px; height: 22px; background: var(--neon-cyan); border: 3.5px solid var(--card-bg); border-radius: 50%; animation: profile-pulse 2s infinite; display: inline-block; box-sizing: border-box;"></span>
                 {% endif %}
             </div>
-            <div class="info-row"><strong class="lbl-job">🛠️ التخصص المهني:</strong> {{ target_user.category.name_ar }}</div>
-        {% endif %}
 
-        <div class="info-row"><strong class="lbl-loc">📍 الموقع الجغرافي:</strong> {{ target_user.governorate.name_ar }} - {{ target_user.city.name_ar }}</div>
-        {% if target_user.address_details %}
-            <div class="info-row"><strong class="lbl-addr">🏠 تفاصيل الحي السكني:</strong> {{ target_user.address_details }}</div>
-        {% endif %}
-        
-            <!-- 🔐 كبسولة الاتصال النيونية الفاخرة والمشفرة بصرياً بصفحة البروفايل العام 🔐 -->
-            {% if profile_user.phone_number %}
-                <div style="margin-top: 15px; text-align: center;">
-                    <a href="tel:{{ profile_user.phone_number }}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 10px 24px; border-radius: 30px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 15px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); direction: rtl;">
-                        <span style="font-size: 16px; animation: pulse 2s infinite;">📞</span> 
-                        <span>اتصال  ⚡</span>
+            <!-- 📞 كبسولة الاتصال الصوتية الفاخرة بداخل البروفايل تظهر وتنبثق فقط واليوزر متاح 📞 -->
+            {% if target_user.is_active_now %}
+                <div style="text-align: center; margin-top: 10px; margin-bottom: 18px;">
+                    <a href="{% url 'trigger_voice_call' target_user.id %}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--neon-cyan), #20a396); color: white !important; text-decoration: none; padding: 10px 26px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 5px 20px rgba(46,196,182,0.3); border: 1px solid rgba(255,255,255,0.1);">
+                        <span style="font-size: 16px; animation: status-pulse 2s infinite; display: inline-block;">📞</span> اتصال لايف ⚡
                     </a>
                 </div>
             {% endif %}
+            
+            <h2 style="margin: 0 0 5px 0; color: var(--text-main); font-size: 22px; font-weight: 800;">{{ target_user.username }}</h2>
+            <p id="txt-account-type" style="margin: 0 0 25px 0; color: var(--text-muted); font-weight: 600; font-size: 14px;">📌 نوع الحساب: {{ target_user.get_user_type_display }}</p>
 
+            <!-- 🌟 كبسولة عرض ومتوسط تقييم فني الخدمات المطور بألوان البراند بوك الفخمة 🌟 -->
+            {% if target_user.user_type == 'provider' %}
+                <div style="background: rgba(255, 183, 3, 0.04); padding: 16px; border-radius: 18px; margin-bottom: 20px; border: 1px solid rgba(255, 183, 3, 0.15); text-align: center; color: #ffb703; direction: rtl; box-sizing: border-box; width: 100%;">
+                    <div style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">
+                        ⭐ <span id="txt-avg-rating-lbl">متوسط التقييم الحالي:</span> <span id="public-avg-rating" style="font-weight: 900; font-size: 16px;">{{ target_user.get_average_rating }}</span> / 5.0
+                    </div>
+                    
+                    {% if request.user.is_authenticated and request.user != target_user %}
+                        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 10px; flex-wrap: wrap; direction: rtl;">
+                            <span id="txt-click-stars" style="font-size: 12px; color: var(--text-muted); font-weight: bold; margin-left: 4px;">اضغط على النجوم لتقييم مقدم الخدمة:</span>
+                            <div style="direction: ltr; display: inline-flex; gap: 4px;">
+                                <span onclick="submitPublicRating('{{ target_user.id }}', 1)" class="star-rating-item" style="cursor:pointer; font-size:24px; color:#64748b; transition: 0.2s;">★</span>
+                                <span onclick="submitPublicRating('{{ target_user.id }}', 2)" class="star-rating-item" style="cursor:pointer; font-size:24px; color:#64748b; transition: 0.2s;">★</span>
+                                <span onclick="submitPublicRating('{{ target_user.id }}', 3)" class="star-rating-item" style="cursor:pointer; font-size:24px; color:#64748b; transition: 0.2s;">★</span>
+                                <span onclick="submitPublicRating('{{ target_user.id }}', 4)" class="star-rating-item" style="cursor:pointer; font-size:24px; color:#64748b; transition: 0.2s;">★</span>
+                                <span onclick="submitPublicRating('{{ target_user.id }}', 5)" class="star-rating-item" style="cursor:pointer; font-size:24px; color:#64748b; transition: 0.2s;">★</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="info-row" style="direction: rtl;"><strong class="lbl-job">🛠️ التخصص المهني:</strong> <span style="font-weight: 800; color: var(--accent-blue);">{{ target_user.category.name_ar|default:"مقدم خدمات عام" }}</span></div>
+            {% endif %}
+        <!-- حقول بيانات التموضع الجغرافي والاتصال التابعة للفني المستهدف -->
+        <div class="info-row" style="direction: rtl;"><strong class="lbl-gov">📍 المحافظة الحالية:</strong> <span>{{ target_user.governorate.name_ar|default:"غير محدد" }}</span></div>
+        <div class="info-row" style="direction: rtl;"><strong class="lbl-city">🏙️ المدينة أو المركز:</strong> <span>{{ target_user.city.name_ar|default:"غير محدد" }}</span></div>
+
+        <!-- حقول تفاصيل العنوان السكني الإضافية إن وجدت بالفحص -->
+        {% if target_user.address_details %}
+            <div class="info-row" style="direction: rtl;"><strong class="lbl-addr">🏠 تفاصيل الحي السكني:</strong> <span>{{ target_user.address_details }}</span></div>
+        {% endif %}
+
+        <!-- أزرار ووسائل الربط الاجتماعي المحدثة صراحة لتعمل لكافة الحسابات بنقاء 100% -->
         {% if request.user.is_authenticated and request.user != target_user %}
-            <div style="display: flex; gap: 12px; margin-top: 25px;">
+            <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; direction: rtl; width: 100%; box-sizing: border-box;">
                 {% if friend_status == 'accepted' %}
-                    <span id="lbl-status-friends" style="flex: 1; text-align: center; background: var(--input-bg); color: var(--text-muted); padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block; border: 1px solid var(--border-color);">أصدقاء 👥</span>
+                    <div style="display: flex; gap: 8px; flex: 2; width: 100%;">
+                        <span style="flex: 1; text-align: center; background: rgba(46,196,182,0.06); color: var(--neon-cyan); padding: 12px; border-radius: 30px; font-weight: bold; font-size: 13px; border: 1px solid rgba(46,196,182,0.15);">أصدقاء 👥</span>
+                        <a href="{% url 'remove_friend' target_user.id %}" onclick="return confirm('هل أنت متأكد تماماً من رغبتك في إلغاء الصداقة؟ ❌')" style="flex: 1; text-align: center; background: rgba(239, 68, 68, 0.08); color: #ef4444 !important; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: 800; font-size: 13px; border: 1px solid rgba(239, 68, 68, 0.2); transition: 0.2s;">إلغاء الصداقة ❌</a>
+                    </div>
                 {% elif friend_status == 'pending' %}
-                    <span id="lbl-status-pending" style="flex: 1; text-align: center; background: #fff3cd; color: #b7791f; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block;">تم إرسال الطلب ⏳</span>
+                    <span style="flex: 1; text-align: center; background: rgba(255,183,3,0.08); color: #ffb703; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 13px; display: block; border: 1px solid rgba(255,183,3,0.15);">تم إرسال الطلب ⏳</span>
                 {% else %}
-                    <a href="{% url 'send_friend_request' target_user.id %}" id="btn-add-friend-lbl" style="flex: 1; text-align: center; background: #1DA1F2; color: white !important; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 14px; display: block;">👥 إضافة صديق</a>
+                    <a href="{% url 'send_friend_request' target_user.id %}" style="flex: 1; text-align: center; background: var(--accent-blue); color: white !important; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 13px; display: block; box-shadow: 0 4px 12px rgba(30,136,255,0.2);">👥 إضافة صديق</a>
                 {% endif %}
-                <a href="{% url 'chat_detail' target_user.id %}" id="btn-chat-lbl" class="btn-chat" style="flex: 1; margin-top: 0; padding: 12px;">💬 مراسلة خاصة</a>
+                
+                <a href="{% url 'chat_detail' target_user.id %}" style="flex: 1; text-align: center; background: var(--input-bg); color: var(--text-main) !important; text-decoration: none; padding: 12px; border-radius: 30px; font-weight: bold; font-size: 13px; display: block; border: 1px solid var(--border);">💬 مراسلة خاصة</a>
             </div>
         {% endif %}
+
         
-        <!-- تايم لاين منشورات الفني المصغر -->
-        <h3 id="txt-prev-posts" style="text-align: right; color: var(--text-main); font-size: 15px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">📝 المنشورات والعروض السابقة له:</h3>
-        <div style="display: flex; flex-direction: column; gap: 12px; text-align: right;">
+        <!-- حائط تايم لاين منشورات وعروض مقدم الخدمة المصغر بالداخل -->
+        <h3 id="txt-prev-posts" style="text-align: right; color: var(--text-main); font-size: 14px; margin-top: 30px; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-weight: 800;">📝 المنشورات والعروض السابقة له:</h3>
+        <div style="display: flex; flex-direction: column; gap: 14px; text-align: right;">
             {% for post in user_posts %}
-                <div style="background-color: var(--input-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
-                    <p style="font-size: 14px; color: var(--text-main); line-height: 1.5; margin: 0 0 8px 0; white-space: pre-line;">{{ post.content }}</p>
+                <div style="background-color: var(--input-bg); padding: 166px 16px; padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-sizing: border-box; width: 100%;">
+                    <p style="font-size: 13px; color: var(--text-main); line-height: 1.6; margin: 0 0 10px 0; white-space: pre-line; font-weight: 600;">{{ post.content }}</p>
                     {% if post.image %}
-                        <img src="{{ post.image.url }}" style="max-width: 100%; max-height: 150px; border-radius: 8px; object-fit: contain; display: block;">
+                        <img src="{{ post.image.url }}" style="max-width: 100%; max-height: 180px; border-radius: 12px; object-fit: cover; display: block; border: 1px solid var(--border); margin: 0 auto;">
                     {% endif %}
-                    <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 5px;">📅 {{ post.created_at|date:"Y-m-d" }}</span>
+                    {% if post.video %}
+                        <video src="{{ post.video.url }}" controls style="max-width: 100%; max-height: 180px; border-radius: 12px; display: block; border: 1px solid var(--border); background: #000; margin-top: 8px; margin: 8px auto 0 auto;"></video>
+                    {% endif %}
+                    <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 8px; font-weight: bold;">📅 {{ post.created_at|date:"Y-m-d" }}</span>
                 </div>
             {% empty %}
-                <p id="txt-no-posts-lbl" style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 15px; background-color: var(--input-bg); border-radius: 12px; border: 1px dashed var(--border-color); margin: 0;">لم يقم بنشر أي منشورات أو عروض حتى الآن.</p>
+                <p id="txt-no-posts-lbl" style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px; background-color: var(--input-bg); border-radius: 16px; border: 1px dashed var(--border); margin: 0; font-weight: bold;">لم يقم بنشر أي منشورات أو عروض حتى الآن.</p>
             {% endfor %}
         </div>
 
-        <a href="{% url 'home' %}" id="txt-return-home" style="display: block; text-align: center; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: bold;">🏠 العودة للرئيسية</a>
-    </div>
-        <!-- 📱 🌟 شريط الأيقونات الطائرة العائم الفخم المحدث المرفوع فوق بار الجوال (Premium Floating Navbar) 🌟 📱 -->
+        <a href="{% url 'home' %}" id="txt-return-home" style="display: inline-block; text-align: center; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: bold;">🏠 العودة للرئيسية</a>
+    </div> <!-- 🔒 قفل كارت الـ profile-card بالملي 🔒 -->
+
+    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية المستجيبة main-responsive-container بالملي 🔒 -->
+
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المستقر بقاع الجوال تماماً وبتطابق كامل بالبكسل 🌟 📱 -->
     <div class="bottom-nav-premium">
-        <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
+        <a href="{% url 'home' %}" class="bottom-nav-link" title="الرئيسية">🏠</a>
         <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        <a href="{% url 'providers_directory' %}" class="bottom-nav-link active" title="دليل مقدمي الخدمات">📋</a>
         <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
-        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
         <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
-
-
+    <!-- 🚀 محركات الجافا سكريبت الشاملة والفولاذية لصفحة البروفايل العام 🚀 -->
     <script>
+        // 🌟 دالة تسجيل وتقليب نجوم التقييم فورياً عبر الـ API بالخلفية 🌟
         function submitPublicRating(providerId, starsCount) {
             const formData = new FormData();
             formData.append('provider_id', providerId);
@@ -241,12 +221,17 @@
             fetch('/rating/add/', { method: 'POST', body: formData })
             .then(res => res.json())
             .then(data => {
-                                if (data.status === 'success') {
-                    alert(`🎉 تم تسجيل تقييمك بنجاح!`);
+                if (data.status === 'success') {
+                    // إضاءة النجوم بصرياً باللون الذهبي حسب عدد النجوم المكبوسة
+                    const stars = document.querySelectorAll('.star-rating-item');
+                    stars.forEach((star, index) => {
+                        star.style.color = (index < starsCount) ? '#ffb703' : '#64748b';
+                    });
+                    
                     const avgSpan = document.getElementById('public-avg-rating');
                     if (avgSpan) avgSpan.textContent = data.avg_rating;
                 }
-            }).catch(error => console.error('Error:', error));
+            }).catch(error => console.error('Error submitting rating:', error));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -257,13 +242,13 @@
             document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.lang = savedLang;
 
-            // قاموس ترجمة البروفايل العام الفوري المورث تلقائياً مئة بالمئة
+            // 🌐 قاموس ترجمة البروفايل العام الفوري المطور بالمسميات العالمية 🌐
             const publicTranslations = {
                 'ar': {
                     'acc_type': '📌 نوع الحساب: {{ target_user.get_user_type_display }}',
                     'rating_lbl': 'متوسط التقييم الحالي:',
-                    'click_stars': 'اضغط على النجوم لتقييم الفني:',
-                    'job': '🛠️ التخصص المهني:', 'loc': '📍 الموقع الجغرافي:', 'addr': '🏠 تفاصيل الحي السكني:', 'phone': '📞 رقم الهاتف:',
+                    'click_stars': 'اضغط على النجوم لتقييم مقدم الخدمة:',
+                    'job': '🛠️ التخصص المهني:', 'gov': '📍 المحافظة الحالية:', 'city': '🏙️ المدينة أو المركز:', 'addr': '🏠 تفاصيل الحي السكني:',
                     'friends': 'أصدقاء 👥', 'pending': 'تم إرسال الطلب ⏳', 'add_friend': '👥 إضافة صديق', 'chat': '💬 مراسلة خاصة',
                     'prev_posts': '📝 المنشورات والعروض السابقة له:', 'no_posts': 'لم يقم بنشر أي منشورات أو عروض حتى الآن.', 'ret_home': '🏠 العودة للرئيسية'
                 },
@@ -271,7 +256,7 @@
                     'acc_type': '📌 Account Type: {{ target_user.get_user_type_display }}',
                     'rating_lbl': 'Current Rating Average:',
                     'click_stars': 'Click on stars to rate provider:',
-                    'job': '🛠️ Professional Specialty:', 'loc': '📍 Location:', 'addr': '🏠 Neighborhood Details:', 'phone': '📞 Phone Number:',
+                    'job': '🛠️ Professional Specialty:', 'gov': '📍 Current Governorate:', 'city': '🏙️ City or Center:', 'addr': '🏠 Neighborhood Details:',
                     'friends': 'Friends 👥', 'pending': 'Request Sent ⏳', 'add_friend': '👥 Add Friend', 'chat': '💬 Private Chat',
                     'prev_posts': '📝 Previous Posts & Offers:', 'no_posts': 'No posts or offers published yet.', 'ret_home': '🏠 Back to Home'
                 }
@@ -289,12 +274,11 @@
             if(document.getElementById('txt-no-posts-lbl')) document.getElementById('txt-no-posts-lbl').textContent = t['no_posts'];
             if(document.getElementById('txt-return-home')) document.getElementById('txt-return-home').textContent = t['ret_home'];
             
-            if(document.querySelector('.lbl-job')) document.querySelector('.lbl-job').textContent = t['job'];
-            if(document.querySelector('.lbl-loc')) document.querySelector('.lbl-loc').textContent = t['loc'];
-            if(document.querySelector('.lbl-addr')) document.querySelector('.lbl-addr').textContent = t['addr'];
-            if(document.querySelector('.lbl-phone')) document.querySelector('.lbl-phone').textContent = t['phone'];
+            if(document.querySelector('.lbl-job')) document.querySelector('.lbl-job').innerHTML = t['job'];
+            if(document.querySelector('.lbl-gov')) document.querySelector('.lbl-gov').innerHTML = t['gov'];
+            if(document.querySelector('.lbl-city')) document.querySelector('.lbl-city').innerHTML = t['city'];
+            if(document.querySelector('.lbl-addr')) document.querySelector('.lbl-addr').innerHTML = t['addr'];
         });
     </script>
 </body>
 </html>
-

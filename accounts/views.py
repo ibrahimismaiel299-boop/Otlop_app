@@ -119,14 +119,39 @@ def mark_notifications_read_view(request):
 
 # ضع هذه الدوال المصححة تماماً في نهاية ملف accounts/views.py
 
+# accounts/views.py [دالة إرسال طلب الصداقة المطورة وحقن الإشعارات اللحظية]
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import User, FriendRequest, Notification # تأكد من استدعاء موديل الـ Notification عندك
+
 @login_required
 def send_friend_request_view(request, user_id):
-    """دالة لإرسال طلب صداقة فوري للمخدم"""
+    """دالة إرسال طلب الصداقة المحدثة لحقن وتفجير الإشعارات اللحظية بجرس الأعلى فوريّاً"""
     to_user = get_object_or_404(User, id=user_id)
-    if request.user != to_user:
-        # منع تكرار الطلب إذا كان موجوداً مسبقاً
-        FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
-    return redirect('home')
+    
+    # صمام أمان لمنع تكرار إرسال الطلب أو إرساله لنفسك
+    if to_user != request.user:
+        req, created = FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
+        
+        if created:
+            req.status = 'pending'
+            req.save()
+            
+            # 🚀 🔔 تفجير وحقن سجل الإشعار اللحظي في قاعدة البيانات للفني المستهدف فوريّاً 🔔 🚀
+            # تأكد من مطابقة أسماء حقول موديل Notification بملفك (user, text, is_read)
+            Notification.objects.create(
+                user=to_user, # الشخص المستلم لطلب الصداقة
+                text=f" قام المستخدم {request.user.username} بإرسال طلب صداقة إليك 👥",
+                is_read=False
+            )
+            
+            messages.success(request, "تم إرسال طلب الصداقة وتنبيه المستخدم بنجاح! ⏳")
+        else:
+            messages.info(request, "هناك طلب صداقة معلق بالفعل بينكما.")
+            
+    return redirect('public_profile', user_id=user_id)
+
 
 @login_required
 def accept_friend_request_view(request, request_id):
@@ -218,18 +243,28 @@ def post_action_view(request, post_id, action_type):
 
 @login_required
 def check_live_updates_view(request):
-    """دالة ذكية تفحص وجود إشعارات أو طلبات صداقة جديدة كل بضع ثوانٍ خلف الكواليس"""
+    """الدالة الذهبية المصلحة لضخ عدادات الإشعارات وطلبات الصداقة لايف للفرونت إند بالملي ثانية"""
     unread_notifs = request.user.notifications.filter(is_read=False)
     pending_reqs = request.user.received_friend_requests.filter(status='pending')
     
-    # تحويل البيانات لصيغة بسيطة يفهمها الجافا سكريبت
-    notifs_data = [{'id': n.id, 'text': f"{n.sender.username} {n.get_notification_type_display()}"} for n in unread_notifs]
+    # 🚀 صمام أمان محمي: التأكد من وجود sender لمنع الـ Null Crash الخلفي بالسيرفر 🚀
+    notifs_data = []
+    for n in unread_notifs:
+        sender_name = n.sender.username if hasattr(n, 'sender') and n.sender else "Otlop"
+        notifs_data.append({
+            'id': n.id, 
+            'text': f"{sender_name} - {n.text}"
+        })
+        
     reqs_data = [{'id': r.id, 'sender': r.from_user.username} for r in pending_reqs]
     
+    # 🎯 تجميع الـ JSON بالمفاتيح المتطابقة مئة بالمئة مع الجافا سكريبت بالواجهة 🎯
     return JsonResponse({
-        'unread_count': unread_notifs.count(),
+        'unread_notifications_count': unread_notifs.count(), # المسمى المطابق للـ JS بالملي
+        'unread_count': unread_notifs.count(),               # مسار احتياطي للأمان
         'notifications': notifs_data,
-        'pending_requests': reqs_data
+        'pending_requests': reqs_data,
+        'pending_requests_count': pending_reqs.count()
     })
 
 @login_required
@@ -279,23 +314,51 @@ def friends_list_view(request):
             
     return render(request, 'accounts/friends_list.html', {'friends': friends})
 
-# accounts/views.py [جزء 1 من 2]
+# accounts/views.py [جزء 1 من 2 لـ home_view المطور والنهائي]
 import math
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
-from django.contrib.auth.decorators import login_required
 from .models import Category, Post, User, Comment, FriendRequest, Governorate
-from .forms import PostForm # تأكد من اسم الفورم عندك
+from .forms import PostForm # تأكد من مطابقة اسم الفورم عندك
 
 def home_view(request):
-    """دالة الرئيسية الشاملة المحدثة لتشغيل واجهة الأقسام والـ Subcategories والـ Live GPS"""
-    # 1. معالجة عمليات الـ POST وحفظ المنشورات والتعليقات بدون ريفريش
+    """دالة الرئيسية الشاملة والمحدثة: حقن القسم العام كديفولت والربط التلقائي للكروت بالـ GPS والبوستات"""
+    
+    # 1. 🌟 صناعة وفحص وجود القسم العام (General) ليكون الديفولت القسري للبيانات 🌟
+    general_category, created = Category.objects.get_or_create(
+        name_ar="القسم العام",
+        defaults={
+            'name_en': "General",
+            'icon_emoji': "🌐",
+            'parent': None
+        }
+    )
+
+    # 2. استقبال معرف القسم والموقع الجغرافي الذي تضخه كروت وأزرار الواجهة
+    selected_category = request.GET.get('category')
+    client_lat = request.GET.get('user_lat') or request.session.get('user_lat')
+    client_lng = request.GET.get('user_lng') or request.session.get('user_lng')
+
+    # حفظ إحداثيات موقع العميل في الجلسة (Session) لدوام الفلترة التلقائية عند إعادة التحميل
+    if request.GET.get('user_lat') and request.GET.get('user_lng'):
+        request.session['user_lat'] = request.GET.get('user_lat')
+        request.session['user_lng'] = request.GET.get('user_lng')
+
+    # 3. معالجة عمليات الـ POST وحفظ المنشورات والتعليقات بالقسم المؤتمت والذكي
     if request.user.is_authenticated and request.method == 'POST':
         if 'submit_post' in request.POST:
             form = PostForm(request.POST, request.FILES) 
             if form.is_valid():
                 post = form.save(commit=False)
                 post.user = request.user
+                
+                # 🚀 حقن وتلقيم القسم تلقائياً: يقرأ من حقل الكارت المخفي بالواجهة، وإذا كان فارغاً يأخذ القسم العام 🚀
+                hidden_cat_id = request.POST.get('category_id_hidden')
+                if hidden_cat_id and hidden_cat_id.strip() != "":
+                    post.category_id = int(hidden_cat_id)
+                else:
+                    post.category_id = general_category.id
+                
                 post.save()
                 return redirect('home')
         elif 'submit_comment' in request.POST:
@@ -309,12 +372,12 @@ def home_view(request):
                 Comment.objects.create(post=post_obj, user=request.user, content=comment_content, parent=parent_obj)
                 return redirect('home')
 
-    # 2. تهيئة استمارة المنشور الافتراضية
+    # تهيئة استمارة المنشور الافتراضية
     post_form = PostForm()
     if hasattr(post_form.fields, 'get') and 'category' in post_form.fields:
         post_form.fields['category'].queryset = Category.objects.all()
             
-    # 3. جلب العدادات والإشعارات اللحظية للمسجلين
+    # جلب العدادات والإشعارات اللحظية للمسجلين
     unread_notifications, pending_friend_requests = [], []
     if request.user.is_authenticated:
         unread_notifications = request.user.notifications.filter(is_read=False)
@@ -324,7 +387,6 @@ def home_view(request):
     # 4. جلب الأقسام الرئيسية (التي ليس لها parent) والمحافظات الحية للشبكة الفخمة
     category_choices = Category.objects.filter(parent=None)
     gov_choices = Governorate.objects.all()
-    selected_category = request.GET.get('category')
     
     # 5. تجميع التايم لاين وتفعيل الفلترة الشجرية العميقة للأقسام والـ Subcategories
     posts = Post.objects.all().order_by('-created_at')
@@ -348,15 +410,21 @@ def home_view(request):
                 sub_categories_ids.append(child2.id)
         posts = posts.filter(category_id__in=sub_categories_ids)
 
-    # 6. 🧭 رادار حساب المسافات الجغرافية التلقائي لاكتشاف أقرب الفنيين المتاحين حول العميل 🧭
-    nearby_providers = []
-    client_lat = request.GET.get('user_lat') or request.session.get('user_lat')
-    client_lng = request.GET.get('user_lng') or request.session.get('user_lng')
+# accounts/views.py [تحديث رادار المسافات ليعمل للمسجلين والزوار كدعاية فورية]
 
+    # 6. 🧭 🟢 رادار حساب المسافات الأوتوماتيكي المطور (مفتوح صراحة للمسجلين والزوار) 🟢 🧭
+    nearby_providers = []
+    
+    # بناء الفلترة الأساسية لمقدمي الخدمات المتاحين أونلاين الحين بالمنصة
+    provider_filters = models.Q(user_type='provider', is_active_now=True)
+    if selected_category and category_obj:
+        cat_and_children_ids = [category_obj.id] + list(subcategories.values_list('id', flat=True))
+        provider_filters &= models.Q(category_id__in=cat_and_children_ids)
+
+    # أ) المسار الأساسي: لو المتصفح ضخ إحداثيات الـ GPS (للمسجل أو الزائر)، يحسب المسافات اللحظية بدقة
     if client_lat and client_lng:
         c_lat, c_lng = float(client_lat), float(client_lng)
-        # جلب الفنيين المتاحين أونلاين الحين والذين يملكون إحداثيات موقع صريحة بالسيرفر
-        active_providers = User.objects.filter(user_type='provider', is_active_now=True, latitude__isnull=False, longitude__isnull=False)
+        active_providers = User.objects.filter(provider_filters & models.Q(latitude__isnull=False, longitude__isnull=False))
         
         R = 6371.0 # نصف قطر الأرض بالكيلومترات
         for p in active_providers:
@@ -365,10 +433,20 @@ def home_view(request):
             a = math.sin(dlat/2)**2 + math.cos(math.radians(c_lat)) * math.cos(math.radians(p.latitude)) * math.sin(dlon/2)**2
             distance = R * (2 * math.atan2(math.sqrt(a), math.sqrt(1-a)))
             
-            # فلترة وتجهيز مقدمي الخدمة المتواجدين في نطاق 15 كم فقط من العميل
+            # حصر وعرض الفنيين المتواجدين في نطاق 15 كيلومتر حول العميل
             if distance <= 15.0:
-                p.computed_distance = round(distance, 1) # حقن المسافة في كائن اليوزر ديناميكياً
+                p.computed_distance = round(distance, 1)
+                p.has_live_distance = True # شارة تأكيد الحساب الجغرافي
                 nearby_providers.append(p)
+                
+    # ب) 🚀 مسار الدعاية الاحتياطي الصارم: لو الـ GPS لسه بيلقط أو المستخدم زائر بدون لوكيشن، يملأ الصندوق فوراً بأول 3 فنيين متاحين لمنع الفراغ 🚀
+    if not nearby_providers:
+        fallback_providers = User.objects.filter(provider_filters)[:3]
+        for p in fallback_providers:
+            p.computed_distance = "متاح" # نص جمالي بديل للمسافة الجافة
+            p.has_live_distance = False
+            nearby_providers.append(p)
+
 
     # 7. فحص ومطالعة علاقات الصداقة لحجب وتثبيت أزرار التفاعل بالتايم لاين
     for post in posts:
@@ -381,10 +459,11 @@ def home_view(request):
             if rel: 
                 post.friend_status = rel.status
 
-    # 8. 🔒 حزمة الـ Context الأصلية والمعدلة بالكامل لتصميم الشبكة الفخمة 🔒
+    # 8. 🔒 حزمة الـ Context الأصلية والمعدلة والمحقونة بالقسم العام بالملي 🔒
     context = {
         'gov_choices': gov_choices,
         'category_choices': category_choices,
+        'general_category': general_category, # تمرير كائن القسم العام للواجهة
         'selected_category': int(selected_category) if selected_category else None,
         'category_obj': category_obj,
         'subcategories': subcategories,
@@ -392,11 +471,9 @@ def home_view(request):
         'post_form': post_form,
         'unread_notifications': unread_notifications,
         'pending_requests': pending_friend_requests,
-        'nearby_providers': nearby_providers, # تجميع أقرب الفنيين المتاحين
+        'nearby_providers': nearby_providers,
     }
     return render(request, 'accounts/home.html', context)
-
-
 
 # 2. 🚀 دالة صفحة دليل الفنيين المستقلة الجديدة تماماً (تستقبل البحث الذكي والفلترة) 🚀
 def all_providers_view(request):
@@ -565,3 +642,21 @@ def providers_map_view(request):
         'providers': active_providers,
         'is_logged_in': request.user.is_authenticated  # تمرير حالة تسجيل الدخول فوريّاً للفرونت إند
     })
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+
+@login_required
+def remove_friend_view(request, user_id):
+    """دالة الباك إند الحاسمة لفسخ وإلغاء علاقة الصداقة نهائياً من جداول قاعدة البيانات"""
+    target_user = get_object_or_404(User, id=user_id)
+    
+    # البحث عن علاقة الصداقة القائمة بين اليوزر الحالي والفني المستهدف وإبادتها فوراً
+    FriendRequest.objects.filter(
+        (models.Q(from_user=request.user) & models.Q(to_user=target_user) & models.Q(status='accepted')) |
+        (models.Q(from_user=target_user) & models.Q(to_user=request.user) & models.Q(status='accepted'))
+    ).delete()
+    
+    messages.success(request, "تم إلغاء الصداقة بنجاح ❌")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

@@ -10,7 +10,7 @@ from accounts.views import (
     chat_rooms_list_view, chat_detail_view, public_profile_view, mark_notifications_read_view,
     post_action_view, check_live_updates_view, check_new_messages_view, reject_friend_request_view,
     check_unread_messages_count_view, friends_list_view,
-    all_providers_view, delete_post_view, trigger_voice_call_view, update_live_location_view
+    all_providers_view, delete_post_view, trigger_voice_call_view, update_live_location_view, remove_friend_view
 
 )
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('friend/remove/<int:user_id>/', remove_friend_view, name='remove_friend'),
     
     # روابط جلب البيانات الجغرافية والإشعارات عبر الـ AJAX
     path('ajax/load-cities/', load_cities_view, name='ajax_load_cities'),
