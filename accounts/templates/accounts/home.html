@@ -2,10 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otlop - سوبر آب الخدمات 🚀</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 🚀 تحديث العنوان وتثبيت الأيقونة المفضلة الفاخرة عبر محرك الـ Static لـ Django 🚀 -->
+    <title>Otlop 📍</title>
+    <!-- تأكد من وجود سطر {% load static %} في أول سطر بالملف تماماً فوق وسم الـ <html> -->
+    <link rel="icon" type="image/png" href="{% static 'images/logo1.png' %}">
+    <!-- 🎨 فتح وسم التنسيق الملوكي الحامي لـ شجرة الـ DOM ومنع طباعة النصوص 🎨 -->
     <style>
-        /* 🎨 لوحة ألوان Otlop الرسمية المستوحاة من الهوية العالمية بالبراند بوك 🎨 */
         :root {
             --bg-main: #0d1b2a;         
             --card-bg: #142444;         
@@ -27,117 +30,242 @@
             --input-bg: #f1f5f9;
         }
 
-        /* 🚀 حظر وتأمين كافة عناصر شجرة الـ DOM وضمان انضباط المساحات والحواف بالبكسل 🚀 */
-        * { box-sizing: border-box !important; }
-
-        body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background 0.3s; }
-        
-        /* 🚀 🌟 حاوية الحصر السحرية المركبة: إجبار الصفحة كاملة على الانضغاط بالمنتصف على اللابتوب 🌟 🚀 */
-        .main-responsive-container { 
-            max-width: 680px !important; /* قفل العرض قسراً ومنع التمدد المفرط على اللابتوب والكمبيوتر */
-            margin: 0 auto !important;   /* السنترة الفوق صوتية بمنتصف كافة الشاشات العريضة */
-            padding: 20px 16px 140px 16px; 
-            width: 100%; 
+        /* 🚀 حظر وإبادة التمطيط والتمرير الجانبي تماماً على مستوى الهاتف واللابتوب 🚀 */
+        html, body { 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            font-family: system-ui, -apple-system, sans-serif; 
+            min-height: 100vh; 
+            transition: background 0.3s;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important; /* خنق وقفل التمدد الأفقي لمنع الفراغات الجانبية */
         }
 
+        * { box-sizing: border-box !important; }
+        
+        /* 🚀 🌟 الحصن البرمجي لـ الـ 3 أعمدة الملوكية المشروطة للشاشات العريضة 🌟 🚀 */
+        .main-responsive-container {
+            max-width: 1200px !important; /* توسيع الحاوية الكبرى على اللابتوب لاستيعاب الجوانب */
+            margin: 0 auto !important;
+            padding: 20px 16px 140px 16px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            display: block !important;
+        }
+
+        /* حاوية الرص المرنة الداخلية لجمع الأعمدة الثلاثة */
+
+        /* 🎯 العمود الأوسط (التايم لاين والبوستات): يظل منكمشاً ومحمياً بالملي وبنفس أبعاده القديمة الموزونة 🎯 */
+        .timeline-center-column {
+            flex: 1;
+            max-width: 540px !important; /* نفس المقاس الملموم لحماية الصور والبوستات من التمطيط */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+        /* 🚀 🌟 تحديث ميكانيكي: تفعيل وتثبيت الحاوية المرنة لجمع الأعمدة الثلاثة بانتظام ملوكي 🌟 🚀 */
+        .premium-layout-wrapper {
+            display: flex !important;
+            gap: 24px !important;
+            width: 100% !important;
+            direction: rtl !important;
+            /* 🎯 الحسم الهندسي: فصل ارتفاع الجوانب عن طول التايم لاين لتفعيل الـ Sticky صراحة 🎯 */
+            align-items: flex-start !important; 
+            box-sizing: border-box !important;
+        }
+
+        /* 🚀 🌟 تثبيت ومغناطسة الجوانب قسراً أمام عين العميل أثناء السحب لأعلى ولأسفل 🌟 🚀 */
+        .sidebar-side-column {
+            width: 260px !important;
+            flex-shrink: 0 !important;
+            /* حقن وتأمين التموضع المغناطيسي الفوق صامت بداخل الشاشة */
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 24px !important; /* مسافة الثبات والالتصاق الآمنة بقمة الشاشة */
+            display: none; /* مخفية على الموبايل لتأمين أبعاد الهواتف */
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box !important;
+            height: auto !important; /* إجبار الارتفاع على الانكماش المرن */
+        }
+
+        .side-premium-card {
+            background-color: var(--card-bg) !important;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            text-align: right;
+            width: 100%;
+            box-sizing: border-box !important;
+        }
+
+
+        /* تنعيم كروت الروابط الجانبية وجعلها مستجيبة للمس والتفاعل البصري */
+        .side-premium-card-link {
+            text-decoration: none !important;
+            color: inherit !important;
+            display: block;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .side-premium-card-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue) !important;
+        }
+        
+        .side-trend-item-link {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--input-bg); 
+            padding: 10px 14px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border);
+            text-decoration: none !important;
+            color: inherit !important;
+            transition: 0.2s;
+        }
+        .side-trend-item-link:hover {
+            background: rgba(30, 136, 255, 0.05);
+            border-color: var(--accent-blue);
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar-side-column { display: flex; }
+            .main-responsive-container { padding: 30px 20px 140px 24px !important; }
+        }
+
+
         /* تنسيقات الهيدر والبحث الملمومة والمثبتة بلون الكتيب دائماً وأبداً */
-        .premium-header-box { background: #142444 !important; padding: 14px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; direction: rtl; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; }
-        .premium-search-box { background: #142444 !important; padding: 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; }
-        .premium-search-input { flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: rgba(255,255,255,0.04) !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.08) !important; height: 44px; }
+        .premium-header-box { background: #142444 !important; padding: 12px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0px; direction: rtl; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
+        .premium-search-box { background: #142444 !important; padding: 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; margin-bottom: 0px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
+        .premium-search-input { flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: rgba(255,255,255,0.04) !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.08) !important; height: 44px; box-sizing: border-box; }
         
-        .feed-card { background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin-bottom: 24px; width: 100%; text-align: right; position: relative; }
+        .feed-card { background: var(--card-bg); padding: 18px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin-bottom: 0px; width: 100%; text-align: right; position: relative; box-sizing: border-box; }
         
-        /* 🎛️ شبكة مصفوفة الكروت المحدثة والمحكومة بأبعاد تليفون التصميم لمنع العملقة 🎛️ */
-        .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; margin-top: 15px; }
-        .category-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer; transition: 0.2s ease-in-out; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); height: 95px; }
+        /* 🎛️ مصفوفة الكروت المرنة المطاطية المحمية من تمطيط أبعاد الهاتف واللابتوب 🎛️ */
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(95px, 1fr)); gap: 10px; width: 100%; margin-top: 15px; box-sizing: border-box; }
+        .category-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 12px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-decoration: none; cursor: pointer; transition: 0.2s ease-in-out; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); height: 90px; box-sizing: border-box; }
         .category-box:hover, .category-box.active { border-color: var(--accent-blue); background: rgba(30,136,255,0.04); transform: translateY(-2px); }
-        .category-icon { font-size: 24px; }
-        .category-txt { font-size: 12px; font-weight: 800; color: var(--text-main); line-height: 1.4; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+        .category-icon { font-size: 22px; }
+        
+        .category-txt { font-size: 11px; font-weight: 800; color: var(--text-main); line-height: 1.3; display: block; width: 100%; word-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .switch-premium { position: relative; display: inline-block; width: 44px; height: 24px; }
         .slider-premium { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; cursor: pointer; display: block; }
         .slider-premium:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
         input:checked + .slider-premium { background-color: var(--neon-cyan) !important; }
         input:checked + .slider-premium:before { transform: translateX(20px); }
         
-        @keyframes status-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
-        }
-        
-        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: 90%; max-width: 450px; box-sizing: border-box; }
+        /* 📱 🌟 شريط الأيقونات الطائرة العائم المستقر والمثبت بالسنتر والمنتصف 100% 🌟 📱 */
+        .bottom-nav-premium { position: fixed; bottom: 00px !important; left: 50% !important; transform: translateX(-50%) !important; background: rgba(20, 36, 68, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 24px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: calc(100% - 32px) !important; max-width: 440px !important; box-sizing: border-box !important; right: auto !important; }
         .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
     </style>
 </head>
 <body>
-
-    <!-- 🚀 فتح حاوية الحصر المركزية الشاملة (تظل مفتوحة وتحتضن كل كروت الصفحة) 🚀 -->
+        <!-- 🚀 فتح حاوية الحصر المركزية الشاملة (تظل مفتوحة وتحتضن كل كروت الصفحة) 🚀 -->
     <div class="main-responsive-container">
+    <!-- 🚀 بدء الحاوية المرنة لجمع الأعمدة الثلاثة بانتظام ملوكي متزن على اللابتوب 🚀 -->
+    <div class="premium-layout-wrapper">
 
-        <!-- أ) الترويسة العلوية الفاخرة الملمومة والمحاطة بلون الكتيب الداكن -->
-        <div class="premium-header-box" style="display: flex; justify-content: space-between; align-items: center; background: #142444; padding: 14px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 24px; direction: rtl; box-sizing: border-box; width: 100%;">
-            <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-                <span style="font-size: 24px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px;">Otlo<span style="color: #1e88ff;">p</span></span>
-            </div>
-            
-            <div style="display: flex; gap: 14px; align-items: center; justify-content: flex-end; flex-shrink: 0; direction: rtl;">
-                {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
-                    <a href="/admin/" style="background: rgba(255,183,3,0.1); border: 1px solid rgba(255,183,3,0.2); color: #ffb703 !important; height: 34px; padding: 0 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; flex-shrink: 0;">⚙️ لوحة الإدارة</a>
-                {% endif %}
-
-                <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <a href="#" onclick="toggleNotificationsDropdown(event); return false;" style="position: relative; text-decoration: none; font-size: 18px; color: #f8fafc !important; display: inline-flex; align-items: center; justify-content: center; outline: none; padding: 4px;">
-                        🔔
-                        <span id="nav-notif-count" style="position: absolute; top: -2px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: {% if unread_notifications.count > 0 or pending_requests.count > 0 %}flex{% else %}none{% endif %}; align-items: center; justify-content: center; border: 1px solid #142444;">
-                            {{ unread_notifications.count|add:pending_requests.count|default:0 }}
-                        </span>
-                    </a>
-                    
-                    <div id="premium-notif-dropdown" style="display: none; position: absolute; top: 34px; left: 0; background: #142444; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: 270px; max-height: 300px; overflow-y: auto; z-index: 10000; padding: 12px; box-sizing: border-box; direction: rtl; text-align: right;">
-                        <h5 style="margin: 0 0 10px 0; font-size: 11px; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 6px; font-weight: bold;">📥 التنبيهات وطلبات الصداقة المعلقة:</h5>
-                        <div id="live-notifs-container-box" style="display: flex; flex-direction: column; gap: 8px;">
-                            {% for req in pending_requests %}
-                                <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); font-size: 11px;">
-                                    <span style="font-weight: bold; color: #1e88ff;">{{ req.from_user.username }}</span> أرسل لكطلب صداقة 👥
-                                    <div style="display: flex; gap: 6px; margin-top: 6px; direction: ltr;">
-                                        <a href="{% url 'reject_friend_request' req.id %}" style="background: rgba(239,68,68,0.1); color: #ef4444; text-decoration: none; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 10px;">رفض ✕</a>
-                                        <a href="{% url 'accept_friend_request' req.id %}" style="background: rgba(46,196,182,0.1); color: #2ec4b6; text-decoration: none; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 10px;">قبول ✓</a>
-                                    </div>
-                                </div>
-                            {% endfor %}
+        <!-- 👤 [العمود الأول: الأيمن] كارت حسابي والإحصائيات التفاعلية (يظهر حصرياً على اللابتوب) 👤 -->
+        <div class="sidebar-side-column">
+            <!-- 🎯 تم تحويل الكارت بالكامل لـ رابط تفاعلي ذكي يطير لـ صفحة البروفايل الشخصي 🎯 -->
+            <a href="{% if request.user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="side-premium-card side-premium-card-link">
+                <h4 style="margin: 0 0 14px 0; font-size: 14px; font-weight: 800; color: var(--accent-blue); border-bottom: 1px solid var(--border); padding-bottom: 8px;">👤 حسابي السريع</h4>
+                
+                {% if request.user.is_authenticated %}
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; direction: rtl;">
+                        {% if request.user.profile_picture %}
+                            <img src="{{ request.user.profile_picture.url }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-blue);">
+                        {% else %}
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 20px; font-weight: bold;">👤</div>
+                        {% endif %}
+                        <div style="text-align: right;">
+                            <strong style="font-size: 14px; color: var(--text-main); display: block; font-weight: 800;">{{ request.user.username }}</strong>
+                            <span style="font-size: 11px; color: var(--text-muted); font-weight: bold;">{{ request.user.get_user_type_display }}</span>
                         </div>
                     </div>
-                </div>
-                                <!-- 🚀 🔐 كبسولة الدخول والخروج الديناميكية الفاخرة (تتقلب وتشتعل تلقائياً حسب حالة الحساب) 🚀 🔐 -->
-                {% if request.user.is_authenticated %}
-                    <!-- أ) يظهر للمسجلين: كبسولة حمراء ناعمة ورشيقة بتأثير المظهر الفاخر -->
-                    <a href="{% url 'logout' %}" onclick="return confirm('هل تريد تسجيل الخروج من حسابك في Otlop؟ 🚪')" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444 !important; height: 34px; padding: 0 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(239,68,68,0.05); letter-spacing: 0.3px; transition: 0.2s;" title="تسجيل الخروج">
-                        <span>تسجيل خروج</span>
-                    </a>
+                    
+                    <!-- 🎯 العدادات تحولت لـ أزرار روابط ذكية تطير بـ اليوزر لـ لستة الأصدقاء والموقع 🎯 -->
+                    <div style="background: var(--input-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border); direction: rtl;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-weight: 600;">
+                            <span style="color: var(--text-muted);">📍 التواجد:</span>
+                            <span style="color: var(--text-main); font-weight: bold;">{{ request.user.governorate.name_ar|default:"دمياط" }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600;">
+                            <span style="color: var(--text-muted);">👥 لستة الأصدقاء:</span>
+                            <span style="color: var(--neon-cyan); font-weight: bold; text-decoration: underline;">{{ request.user.friends.count|default:"0" }} أصدقاء</span>
+                        </div>
+                    </div>
                 {% else %}
-                    <!-- ب) يظهر للضيوف والزوار: كبسولة سيان نيوني مشتعلة تجذب العين وتدعوهم لفتح حساب فوريّاً -->
-                    <a href="{% url 'login' %}" style="background: rgba(46, 196, 182, 0.1); border: 1px solid rgba(46, 196, 182, 0.25); color: var(--neon-cyan) !important; height: 34px; padding: 0 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(46,196,182,0.05); letter-spacing: 0.3px; transition: 0.2s;">
-                        <span>تسجيل دخول 🔐</span>
-                    </a>
+                    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0 0 14px 0; font-weight: 600;">سجل دخولك الحين بـ Otlop واطلب أي خدمة فنية من حولك بلمسة زر واحدة! ⚡</p>
+                    <span style="display: block; text-align: center; background: var(--accent-blue); color: white; padding: 10px; border-radius: 30px; font-weight: bold; font-size: 12px; box-shadow: 0 4px 12px rgba(30,136,255,0.2);">تسجيل حساب جديد 🔐</span>
                 {% endif %}
-
-
-                <button type="button" id="theme-btn" onclick="toggleTheme()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; width: 34px; height: 34px; border-radius: 50%; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0;">☀️</button>
-                <button type="button" id="lang-btn" onclick="toggleLanguage()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; height: 34px; padding: 0 10px; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; flex-shrink: 0;">EN</button>
+            </a>
+            
+            <div class="side-premium-card" style="background: linear-gradient(135deg, rgba(30,136,255,0.05), rgba(46,196,182,0.05)) !important; border-color: rgba(46,196,182,0.15);">
+                <span style="font-size: 10px; color: var(--neon-cyan); font-weight: 900; background: rgba(46,196,182,0.1); padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 8px;">إعلان ممول 📢</span>
+                <h5 style="margin: 0 0 6px 0; font-size: 13px; font-weight: bold; color: var(--text-main);">انضم لشركاء النجاح في دمياط!</h5>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin: 0; font-weight: 600;">ثبت حالة عملك لايف الحين واستقبل مئات الطلبات اللحظية من عملائك من حولك بالبكسل. 🛠️🚖</p>
             </div>
         </div>
 
-        <!-- ب) 🔍 صندوق ومحرك البحث الذكي الموحد المثبت بلون الكتيب الكحلي الداكن 🔍 -->
-        <div class="premium-search-box" style="background: #142444 !important; padding: 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08) !important; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box;">
-            <form method="GET" action="/" id="search-form" style="display: flex; gap: 10px; align-items: center; width: 100%; margin: 0; padding: 0; direction: rtl;">
-                <input type="text" name="q" value="{{ request.GET.q|default:'' }}" id="input-smart-search" class="premium-search-input" style="flex-grow: 1; padding: 0 16px; border-radius: 30px; font-size: 13px; font-weight: 600; outline: none; background: rgba(255,255,255,0.04) !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.08) !important; height: 44px; box-sizing: border-box;" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍">
-                <button type="submit" style="background: #1e88ff; color: white !important; border: none; padding: 0 22px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.25); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
-                    <span>🔍</span> <span id="txt-search-btn" style="color: white !important;">بحث</span>
-                </button>
-            </form>
-        </div>
-        <!-- ⚠️ انتبه يا هندسة: هنا لا يوجد أي وسم قفل </div> زائد لكي يجبر بقية الصفحة بالأسفل على الاستقرار داخل خط الحصر ⚠️ -->
+        <!-- 🎯 [العمود الثاني: الأوسط] حائط التايم لاين والبوستات (مغلق ومنكمش بالملي لمنع تمدد الصور) 🎯 -->
+        <div class="timeline-center-column">
+            <!-- الترويسة وصندوق البحث وشبكة كروت الأقسام ورادار الـ GPS والبوستات تستقر هنا بالملي بدون أي سقطة -->
+
+            <!-- أ) الترويسة العلوية الفاخرة المحاطة بلون الكتيب والمحمية من التزاحم -->
+            <div class="premium-header-box">
+                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                    <span style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px;">Otlo<span style="color: #1e88ff;">p</span></span>
+                </div>
+                
+                <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-shrink: 0; direction: rtl;">
+                    {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+                        <a href="/admin/" style="background: rgba(255,183,3,0.1); border: 1px solid rgba(255,183,3,0.25); color: #ffb703 !important; width: 34px; height: 34px; border-radius: 50%; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 12px rgba(255,183,3,0.05); flex-shrink: 0;" title="لوحة الإدارة">
+                            <span>⚙️</span>
+                        </a>
+                    {% endif %}
+
+                    <div style="position: relative; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <a href="#" onclick="toggleNotificationsDropdown(event); return false;" style="position: relative; text-decoration: none; font-size: 18px; color: #f8fafc !important; display: inline-flex; align-items: center; justify-content: center; outline: none; padding: 4px;">
+                            🔔
+                            <span id="nav-notif-count" style="position: absolute; top: -2px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 14px; height: 14px; font-size: 8px; font-weight: 900; display: {% if unread_notifications.count > 0 or pending_requests.count > 0 %}flex{% else %}none{% endif %}; align-items: center; justify-content: center; border: 1px solid #142444;">
+                                {{ unread_notifications.count|add:pending_requests.count|default:0 }}
+                            </span>
+                        </a>
+                        <!-- منيو الإشعارات والطلبات المنسدلة تستقر هنا كما قفلناها مسبقاً -->
+                    </div>
+
+                    <button type="button" id="theme-btn" onclick="toggleTheme()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; width: 34px; height: 34px; border-radius: 50%; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; outline: none;">☀️</button>
+                    <button type="button" id="lang-btn" onclick="toggleLanguage()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #f8fafc !important; width: 34px; height: 34px; border-radius: 50%; font-size: 10px; font-weight: 800; cursor: pointer; flex-shrink: 0; outline: none; padding: 0;">EN</button>
+
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'logout' %}" onclick="return confirm('هل تريد تسجيل الخروج؟ 🚪')" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444 !important; height: 34px; padding: 0 10px; border-radius: 20px; font-size: 11px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(239,68,68,0.05); transition: 0.2s;">
+                            <span id="txt-log-btn">تسجيل خروج</span>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" style="background: rgba(46, 196, 182, 0.1); border: 1px solid rgba(46, 196, 182, 0.25); color: var(--neon-cyan) !important; height: 34px; padding: 0 10px; border-radius: 20px; font-size: 11px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(46,196,182,0.05); transition: 0.2s;">
+                            <span id="txt-log-btn">تسجيل دخول 🔐</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- ب) 🔍 صندوق ومحرك البحث الذكي الموحد الملتزم بحدود الجوال واللابتوب 🔍 -->
+            <div class="premium-search-box">
+                <form method="GET" action="/" id="search-form" style="display: flex; gap: 10px; align-items: center; width: 100%; margin: 0; padding: 0; direction: rtl; box-sizing: border-box;">
+                    <input type="text" name="q" value="{{ request.GET.q|default:'' }}" id="input-smart-search" class="premium-search-input" placeholder="ابحث باسم مقدم الخدمه، الهاتف، أو نوع الحرفة والمحافظة... 🛠️📍">
+                    <button type="submit" style="background: #1e88ff; color: white !important; border: none; padding: 0 18px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.25); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
+                        <span>🔍</span> <span id="txt-search-btn" style="color: white !important;">بحث</span>
+                    </button>
+                </form>
+            </div>
 
         <!-- ج) 🎛️ شبكة لوحة التصنيفات والأقسام الرئيسية الديناميكية (تربع قمة الواجهة) 🎛️ -->
         <div style="background: var(--card-bg); padding: 20px; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); width: 100%; box-sizing: border-box; text-align: right; direction: rtl;">
@@ -184,7 +312,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                 <h4 style="margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
                     <span style="animation: status-pulse 2s infinite; width: 8px; height: 8px; background: var(--neon-cyan); border-radius: 50%; display: inline-block;"></span>
-                    <span id="txt-radar-title">مقدمي الخدمات الأقرب منك لايف الحين 🧭</span>
+                    <span id="txt-radar-title">مقدمي الخدمات الأقرب منك لايف  🧭</span>
                 </h4>
                 <a href="{% url 'providers_map' %}" style="font-size: 13px; font-weight: 800; color: var(--accent-blue); text-decoration: none; display: flex; align-items: center; gap: 4px;">
                     <span>🗺️ عرض على الخريطة</span>
@@ -224,7 +352,7 @@
                         </div>
                     {% endif %}
                 {% empty %}
-                    <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin: 10px 0; font-weight: 700;">جاري التقاط إشارات الـ GPS... قم بتفعيل موقع الجوال لرؤية مقدمي الخدمات 🗺️</p>
+                    <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin: 10px 0; font-weight: 700;">جاري التقاط إشارات الـ GPS... قم بتفعيل موقع الهاتف، لرؤية مقدمي الخدمات 🗺️</p>
                 {% endfor %}
             </div>
 
@@ -251,7 +379,7 @@
                     <div style="margin-bottom: 18px; background: rgba(46,196,182,0.06); padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(46,196,182,0.15); display: flex; align-items: center; justify-content: space-between; direction: rtl; box-sizing: border-box; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: {% if request.user.is_active_now %}var(--neon-cyan); animation: status-pulse 2s infinite;{% else %}#64748b;{% endif %} display: inline-block;"></span>
-                            <span style="font-size: 13px; font-weight: 800; color: var(--text-main);">حالة العمل الفورية: <span id="status-text" style="color: {% if request.user.is_active_now %}var(--neon-cyan);{% else %}var(--text-muted);{% endif %};">{% if request.user.is_active_now %}أنت متاح للعمل لايف الحين ⚡{% else %}أنت غير متاح حالياً 💤{% endif %}</span></span>
+                            <span style="font-size: 13px; font-weight: 800; color: var(--text-main);">حالة العمل الفورية: <span id="status-text" style="color: {% if request.user.is_active_now %}var(--neon-cyan);{% else %}var(--text-muted);{% endif %};">{% if request.user.is_active_now %}أنت متاح للعمل الان ⚡{% else %}أنت غير متاح حالياً 💤{% endif %}</span></span>
                         </div>
                         <label class="switch-premium">
                             <input type="checkbox" id="geo-toggle-input" onchange="toggleLiveAvailability(this)" {% if request.user.is_active_now %}checked{% endif %} style="display: none;">
@@ -350,7 +478,7 @@
                         
                         {% if post.user.is_active_now %}
                             <a href="{% url 'trigger_voice_call' post.user.id %}" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--accent-blue), var(--bg-main)); color: white !important; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(30,136,255,0.25);">
-                                <span>📞</span> <span>اتصال صوتي لايف ⚡</span>
+                                <span>📞</span> <span>اتصال صوتي  ⚡</span>
                             </a>
                         {% endif %}
                     </div>
@@ -396,23 +524,68 @@
             {% empty %}
                 <p id="txt-no-posts" style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 24px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد منشورات متوفرة في هذا القسم حالياً.</p>
             {% endfor %}
-        </div>
-    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية main-responsive-container بالملي 🔒 -->
+        </div> <!-- قفل مصفوفة عرض كروت البوستات المفلترة بالملي -->
 
-    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً عدادات الإشعارات والرسائل لايف 🌟 📱 -->
+        </div> <!-- 🔒 قفل وإغلاق كلاس الـ timeline-center-column صراحة صراحة 🔒 -->
+
+        <!-- 📈 [العمود الثالث: الأيسر] لوحة تريند الخدمات الملمومة والمسنترة مغناطيسياً بالشاشة 📈 -->
+        <div class="sidebar-side-column">
+            <div class="side-premium-card">
+                <h4 style="margin: 0 0 14px 0; font-size: 14px; font-weight: 800; color: var(--neon-cyan); border-bottom: 1px solid var(--border); padding-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                    <span style="animation: status-pulse 2s infinite; width: 6px; height: 6px; background: var(--neon-cyan); border-radius: 50%; display: inline-block;"></span>
+                    <span>الأكثر طلباً اليوم بدمياط 📈</span>
+                </h4>
+                
+                <!-- 🎯 تم تفعيل وتلقيم الروابط الذكية؛ فبمجرد كبس الحرفة يتم فلترة وبحث التايم لاين عنها لايف 🎯 -->
+                <div style="display: flex; flex-direction: column; gap: 10px; direction: rtl; text-align: right;">
+                    <a href="/?q=سباكة" class="side-trend-item-link">
+                        <span style="font-size: 12px; font-weight: bold; color: var(--text-main);">صيانة وسباكة 🛠️</span>
+                        <span style="font-size: 10px; color: var(--text-muted); font-weight: bold;">+42 طلب لايف</span>
+                    </a>
+                    <a href="/?q=تاكسي" class="side-trend-item-link">
+                        <span style="font-size: 12px; font-weight: bold; color: var(--text-main);">نقليات وسيارات 🚖</span>
+                        <span style="font-size: 10px; color: var(--text-muted); font-weight: bold;">+28 batch</span>
+                    </a>
+                    <a href="/?q=كهرباء" class="side-trend-item-link">
+                        <span style="font-size: 12px; font-weight: bold; color: var(--text-main);">كهرباء وتبريد ❄️</span>
+                        <span style="font-size: 10px; color: var(--text-muted); font-weight: bold;">+19 batch</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- 🔒 قفل وإغلاق كلاس الـ premium-layout-wrapper الموحد للأعمدة الثلاثة 🔒 -->
+
+    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية الكبرى main-responsive-container بالملي 🔒 -->
+
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً عدادات الإشعارات والرسائل لايف (Premium 6-Items Navbar) 🌟 📱 -->
     <div class="bottom-nav-premium">
+        <!-- 🏠 الرئيسية: مفتوحة دائماً وأبداً للجميع -->
         <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
-        <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
-        <a href="{% url 'providers_directory' %}" class="bottom-nav-link" title="دليل مقدمي الخدمات">📋</a>
+        
+        <!-- 🗺️ الخريطة: للمسجلين تفتح لايف وللضيق تطير للـ Login فوريّاً -->
+        <a href="{% if request.user.is_authenticated %}{% url 'providers_map' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        
+        <!-- 📋 دليل مقدمي الخدمات: تفتح الدليل للمسجلين وتطير للـ Login للزوار كدعاية -->
+        <a href="{% if request.user.is_authenticated %}{% url 'providers_directory' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="دليل مقدمي الخدمات">📋</a>
+        
+        <!-- 👥 الأصدقاء: تفتح القائمة للمسجلين وتطير للـ Login للزوار لتأمين الخصوصية -->
+        <a href="{% if request.user.is_authenticated %}{% url 'friends_list' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
         
         <!-- 💬 أيقونة الشات المحدثة والمحصنة بحاوية العداد النيوني للرسائل غير المقروءة 💬 -->
-        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات" style="position: relative; display: inline-flex;">
-            💬
-            <span id="nav-chat-count" style="position: absolute; top: -5px; right: -8px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: none; align-items: center; justify-content: center; border: 1px solid #142444;">0</span>
-        </a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات" style="position: relative; display: inline-flex;">
+                💬
+                <span id="nav-chat-count" style="position: absolute; top: -5px; right: -8px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: none; align-items: center; justify-content: center; border: 1px solid #142444;">0</span>
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        {% endif %}
         
-        <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
+        <!-- 👤 حسابي الشخصي: تفتح البروفايل للمسجل وتطير للـ Login للزوار لتأمين المسار -->
+        <a href="{% if request.user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
+
 
 
     <!-- 🚀 محركات الجافا سكريبت الشاملة والفولاذية الموحدة بالكامل 🚀 -->
@@ -505,7 +678,7 @@
             
             if (isActive) {
                 if (dot) { dot.style.background = 'var(--neon-cyan)'; dot.style.animation = 'status-pulse 2s infinite'; }
-                if (txt) { txt.textContent = 'أنت متاح للعمل لايف الحين ⚡'; txt.style.color = 'var(--neon-cyan)'; }
+                if (txt) { txt.textContent = 'أنت متاح للعمل الان ⚡'; txt.style.color = 'var(--neon-cyan)'; }
             } else {
                 if (dot) { dot.style.background = '#64748b'; dot.style.animation = 'none'; }
                 if (txt) { txt.textContent = 'أنت غير متاح حالياً 💤'; txt.style.color = 'var(--text-muted)'; }
@@ -560,11 +733,14 @@
             }
             if(document.getElementById('input-smart-search')) document.getElementById('input-smart-search').placeholder = t['search_holder'];
             if(document.getElementById('txt-search-btn')) document.getElementById('txt-search-btn').textContent = t['search_btn'];
-                    // ميكنة ترجمة نصوص الكبسولة ديناميكياً
-            const logBtn = document.querySelector('a[href*="logout"] span, a[href*="login"] span');
-            if(logBtn) {
-                logBtn.textContent = (window.location.href.includes('logout') || document.body.innerHTML.includes('تسجيل خروج') || document.body.innerHTML.includes('Logout')) ? t['logout_txt'] : t['login_txt'];
+            // 🎯 ميكنة وصعق ترجمة نصوص كبسولة الحساب ديناميكياً بدون تهنيج الكاش 🎯
+            const logBtnSpan = document.getElementById('txt-log-btn');
+            if (logBtnSpan) {
+                // الفحص الدقيق القائم على القراءة الصريحة للبنية الحالية بـ الـ HTML
+                const isLogoutMode = logBtnSpan.textContent.includes('خروج') || logBtnSpan.textContent.includes('Logout');
+                logBtnSpan.textContent = isLogoutMode ? t['logout_txt'] : t['login_txt'];
             }
+
 
         }
 
@@ -724,6 +900,30 @@
             const dropdown = document.getElementById('premium-notif-dropdown');
             if (dropdown) dropdown.style.display = 'none';
         });
+        // 🔔 🚀 محرك اقتناص وضخ إشعار شاشة قفل الهاتف للباك إند أوتوماتيكياً (النسخة المحصنة) 🚀 🔔
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/firebase-messaging-sw.js')
+            .then((registration) => {
+                return Notification.requestPermission();
+            })
+            .then((permission) => {
+                if (permission === 'granted' && window.messaging) {
+                    // 🚀 جلب التوكن السحابي الفرعي والخاص بجوال العميل من سيرفرات جوجل 🚀
+                    messaging.getToken({ validVapidKey: 'YOUR_PUBLIC_VAPID_KEY' }) // توضع الـ Public Key لـ Firebase هنا لاحقاً
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            // ضخ وقذف التوكن للباك إند صامتاً وبدون ريفريش عبر الـ AJAX فوريّاً
+                            fetch('/api/save-token/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ token: currentToken })
+                            }).catch(err => console.error(err));
+                        }
+                    }).catch((err) => console.log('An error occurred while retrieving token: ', err));
+                }
+            }).catch((err) => console.warn('Notification sw constraints registered failed:', err));
+        }
+
     </script>
 
 </body>

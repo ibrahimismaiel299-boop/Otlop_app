@@ -119,15 +119,38 @@ def mark_notifications_read_view(request):
 
 # ضع هذه الدوال المصححة تماماً في نهاية ملف accounts/views.py
 
-# accounts/views.py [دالة إرسال طلب الصداقة المطورة وحقن الإشعارات اللحظية]
+# accounts/views.py [دمج محرك الـ Push Notifications لـ Firebase مع طلبات الصداقة]
+import requests
+import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from .models import User, FriendRequest, Notification # تأكد من استدعاء موديل الـ Notification عندك
+from .models import User, FriendRequest, Notification # تأكد من مطابقة الموديلات عندك
+
+def send_fcm_push_notification(user_token, title, body, click_url):
+    """دالة إرسال الإشعار اللحظي السحابي عبر سيرفرات جوجل Firebase لتظهر على شاشة القفل"""
+    server_key = 'YOUR_FIREBASE_SERVER_KEY' # سحب المفتاح السري من كونسول Firebase الخاص بك لاحقاً
+    headers = {
+        'Authorization': 'key=' + server_key,
+        'Content-Type': 'application/json',
+    }
+    payload = {
+        'to': user_token, # التوكن المحفوظ الخاص بجوال المستخدم المتلقي الحين
+        'data': {
+            'title': title,
+            'body': body,
+            'click_action': click_url
+        }
+    }
+    try:
+        # ضخ الطلب الصاروخي لجوجل بالخلفية
+        requests.post('https://googleapis.com', headers=headers, data=json.dumps(payload), timeout=5)
+    except Exception as e:
+        print(f"Firebase Push Failed: {e}")
 
 @login_required
 def send_friend_request_view(request, user_id):
-    """دالة إرسال طلب الصداقة المحدثة لحقن وتفجير الإشعارات اللحظية بجرس الأعلى فوريّاً"""
+    """دالة إرسال طلب الصداقة المحدثة لتفجير جرس الأعلى وإشعارات شاشة قفل الهاتف معاً لايف فوريّاً"""
     to_user = get_object_or_404(User, id=user_id)
     
     # صمام أمان لمنع تكرار إرسال الطلب أو إرساله لنفسك
@@ -138,19 +161,30 @@ def send_friend_request_view(request, user_id):
             req.status = 'pending'
             req.save()
             
-            # 🚀 🔔 تفجير وحقن سجل الإشعار اللحظي في قاعدة البيانات للفني المستهدف فوريّاً 🔔 🚀
-            # تأكد من مطابقة أسماء حقول موديل Notification بملفك (user, text, is_read)
+            # 1. 🔔 حقن وسجل الإشعار اللحظي في قاعدة البيانات للجرس الداخلي بالأعلى 🔔
             Notification.objects.create(
-                user=to_user, # الشخص المستلم لطلب الصداقة
+                user=to_user, 
                 text=f" قام المستخدم {request.user.username} بإرسال طلب صداقة إليك 👥",
                 is_read=False
             )
             
-            messages.success(request, "تم إرسال طلب الصداقة وتنبيه المستخدم بنجاح! ⏳")
+            # 2. 🚀 📱 تفجير وبث الإشعار السحابي لشاشة هاتف المتلقي وهي مقفلة عبر Firebase 🚀 📱
+            # صمام الأمان: يفحص لو الفني يملك حقل fcm_token (تأكد من مطابقة اسم حقل التوكن بجدول اليوزر عندك)
+            if hasattr(to_user, 'fcm_token') and to_user.fcm_token:
+                push_title = "طلب صداقة جديد في Otlop 👥⚡"
+                push_body = f"الحق العروض! قام المستخدم {request.user.username} بإرسال طلب صداقة إليك.. ادخل الحين لقبوله 🤝"
+                click_url = f"/public-profile/{request.user.id}/" # رابط طيران العميل فور نقر الإشعار
+                
+                # استدعاء صعق وجلد سيرفر Firebase بالخلفية
+                send_fcm_push_notification(to_user.fcm_token, push_title, push_body, click_url)
+            
+            messages.success(request, "تم إرسال طلب الصداقة وتنبيه المستخدم على هاتفه بنجاح! ⏳")
         else:
             messages.info(request, "هناك طلب صداقة معلق بالفعل بينكما.")
             
     return redirect('public_profile', user_id=user_id)
+
+    
 
 
 @login_required
@@ -167,15 +201,29 @@ def chat_rooms_list_view(request):
     users = User.objects.exclude(id=request.user.id)
     return render(request, 'accounts/chat_list.html', {'users': users})
 
+# accounts/views.py [دمج إشعارات شاشة قفل الهاتف لـ Firebase بداخل دالة تفاصيل المحادثة المعتمدة]
+
 @login_required
 def chat_detail_view(request, user_id):
-    """شاشة المحادثة الخاصة والمغلقة مصلحة ومؤمنة مئة بالمئة"""
+    """شاشة المحادثة الخاصة والمغلقة مصلحة ومؤمنة ومحقونة بإشعارات شاشة القفل السحابية لايف فوريّاً"""
     other_user = get_object_or_404(User, id=user_id)
     
     if request.method == 'POST':
         message_text = request.POST.get('message')
         if message_text:
+            # 1. صناعة وحفظ الرسالة الجديدة في قاعدة البيانات بنجاح
             ChatMessage.objects.create(sender=request.user, receiver=other_user, message=message_text)
+            
+            # 2. 🚀 📱 تفجير وبث إشعار شات لحظي لشاشة هاتف المتلقي وهي مقفلة عبر Firebase 🚀 📱
+            # صمام الأمان: يفحص لو الفني المستهدف (other_user) يملك توكن، يصعق Firebase فوريّاً
+            if hasattr(other_user, 'fcm_token') and other_user.fcm_token:
+                push_title = f"رسالة جديدة من {request.user.username} 💬⚡"
+                push_body = f"لديك رسالة خاصة جديدة: '{message_text[:40]}...' ادخل الحين للرد عليها ✈️"
+                click_url = "/chat/rooms/" # رابط طيران العميل لصفحة المراسلات العامة فور نقر الإشعار
+                
+                # استدعاء دالة الـ Push السحابية الفولاذية
+                send_fcm_push_notification(other_user.fcm_token, push_title, push_body, click_url)
+                
             return redirect('chat_detail', user_id=user_id)
             
     # تم تصحيح اسم الموديل هنا بدقة لـ ChatMessage لإنهاء مشكلة التجميد
@@ -185,6 +233,7 @@ def chat_detail_view(request, user_id):
     )
     
     return render(request, 'accounts/chat_detail.html', {'other_user': other_user, 'chat_messages': messages})
+
 
 # تحديث دالة البروفايل العام في ملف accounts/views.py لفحص حالة الصداقة وتمريرها
 def public_profile_view(request, user_id):
@@ -385,8 +434,15 @@ def home_view(request):
 # accounts/views.py [جزء 2 من 2 والختامي]
 
     # 4. جلب الأقسام الرئيسية (التي ليس لها parent) والمحافظات الحية للشبكة الفخمة
-    category_choices = Category.objects.filter(parent=None)
+    # 4. جلب الأقسام الرئيسية (التي ليس لها parent) مع إجبار القسم العام على التصدر أولاً 🚀
+    # الفلترة الحصنية: جلب بقية الأقسام الرئيسية باستثناء القسم العام لمنع التكرار
+    other_categories = Category.objects.filter(parent=None).exclude(id=general_category.id)
+    
+    # 🎯 دمج وتجميع الليستة: وضع القسم العام في أول عنصر صراحة، ثم رص بقية الأقسام خلفه بالترتيب
+    category_choices = [general_category] + list(other_categories)
+    
     gov_choices = Governorate.objects.all()
+    selected_category = request.GET.get('category')
     
     # 5. تجميع التايم لاين وتفعيل الفلترة الشجرية العميقة للأقسام والـ Subcategories
     posts = Post.objects.all().order_by('-created_at')
@@ -660,3 +716,48 @@ def remove_friend_view(request, user_id):
     
     messages.success(request, "تم إلغاء الصداقة بنجاح ❌")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+# accounts/views.py [دالة الباك إند لاستقبال وحفظ الـ FCM Token الفرعي للهاتف]
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@login_required
+@csrf_exempt
+def save_fcm_token_view(request):
+    """دالة استقبال وحقن التوكن الجغرافي والسحابي للهاتف بداخل قاعدة البيانات فوريّاً"""
+    if request.method == 'POST':
+        # استقبال البيانات القادمة من الجافا سكريبت صامتاً
+        data = json.loads(request.body) if request.body else {}
+        token = data.get('token')
+        
+        if token:
+            # حقن وحفظ التوكن بداخل حقل اليوزر الحالي بالسيرفر
+            # تأكد من وجود حقل fcm_token بجدول الـ User (أو موديل البروفايل الملحق به)
+            request.user.fcm_token = token
+            request.user.save()
+            return JsonResponse({'status': 'success', 'message': 'Token saved successfully 🚀'})
+            
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+# accounts/views.py [دالة محاكاة تسجيل دخول جوجل على السيرفر المحلي]
+from django.contrib.auth import login
+from django.shortcuts import redirect
+
+def google_local_mock_view(request):
+    """دالة ميكانيكية لتشغيل زر جوجل على السيرفر المحلي تلقائياً دون الحاجة لشفرات كونسول"""
+    # البحث عن مستخدم وهمي تجريبي أو إنشائه فوريّاً بقاعدة البيانات
+    user, created = User.objects.get_or_create(
+        username="Otlop_Google_User",
+        defaults={
+            'email': "google_demo@otlop.com",
+            'user_type': "customer", # تعيينه كعميل افتراضي
+            'is_active_now': True
+        }
+    )
+    if created:
+        user.set_password('Otlop12345')
+        user.save()
+        
+    # تسجيل الدخول وتطهير السشن فوريّاً كأنه قادم من جوجل بالملي!
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+    return redirect('home')

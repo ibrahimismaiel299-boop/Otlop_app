@@ -38,7 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts', # تطبيق الحسابات
+    'django.contrib.sites', # ضروري جداً لإدارة مواقع الربط
+    
+    # 🚀 حزم Allauth الملوكية لتشغيل فتح الحساب بـ الـ Gmail 🚀
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', # حقن مزود خدمة جوجل صراحة
 ]
+
+SITE_ID = 1
 
 # اخبر دجانجو أنك ستستخدم جدول مستخدم مخصص (Custom User Model)
 AUTH_USER_MODEL = 'accounts.User'
@@ -53,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -127,3 +137,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 🚀 🔐 التحديث الأمني الملوكي: توجيه أي مستخدم غير مسجل لصفحة الـ Login فوراً بدلاً من الـ 404 🔐 🚀
+LOGIN_URL = 'login'  # أو '/login/' حسب اسم الـ name المعتمد بملف الـ urls عندك
+LOGIN_REDIRECT_URL = 'home' # الصفحة التي يطير إليها اليوزر فور نجاح تسجيل الدخول

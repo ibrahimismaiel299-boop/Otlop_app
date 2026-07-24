@@ -136,6 +136,19 @@
 
     <div class="form-container">
         <div class="brand-logo">Otlo<span>p</span></div>
+        <!-- 🚀 كبسولة تسجيل جوجل المحدثة للعمل على السيرفر المحلي بنقاء 100% 🚀 -->
+        <div style="margin-top: 20px; text-align: center; border-top: 1px dashed var(--border); padding-top: 18px; width: 100%; box-sizing: border-box;">
+            <a href="{% url 'google_local_mock' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); color: var(--text-main) !important; text-decoration: none; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 320px; box-sizing: border-box; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)';" onmouseout="this.style.background='rgba(255,255,255,0.04)';">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12 5.04c1.65 0 3.13.57 4.3 1.69l3.22-3.22C17.56 1.83 14.99 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99c.92-2.75 3.46-4.51 6.76-4.51z"/>
+                    <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.27H12v4.51h6.46c-.29 1.48-1.14 2.73-2.43 3.6l3.78 2.93c2.21-2.04 3.48-5.04 3.48-8.77z"/>
+                    <path fill="#FBBC05" d="M5.24 14.54c-.24-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29L1.39 6.97C.5 8.77 0 10.77 0 12s.5 3.23 1.39 5.03l3.85-2.49z"/>
+                    <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.78-2.93c-1.1.74-2.51 1.18-4.18 1.18-3.3 0-5.84-1.76-6.76-4.51L1.39 16.32C3.37 20.33 7.35 23 12 23z"/>
+                </svg>
+                <span>تسجيل الدخول بواسطة Google</span>
+            </a>
+        </div>
+
         <h2>إنشاء حساب جديد للمنصة المشتركة 🚀</h2>
         
         <form method="POST" enctype="multipart/form-data" id="signupForm">
@@ -207,13 +220,18 @@
             </div>
         </div>
     </div>
-    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً الدليل الشامل 🌟 📱 -->
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً عدادات الإشعارات والرسائل لايف 🌟 📱 -->
     <div class="bottom-nav-premium">
         <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
         <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
-        <a href="{% url 'providers_directory' %}" class="bottom-nav-link" title="دليل الفنيين">📋</a> <!-- 🚀 حقن الدليل صراحة بقلب الشريط السفلي العائم 🚀 -->
-        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        <a href="{% url 'providers_directory' %}" class="bottom-nav-link" title="دليل مقدمي الخدمات">📋</a>
         <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        <!-- 💬 أيقونة الشات المحدثة والمحصنة بحاوية العداد النيوني للرسائل غير المقروءة 💬 -->
+        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات" style="position: relative; display: inline-flex;">
+            💬
+            <span id="nav-chat-count" style="position: absolute; top: -5px; right: -8px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: none; align-items: center; justify-content: center; border: 1px solid #142444;">0</span>
+        </a>
+        
         <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
 

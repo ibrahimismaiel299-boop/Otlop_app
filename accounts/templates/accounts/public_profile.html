@@ -201,14 +201,21 @@
 
     </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية المستجيبة main-responsive-container بالملي 🔒 -->
 
-    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المستقر بقاع الجوال تماماً وبتطابق كامل بالبكسل 🌟 📱 -->
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً عدادات الإشعارات والرسائل لايف 🌟 📱 -->
     <div class="bottom-nav-premium">
-        <a href="{% url 'home' %}" class="bottom-nav-link" title="الرئيسية">🏠</a>
+        <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
         <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
-        <a href="{% url 'providers_directory' %}" class="bottom-nav-link active" title="دليل مقدمي الخدمات">📋</a>
-        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        <a href="{% url 'providers_directory' %}" class="bottom-nav-link" title="دليل مقدمي الخدمات">📋</a>
+        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        <!-- 💬 أيقونة الشات المحدثة والمحصنة بحاوية العداد النيوني للرسائل غير المقروءة 💬 -->
+        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات" style="position: relative; display: inline-flex;">
+            💬
+            <span id="nav-chat-count" style="position: absolute; top: -5px; right: -8px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: none; align-items: center; justify-content: center; border: 1px solid #142444;">0</span>
+        </a>
+        
         <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
+
     <!-- 🚀 محركات الجافا سكريبت الشاملة والفولاذية لصفحة البروفايل العام 🚀 -->
     <script>
         // 🌟 دالة تسجيل وتقليب نجوم التقييم فورياً عبر الـ API بالخلفية 🌟

@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Otlop - Providers Directory</title>
+    <title>دليل مقدمي الخدمات - Otlop 🚀</title>
     <style>
-        /* 🎨 توحيد لوحة ألوان البراند بوك الملوكي الجديد للمظهرين مع الرئيسية 🎨 */
+        /* 🎨 توحيد لوحة ألوان البراند بوك الملوكي الجديد للمظهرين مع الرئيسية والبروفايل 🎨 */
         :root {
-            --bg-main: #0d1b2a;         /* الكحلي الغامق الفاخر */
-            --card-bg: #142444;         /* الأزرق الداكن لكروت الخدمات */
-            --accent-blue: #1e88ff;     /* الأزرق النيوني المضيء للأزرار */
-            --neon-cyan: #2ec4b6;       /* السيان لشارات الإتاحة */
-            --text-main: #f8fafc;       /* الأبيض الصافي للنصوص */
-            --text-muted: #94a3b8;      /* الرمادي الهادئ للفرعيات */
+            --bg-main: #0d1b2a;         
+            --card-bg: #142444;         
+            --accent-blue: #1e88ff;     
+            --neon-cyan: #2ec4b6;       
+            --text-main: #f8fafc;       
+            --text-muted: #94a3b8;      
             --border: rgba(255, 255, 255, 0.08); 
             --input-bg: rgba(255, 255, 255, 0.03);
         }
@@ -27,164 +27,224 @@
             --input-bg: #f1f5f9;
         }
 
+        * { box-sizing: border-box !important; }
+
         html, body {
-            margin: 0; padding: 0; min-height: 100vh; background-color: var(--bg-main) !important;
-            color: var(--text-main) !important; font-family: system-ui, -apple-system, sans-serif;
-            transition: background-color 0.2s, color 0.2s; box-sizing: border-box;
+            margin: 0; padding: 0; min-height: 100vh;
+            background-color: var(--bg-main) !important;
+            color: var(--text-main) !important;
+            font-family: system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, color 0.2s;
         }
-        /* تعديل الحاوية لإضافة مساحة سفلية كافية للشريط العائم منعاً للتداخل */
-        .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px 16px; box-sizing: border-box; width: 100%; }
         
-        .search-grid { 
-            display: grid; grid-template-columns: 90px 1.2fr 2fr; gap: 10px; width: 100%; 
-            background: var(--card-bg); padding: 12px; border-radius: 18px; 
-            border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.15); box-sizing: border-box; margin-bottom: 25px; 
+        /* 🚀 🌟 حاوية الحصر السحرية لمنع تمدد وانفراط الدليل على اللابتوب نهائياً 🌟 🚀 */
+        .main-responsive-container { 
+            max-width: 680px; 
+            margin: 0 auto !important; 
+            padding: 20px 16px 140px 16px; 
+            width: 100%; 
         }
-        .search-grid input, .search-grid select, .search-grid button { height: 44px; border: none; outline: none; background: var(--input-bg); color: var(--text-main); border-radius: 12px; font-size: 13px; font-weight: 600; box-sizing: border-box; width: 100%; }
-        .search-grid input { padding: 0 16px; text-align: right; border: 1px solid var(--border) !important; }
-        .search-grid select { padding: 0 12px; cursor: pointer; -webkit-appearance: menulist !important; appearance: menulist !important; border: 1px solid var(--border) !important; background-color: var(--card-bg) !important; }
-        .search-grid button { background: var(--neon-cyan) !important; color: white !important; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(46,196,182,0.15); }
         
-        .provider-card { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); padding: 22px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%; margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .directory-card {
+            background-color: var(--card-bg) !important;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .premium-filter-box {
+            background-color: var(--card-bg) !important;
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+
+        .filter-input-premium {
+            background-color: var(--input-bg) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            height: 44px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            width: 100%;
+        }
+
+        .avatar-directory { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--accent-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         
-        @keyframes pulse {
+        @keyframes status-pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0.5); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(46,196,182,0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,196,182,0); }
         }
-        @media (max-width: 768px) { .search-grid { grid-template-columns: 1fr !important; gap: 8px !important; } }
-                        /* 📱 التحديث النهائي: إنزال وتثبيت الشريط العائم في قاع الجوال تماماً حافة بحافة 📱 */
-        .bottom-nav-premium { 
-            position: fixed; 
-            bottom: 0px; /* 🚀 الإنزال الهندسي الموزون ليلتصق بقاع الجوال ويعزل الفراغات 🚀 */
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: rgba(20, 36, 68, 0.95); /* تعتيم ملوكي فاخر للبراند بوك الداكن */
-            backdrop-filter: blur(12px); 
-            border: 1px solid var(--border); 
-            padding: 12px 24px; 
-            border-radius: 40px; 
-            display: flex; 
-            gap: 30px; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 9999; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
-            width: 90%; 
-            max-width: 450px; 
-            box-sizing: border-box; 
-        }
-        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-        .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
 
-
-        /* 📱 شريط التنقل السفلي العائم فائق الحداثة المتناسق بالملي بكسل 📱 */
-        .bottom-nav-premium { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 450px; box-sizing: border-box; }
-        [data-theme="light"] .bottom-nav-premium { background: rgba(255, 255, 255, 0.85); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .bottom-nav-premium { position: fixed; bottom: 00px; left: 50%; transform: translateX(-50%); background: rgba(20, 36, 68, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px 24px; border-radius: 40px; display: flex; gap: 30px; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: 90%; max-width: 450px; box-sizing: border-box; }
         .bottom-nav-link { color: var(--text-muted); text-decoration: none; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .bottom-nav-link:hover, .bottom-nav-link.active { color: var(--accent-blue); transform: scale(1.15); }
     </style>
-
 </head>
 <body>
-    <!-- الحاوية الفاخرة المحكومة بـ 680 بكسل لتتوسط اللاب توب وتتمدد بالكامل على الموبايل -->
-    <div class="container">
-        
-        <!-- زر العودة السريع للتايم لاين بالرئيسية -->
-        <div style="margin-bottom: 20px; text-align: right;">
-            <button type="button" onclick="window.location.href='/'" style="background: none; border: none; color: #1da1f2; font-weight: bold; font-size: 14px; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 4px;">
-                <span>➡️</span> عودة للرئيسية
-            </button>
-                <!-- 📱 شريط التنقل السفلي العائم فائق الحداثة (Bottom Navbar للفلترة والملاحة الموحدة) 📱 -->
-    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً الدليل الشامل 🌟 📱 -->
-    <div class="bottom-nav-premium">
-        <a href="{% url 'home' %}" class="bottom-nav-link active" title="الرئيسية">🏠</a>
-        <a href="{% url 'providers_map' %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
-        <a href="{% url 'providers_directory' %}" class="bottom-nav-link" title="دليل الفنيين">📋</a> <!-- 🚀 حقن الدليل صراحة بقلب الشريط السفلي العائم 🚀 -->
-        <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات">💬</a>
-        <a href="{% url 'friends_list' %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
-        <a href="{% url 'profile' %}" class="bottom-nav-link" title="حسابي">👤</a>
-    </div>
+    <!-- 🚀 فتح بوابات حاوية الحصر لالتفات ولمّ الدليل بالكامل بمنتصف اللابتوب 🚀 -->
+    <div class="main-responsive-container">
 
+        <!-- 1️⃣ زر كبسولة العودة السريعة والرشيق للتايم لاين بالرئيسية -->
+        <div style="margin-bottom: 20px; text-align: right; width: 100%;">
+            <a href="{% url 'home' %}" style="text-decoration: none; color: var(--accent-blue); font-weight: 800; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; transition: 0.2s;">
+                <span>➡️</span> عودة للرئيسية
+            </a>
         </div>
 
+        <!-- 2️⃣ 🔍 شريط الفلترة والبحث الذكي المطور مكسو بالكامل بلون الكتيب الداكن لـ Otlop 🔍 -->
+        <div class="premium-filter-box">
+            <form method="GET" action="/providers/" style="display: flex; flex-direction: column; gap: 12px; width: 100%; margin: 0; padding: 0; direction: rtl;">
+                
+                <!-- حقل الكتابة النصي الموحد -->
+                <input type="text" name="q" value="{{ search_query|default:'' }}" class="filter-input-premium" placeholder="ابحث باسم مقدم الخدمة، الهاتف، الحرفة أو المدينة... 🛠️📍">
+                
+                <div style="display: flex; gap: 10px; width: 100%; align-items: center;">
+                    <!-- قائمة اختيار المحافظات المطهرة -->
+                    <select name="governorate" class="filter-input-premium" style="flex: 1; padding: 0 12px; -webkit-appearance: menulist !important; appearance: menulist !important; cursor: pointer;">
+                        <option value="">كل المحافظات المصرية 🌍</option>
+                        {% for gov in gov_choices %}
+                            <option value="{{ gov.id }}" {% if selected_gov == gov.id %}selected{% endif %}>{{ gov.name_ar }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- زر التصفية السيان النيوني الفاخر المدمج بالصف -->
+                    <button type="submit" style="background: var(--accent-blue); color: white !important; border: none; padding: 0 24px; height: 44px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(30,136,255,0.25); flex-shrink: 0; display: flex; align-items: center; gap: 4px;">
+                        <span>🔍</span> تصفية
+                    </button>
+                </div>
+            </form>
+        </div>
 
-        <!-- شريط الفلترة والبحث الذكي المطور (اسم، تخصص، هاتف، محافظة) -->
-        <form method="GET" action="/providers/" class="search-grid">
-            <button type="submit">تصفية 🔍</button>
-            <select name="governorate">
-                <option value="">كل المحافظات المصرية 🌍</option>
-                {% for gov in gov_choices %}
-                    <option value="{{ gov.id }}" {% if selected_gov == gov.id %}selected{% endif %}>{{ gov.name_ar }}</option>
-                {% endfor %}
-            </select>
-            <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="ابحث بالاسم، الهاتف، أو نوع الخدمة... 🛠️">
-        </form>
+        <!-- 3️⃣ 🗺️ 🌟 زر كبسولة الانتقال الفوري لخريطة مقدمي الخدمات الحية لايف لاكتشاف الأقرب 🌟 🗺️ -->
+        <div style="margin-bottom: 24px; text-align: center; width: 100%;">
+            <a href="{% if request.user.is_authenticated %}{% url 'providers_map' %}{% else %}{% url 'login' %}{% endif %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--neon-cyan), #20a396); color: white !important; text-decoration: none; padding: 12px 24px; border-radius: 30px; font-weight: 800; font-size: 13px; box-shadow: 0 6px 20px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-sizing: border-box; transition: 0.2s;">
+                <span style="font-size: 16px; animation: status-pulse 2s infinite; display: inline-block;">🗺️</span>
+                <span>اكتشف مقدمي الخدمات القريبين منك الآن على الخريطة لايف ⚡</span>
+            </a>
+        </div>
 
-                            <!-- 🗺️ 🌟 زر كبسولة الانتقال الفوري لخريطة الفنيين الحية لايف لاكتشاف الأقرب 🌟 🗺️ -->
-            <div style="margin-top: 14px; text-align: center; width: 100%;">
-                <a href="{% url 'providers_map' %}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 12px 24px; border-radius: 30px; font-weight: 800; font-size: 14px; box-shadow: 0 6px 20px rgba(46,196,182,0.3); border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; box-sizing: border-box; transition: 0.2s;">
-                    <span style="font-size: 18px; animation: status-pulse 2s infinite; display: inline-block;">🗺️</span>
-                    <span>اكتشف الفنيين القريبين منك الآن على الخريطة لايف ⚡</span>
-                </a>
-            </div>
-
-        <!-- شبكة عرض كروت مقدمي الخدمات الملمومة والموسطة هندسياً -->
-        <div style="display: flex; flex-direction: column; gap: 5px; width: 100%; box-sizing: border-box;">
+        <!-- 4️⃣ شبكة وعمود عرض كروت مقدمي الخدمات الملمومة والمحكومة بالسنتر 100% -->
+        <div style="display: flex; flex-direction: column; gap: 16px; width: 100%; box-sizing: border-box;">
+            <!-- تكرار دحرجة كروت مقدمي الخدمات من قاعدة البيانات -->
             {% for provider in providers %}
-                <div class="provider-card">
-                    <!-- الصورة الدائرية المحمية بنبض الإتاحة الجغرافية -->
-                    <div style="position: relative; display: inline-block;">
-                        {% if provider.profile_picture %}
-                            <img src="{{ provider.profile_picture.url }}" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid {% if provider.is_active_now %}#2ec4b6{% else %}#1da1f2{% endif %};">
-                        {% else %}
-                            <div style="width: 65px; height: 65px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 24px; font-weight: bold;">👤</div>
-                        {% endif %}
+                <div class="directory-card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; width: 100%; box-sizing: border-box;">
                         
-                        <!-- نقطة النور النيوني النابض تلمع على الكرت لايف -->
-                        {% if provider.is_active_now %}
-                            <span style="position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #2ec4b6; border: 2.5px solid var(--card-bg); border-radius: 50%; animation: pulse 2s infinite;"></span>
-                        {% endif %}
+                        <!-- القسم الأيمن: الصورة الشخصية والاسم والتخصص الجغرافي لمقدم الخدمة -->
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <!-- 👤 حاوية وصورة البروفايل: تفتح البروفايل للمسجلين وتطير لصفحة الـ Login للزوار 👤 -->
+                            <a href="{% if request.user.is_authenticated %}{% url 'public_profile' provider.id %}{% else %}{% url 'login' %}{% endif %}" style="text-decoration: none; display: flex; align-items: center; position: relative; flex-shrink: 0;">
+                                {% if provider.profile_picture %}
+                                    <img src="{{ provider.profile_picture.url }}" class="avatar-directory">
+                                {% else %}
+                                    <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--input-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 28px; font-weight: bold;">👤</div>
+                                {% endif %}
+                                {% if provider.is_active_now %}
+                                    <span style="position: absolute; bottom: 4px; right: 4px; width: 16px; height: 16px; background: var(--neon-cyan); border: 3px solid var(--card-bg); border-radius: 50%; animation: status-pulse 2s infinite;"></span>
+                                {% endif %}
+                            </a>
+                            
+                            <div style="text-align: right;">
+                                <a href="{% if request.user.is_authenticated %}{% url 'public_profile' provider.id %}{% else %}{% url 'login' %}{% endif %}" style="text-decoration: none; color: inherit;">
+                                    <h4 style="margin: 0 0 6px 0; font-size: 16px; font-weight: 800; color: var(--text-main);">{{ provider.username }}</h4>
+                                </a>
+                                <span style="font-size: 12px; color: var(--text-muted); display: block; font-weight: bold; margin-bottom: 4px;">🛠️ التخصص: <span style="color: var(--accent-blue);">{{ provider.category.name_ar|default:"مقدم خدمات عام" }}</span></span>
+                                <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 600;">📍 الموقع: {{ provider.governorate.name_ar|default:"غير محدد" }} - {{ provider.city.name_ar|default:"غير محدد" }}</span>
+                            </div>
+                        </div>
+
+                        <!-- القسم الأيسر: كبسولات التقييم وزر الاتصال الداخلي المطور بالـ VoIP المباشر -->
+                        <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0;">
+                            <div style="font-size: 12px; font-weight: bold; color: #ffb703; background: rgba(255,183,3,0.05); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255,183,3,0.15);">
+                                ⭐ <span>{{ provider.get_average_rating|default:"5.0" }}</span> / 5.0
+                            </div>
+                            
+                            <!-- زر اتصال صوتي داخلي مصلح: يفتح المكالمة لايف للمسجلين ويطير للـ Login للزوار -->
+                            {% if provider.is_active_now %}
+                                <a href="{% if request.user.is_authenticated %}{% url 'trigger_voice_call' provider.id %}{% else %}{% url 'login' %}{% endif %}" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--neon-cyan), #20a396); color: white !important; text-decoration: none; padding: 8px 18px; border-radius: 30px; font-weight: 800; font-size: 12px; box-shadow: 0 4px 15px rgba(46,196,182,0.25);">
+                                    <span>📞</span> <span>اتصال لايف ⚡</span>
+                                </a>
+                            {% endif %}
+                        </div>
+
                     </div>
-
-
-                    <!-- اسم الفني وتقييمه الحركي -->
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <a href="{% url 'public_profile' provider.id %}" style="text-decoration: none; color: inherit;">
-                            <strong style="color: var(--text-main); font-size: 16px; font-weight: 800;">{{ provider.username }}</strong>
-                        </a>
-                        <span style="color: #ffb703; font-weight: bold; font-size: 13px;">⭐ {{ provider.get_average_rating }}</span>
-                    </div>
-
-                    <!-- التخصص والموقع الجغرافي المسجل بالسيرفر -->
-                    <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; margin: 4px 0 10px 0;">
-                        <span>🛠️ التخصص: <span style="color: #1da1f2;">{{ provider.category.name_ar|default:"غير محدد" }}</span></span>
-                        <span>📍 الموقع: {{ provider.governorate.name_ar }} - {{ provider.city.name_ar }}</span>
-                    </div>
-
-                    <!-- 🔐 كبسولة الاتصال النيونية الفاخرة والمشفرة بصرياً بالكامل (ممررة للرقم خلف الكواليس) 🔐 -->
-                    {% if provider.phone_number %}
-                        <a href="tel:{{ provider.phone_number }}" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2ec4b6, #20a396); color: white; text-decoration: none; padding: 8px 22px; border-radius: 30px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 15px rgba(46,196,182,0.25); border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; box-sizing: border-box;">
-                            <span style="font-size: 15px; animation: pulse 2s infinite; display: inline-block;">📞</span> 
-                            <span>اتصال ⚡</span>
-                        </a>
-                    {% endif %}
                 </div>
             {% empty %}
-                <p style="text-align: center; color: var(--text-muted); padding: 50px; border-radius: 20px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 14px; background: var(--card-bg);">لا توجد نتائج مطابقة لبحثك حالياً.</p>
+                <p style="text-align: center; color: var(--text-muted); padding: 40px; border-radius: 24px; border: 2px dashed var(--border); margin: 0; font-weight: 700; font-size: 13px; background: var(--card-bg);">لا يوجد مقدمي خدمات مسجلين حالياً يطابقون خيارات البحث.</p>
             {% endfor %}
         </div>
+    </div> <!-- 🔒 قفل وإغلاق الحاوية الخارجية main-responsive-container بالملي قسراً للحصر 🔒 -->
 
+    <!-- 📱 🌟 شريط الأيقونات الطائرة العائم المطور متضمناً عدادات الإشعارات والرسائل لايف (Premium 6-Items Navbar) 🌟 📱 -->
+    <div class="bottom-nav-premium">
+        <!-- 🏠 الرئيسية: مفتوحة دائماً وأبداً للجميع -->
+        <a href="{% url 'home' %}" class="bottom-nav-link" title="الرئيسية">🏠</a>
+        
+        <!-- 🗺️ الخريطة: للمسجلين تفتح لايف وللضيوف تطير للـ Login فوريّاً -->
+        <a href="{% if request.user.is_authenticated %}{% url 'providers_map' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="الخريطة لايف">🗺️</a>
+        
+        <!-- 📋 دليل مقدمي الخدمات: تفتح الدليل للمسجلين وتطير للـ Login للزوار كدعاية (نشطة الحين) -->
+        <a href="{% if request.user.is_authenticated %}{% url 'providers_directory' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link active" title="دليل مقدمي الخدمات">📋</a>
+        
+        <!-- 👥 الأصدقاء: تفتح القائمة للمسجلين وتطير للـ Login للزوار لتأمين الخصوصية -->
+        <a href="{% if request.user.is_authenticated %}{% url 'friends_list' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="الأصدقاء">👥</a>
+        
+        <!-- 💬 أيقونة الشات المحدثة والمحصنة بحاوية العداد النيوني للرسائل غير المقروءة 💬 -->
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'chat_rooms_list' %}" class="bottom-nav-link" title="المحادثات" style="position: relative; display: inline-flex;">
+                💬
+                <span id="nav-chat-count" style="position: absolute; top: -5px; right: -8px; background: #ef4444; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 9px; font-weight: 900; display: none; align-items: center; justify-content: center; border: 1px solid #142444;">0</span>
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="bottom-nav-link" title="المحادثات">💬</a>
+        {% endif %}
+        
+        <!-- 👤 حسابي الشخصي: تفتح البروفايل للمسجل وتطير للـ Login للزوار لتأمين المسار -->
+        <a href="{% if request.user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="bottom-nav-link" title="حسابي">👤</a>
     </div>
 
-    <!-- تفعيل تزامنات الجافا سكريبت الخاصة بقراءة وإرث الوضع المظلم التلقائي للهاتف -->
+    <!-- 🚀 محركات الجافا سكريبت والمزامنة اللحظية لعدادات الدليل (النسخة المصلحة 100%) 🚀 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // قراءة وتثبيت السمات المظلمة والفاتحة للبراند بوك تلقائياً
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
         });
+
+        // 🚀 تنظيف وعزل شرط جانجو بداخل متغير جافا سكريبت صافي ومحمي من الـ Crash 🚀
+        const isUserLoggedIn = "{{ request.user.is_authenticated|yesno:'true,false' }}";
+
+        if (isUserLoggedIn === "true") {
+            // سكريبت الفحص الدوري اللحظي لعداد الشات العائم يعمل حصرياً للمسجلين بنقاء
+            setInterval(() => {
+                fetch('/live/messages-count/')
+                    .then(res => res.json())
+                    .then(data => {
+                        const chatCountEl = document.getElementById('nav-chat-count');
+                        if (chatCountEl && data.unread_messages_count !== undefined) {
+                            const msgCount = parseInt(data.unread_messages_count);
+                            if (msgCount > 0) {
+                                chatCountEl.textContent = msgCount;
+                                chatCountEl.style.display = 'flex'; // وميض العداد الأحمر اللحظي
+                            } else {
+                                chatCountEl.style.display = 'none';
+                            }
+                        }
+                    }).catch(e => {});
+            }, 5000); // بولينج كفء كل 5 ثوانٍ
+        }
     </script>
 </body>
 </html>
-
